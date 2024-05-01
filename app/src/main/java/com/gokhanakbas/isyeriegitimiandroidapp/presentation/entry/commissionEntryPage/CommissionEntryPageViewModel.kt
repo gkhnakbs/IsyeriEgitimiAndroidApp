@@ -40,7 +40,9 @@ class CommissionEntryPageViewModel @Inject constructor(private val commissionsRe
                         )
                     }
                 }
-
+            _state.update {
+                it.copy(isLoading = false)
+            }
         }
     }
 

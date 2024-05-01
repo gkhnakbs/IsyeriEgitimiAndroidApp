@@ -41,56 +41,56 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideStudentsRepository() : StudentsRepository{
-        return StudentsRepositoryImpl(provideStudentsApi())
+    fun provideStudentsRepository(studentsApi: StudentsApi) : StudentsRepository{
+        return StudentsRepositoryImpl(studentsApi)
     }
 
     @Singleton
     @Provides
-    fun provideFirmsRepository() : FirmsRepository{
-        return FirmsRepositoryImpl(provideFirmsApi())
+    fun provideFirmsRepository(firmsApi: FirmsApi) : FirmsRepository{
+        return FirmsRepositoryImpl(firmsApi)
     }
 
     @Singleton
     @Provides
-    fun provideLecturersRepository() : LecturersRepository{
-        return LecturersRepositoryImpl(provideLecturersApi())
+    fun provideLecturersRepository(lecturerApi: LecturerApi) : LecturersRepository{
+        return LecturersRepositoryImpl(lecturerApi)
     }
 
     @Singleton
     @Provides
-    fun provideCommissionsRepository() : CommissionsRepository{
-        return CommissionsRepositoryImpl(provideCommissionsApi())
+    fun provideCommissionsRepository(commissionApi: CommissionApi) : CommissionsRepository{
+        return CommissionsRepositoryImpl(commissionApi)
     }
 
     @Singleton
     @Provides
-    fun provideAdvertsRepository() : AdvertsRepository{
-        return AdvertsRepositoryImpl(provideAdvertsApi())
+    fun provideAdvertsRepository(advertsApi: AdvertsApi) : AdvertsRepository{
+        return AdvertsRepositoryImpl(advertsApi)
     }
 
     @Singleton
     @Provides
-    fun provideFormsRepository() : FormsRepository{
-        return FormsRepositoryImpl(provideFormsApi())
+    fun provideFormsRepository(formsApi: FormsApi) : FormsRepository{
+        return FormsRepositoryImpl(formsApi)
     }
 
     @Singleton
     @Provides
-    fun provideSurveysRepository() : SurveysRepository{
-        return SurveysRepositoryImpl(provideSurveysApi())
+    fun provideSurveysRepository(surveyApi: SurveyApi) : SurveysRepository{
+        return SurveysRepositoryImpl(surveyApi)
     }
 
     @Singleton
     @Provides
-    fun providePostsRepository() : PostsRepository{
-        return PostsRepositoryImpl(providePostsApi())
+    fun providePostsRepository(postsApi: PostsApi) : PostsRepository{
+        return PostsRepositoryImpl(postsApi)
     }
 
     @Singleton
     @Provides
-    fun provideReportsRepository() : ReportsRepository{
-        return ReportsRepositoryImpl(provideReportsApi())
+    fun provideReportsRepository(reportsApi: ReportsApi) : ReportsRepository{
+        return ReportsRepositoryImpl(reportsApi)
     }
 
     @Singleton
@@ -101,55 +101,55 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideStudentsApi() : StudentsApi{
-        return StudentsApi(provideDatabase())
+    fun provideStudentsApi(databaseConnection: DatabaseConnection) : StudentsApi{
+        return StudentsApi(databaseConnection)
     }
 
     @Singleton
     @Provides
-    fun provideFirmsApi() : FirmsApi{
-        return FirmsApi(provideDatabase())
+    fun provideFirmsApi(databaseConnection: DatabaseConnection) : FirmsApi{
+        return FirmsApi(databaseConnection)
     }
 
     @Singleton
     @Provides
-    fun provideLecturersApi() : LecturerApi {
-        return LecturerApi(provideDatabase())
+    fun provideLecturersApi(databaseConnection: DatabaseConnection) : LecturerApi {
+        return LecturerApi(databaseConnection)
     }
 
     @Singleton
     @Provides
-    fun provideCommissionsApi() : CommissionApi{
-        return CommissionApi(provideDatabase())
+    fun provideCommissionsApi(databaseConnection: DatabaseConnection) : CommissionApi{
+        return CommissionApi(databaseConnection)
     }
 
     @Singleton
     @Provides
-    fun provideFormsApi() : FormsApi{
-        return FormsApi(provideDatabase())
+    fun provideFormsApi(databaseConnection: DatabaseConnection) : FormsApi{
+        return FormsApi(databaseConnection)
     }
 
     @Singleton
     @Provides
-    fun provideSurveysApi() : SurveyApi{
-        return SurveyApi(provideDatabase())
+    fun provideSurveysApi(databaseConnection: DatabaseConnection) : SurveyApi{
+        return SurveyApi(databaseConnection)
     }
 
     @Singleton
     @Provides
-    fun provideAdvertsApi() : AdvertsApi{
-        return AdvertsApi(provideDatabase())
+    fun provideAdvertsApi(databaseConnection: DatabaseConnection) : AdvertsApi{
+        return AdvertsApi(databaseConnection)
     }
 
     @Singleton
     @Provides
-    fun providePostsApi() : PostsApi{
-        return PostsApi(provideDatabase())
+    fun providePostsApi(databaseConnection: DatabaseConnection) : PostsApi{
+        return PostsApi(databaseConnection)
     }
 
     @Singleton
     @Provides
-    fun provideReportsApi() : ReportsApi{
-        return ReportsApi(provideDatabase())
+    fun provideReportsApi(databaseConnection: DatabaseConnection) : ReportsApi{
+        return ReportsApi(databaseConnection)
     }
 }

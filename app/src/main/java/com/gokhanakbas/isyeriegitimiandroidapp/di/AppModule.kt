@@ -33,5 +33,4 @@ object AppModule {
     ): UserInfoUseCases = UserInfoUseCases(
         ReadUserInfo(localUserManager),
         SaveUserInfo(localUserManager))
-
 }
