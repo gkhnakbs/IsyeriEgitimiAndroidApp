@@ -1,0 +1,147 @@
+<resources>
+    <string name="app_name">İşyeri Eğitimi</string>
+
+    <string name="ogrenci_giris_sayfasi">Öğrenci Giriş</string>
+    <string name="izleyici_giris_sayfasi">İzleyici Giriş</string>
+    <string name="firma_giris_sayfasi">Firma Giriş</string>
+    <string name="komisyon_giris_sayfasi">Komisyon Giriş</string>
+
+    <string name="firma">Firma</string>
+    <string name="izleyici">İzleyici</string>
+    <string name="komisyon">Komisyon</string>
+    <string name="ogrenci">Öğrenci</string>
+
+    <string name="haftalik_rapor">Haftalık Rapor</string>
+    <string name="anket">Anket</string>
+    <string name="form">Form</string>
+    <string name="bilgilerim">Bilgilerim</string>
+    <string name="yeteneklerim">Yeteneklerim</string>
+    <string name="cikis_yap">Çıkış Yap</string>
+    <string name="cikis">Çıkış</string>
+    <string name="kaydet">Kaydet</string>
+    <string name="favorilere_ekle">Favorilere Ekle</string>
+    <string name="favorilerden_cikar">Favorilerden Çıkar</string>
+    <string name="ilana_git">İlana Git</string>
+    <string name="favori_ilanlar">Favori İlanlar</string>
+    <string name="parola_bos_birakilamaz">Parola Alanı Boş Bırakılamaz</string>
+    <string name="ekle">Ekle</string>
+    <string name="yetenek_ekle">Yetenek Ekle</string>
+    <string name="raporu_goruntule">Raporu Görüntüle</string>
+    <string name="rapor_basariyla_kaydedildi">Rapor Başarıyla Kaydedildi</string>
+
+
+    <string name="ana_sayfa">Ana Sayfa</string>
+
+    <string name="iptal_et">İptal Et</string>
+
+    <string name="zorunlu_yazisi_tf">*Zorunlu</string>
+    <string name="kayit_ol">Kayıt Ol</string>
+    <string name="giris_yap">Giriş Yap</string>
+    <string name="geri_don">Geri Dön</string>
+
+    <string name="ilgi_alani">İlgi Alanı</string>
+
+    <string name="fakulte">Fakülte</string>
+    <string name="yas">Yaş</string>
+    <string name="bolum">Bölüm</string>
+    <string name="is_yeri">İş Yeri</string>
+    <string name="agno">AGNO</string>
+    <string name="mezun_yili">Mezun Yılı</string>
+
+    <string name="en_fazla_11_karakter_olabilir">En fazla 11 karakter olabilir</string>
+    <string name="en_az_5_karakter_olmalidir">En az 5 karakter olmalıdır</string>
+    <string name="bos_birakilamaz">Boş Bırakılamaz</string>
+
+    <string name="cikis_soru">Hesaptan çıkış yapmak istediğine emin misin?</string>
+    <string name="kapat_soru">Uygulamadan çıkış yapmak istediğine emin misin?</string>
+    <string name="raporu_kaydetmek_istedigine_emin_misin">Raporu kaydetmek istediğine emin misin?</string>
+    <string name="eger_kaydedersen_tekrar_degistiremeyecek_veya_silemeyeceksin">Eğer kaydedersen tekrar değiştiremeyecek veya silemeyeceksin</string>
+
+    <string name="basvuru_soru">Başvurmak istediğine emin misin?</string>
+
+    <string name="firma_hakkinda">Firma Hakkında</string>
+    <string name="ilanlar">İlanlar</string>
+    <string name="sil">Sil</string>
+    <string name="basvuranlari_Goster">Başvuranları Göster</string>
+    <string name="ilan">İlan</string>
+    <string name="ilan_olustur">İlan Oluştur</string>
+    <string name="ilani_duzenle">İlanı Düzenle</string>
+    <string name="gruplar">Gruplar</string>
+    <string name="grup">Grup</string>
+    <string name="calisan_ogrenciler">Çalışan Öğrenciler</string>
+
+    <string name="grubu_sil">Grubu Sil</string>
+    <string name="grubu_goruntule">Grubu Görüntüle</string>
+    <string name="grub_olustur">Grup Oluştur</string>
+    <string name="olusturulma_tarihi">Oluşturulma Tarihi</string>
+    <string name="ogrenci_listesi">Öğrenci Listesi</string>
+    <string name="basvuran_listesi">Başvuran Listesi</string>
+    <string name="ogrenciyi_goruntule">Öğrenciyi Görüntüle</string>
+    <string name="ogrencinin_gorevlerini_goruntule">Öğrenci Görevlerini Görüntüle</string>
+    <string name="gorev_sayisi">Görev Sayısı</string>
+    <string name="tamamlanan_gorev_sayisi">Tamamlanan Görev Sayısı</string>
+    <string name="gorev_ver">Görev Ver</string>
+    <string name="gorev_basligi">Görev Başlığı</string>
+
+    <string name="ilan_baslik">İlan Başlık</string>
+    <string name="ilan_aciklama">İlan Açıklama</string>
+    <string name="ilan_bolum">İlan Bölüm</string>
+    <string name="ilan_baslangic_tarihi">İlan Başlangıç Tarihi</string>
+    <string name="ilan_bitis_tarihi">İlan Bitiş Tarihi</string>
+
+    <string name="ilani_yayinla">İlanı Yayınla</string>
+    <string name="ilan_basariyla_yayinlandi">İlan Başarıyla Yayınlandı</string>
+    <string name="basvuru_basariyla_tamamlandi">Başvuru Başarıyla Tamamlandı</string>
+    <string name="islem_gerceklestirilemedi">İşlem Gerçekleştirilemedi</string>
+    <string name="basvuru_zaten_bulunmaktadır">Başvuru Zaten Bulunmaktadır</string>
+
+    <string name="gun_ay_yil">GG/AA/YYYY</string>
+
+    <string name="hakkimda">Hakkımda</string>
+    <string name="email">Email</string>
+
+    <string name="senden_beklenenler">Senden Beklenenler</string>
+
+    <string name="basvur">Başvur</string>
+    <string name="basvuruldu">Başvuruldu</string>
+    <string name="basvurulmus_ilanlar">Başvurduklarım</string>
+    <string name="basvuruyu_sil">Başvuruyu Sil</string>
+    <string name="basvuruyu_silmek_istedigine_emin_misin">Başvuruyu silmek istediğinize emin misiniz?</string>
+    <string name="basvurmak_istedigine_emin_misin">Başvurmak istediğine emin misin?</string>
+
+    <string name="goster">Göster</string>
+    <string name="doldur">Doldur</string>
+    <string name="yazdirIndir">Yazdır/İndir</string>
+    <string name="firmayi_goster">Firmayı Göster</string>
+
+    <string name="ogrenci_no">Öğrenci No</string>
+    <string name="isyeri_firmasi">İşyeri Firması</string>
+    <string name="tam_ad">Tam Ad</string>
+    <string name="ogrenci_fakulte">Öğrenci Fakülte</string>
+    <string name="ogrenci_bolum">Öğrenci Bölüm</string>
+    <string name="ogrenci_ortalama">Öğrenci AGNO</string>
+    <string name="ogrenci_parola">Öğrenci Parola</string>
+
+    <string name="firma_no">Firma No</string>
+    <string name="firma_adi">Firma Adı</string>
+    <string name="firma_adres">Firma Adres</string>
+    <string name="firma_telNo">Firma Telefon</string>
+    <string name="firma_mail">Firma E-Posta Adresi</string>
+    <string name="firma_parola">Firma Parola</string>
+
+    <string name="izleyici_no">İzleyici No</string>
+    <string name="izleyici_isim">İzleyici İsim</string>
+    <string name="izleyici_fakulte">İzleyici Fakülte</string>
+    <string name="izleyici_bolum">İzleyici Bölüm</string>
+    <string name="izleyici_unvan">İzleyici Unvan</string>
+    <string name="izleyici_parola">İzleyici Parola</string>
+
+    <string name="komisyon_no">Komisyon No</string>
+    <string name="komisyon_parola">Komisyon Parola</string>
+
+    <string name="yetenek_baslik">Yetenek Başlık</string>
+
+    <string name="baslangic_seviye">Başlangıç</string>
+    <string name="orta_seviye">Orta</string>
+    <string name="ileri_seviye">İleri</string>
+</resources>

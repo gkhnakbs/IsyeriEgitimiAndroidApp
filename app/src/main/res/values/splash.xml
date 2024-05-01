@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="App.Starting.Theme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#fff</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/gazi_university</item>
+        <item name="postSplashScreenTheme">@style/Theme.IsyeriEgitimiAndroidApp</item>
+        <item name="windowSplashScreenAnimationDuration">1</item>
+    </style>
+</resources>
