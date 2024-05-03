@@ -162,7 +162,7 @@ fun StudentEntryPageContent(
                     value = tf_studentPassword.value,
                     onValueChange = {
                         tf_studentPassword.value = it
-                        if (it.length < 6) {
+                        if (it.length < 5) {
                             errorState1.value = true
                         }else{
                             errorState1.value=false
