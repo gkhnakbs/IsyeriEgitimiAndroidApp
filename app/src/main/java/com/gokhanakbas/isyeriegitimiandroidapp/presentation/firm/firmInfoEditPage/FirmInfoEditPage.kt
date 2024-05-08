@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmInfoEditPage
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -22,6 +22,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,15 +32,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 
 @Composable
-fun FirmInfoEditPage(navController: NavController, firm: Firm) {
+fun FirmInfoEditPage(navController: NavController,firm_id: String,viewModel: FirmInfoEditPageViewModel = hiltViewModel()) {
+
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.getFirmInformation(firm_id)
+    }
+
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    FirmInfoEditPageContent(navController,state,viewModel)
+
+}
+
+
+@Composable
+fun FirmInfoEditPageContent(navController: NavController,firmInfoEditPageState: FirmInfoEditPageState,viewModel: FirmInfoEditPageViewModel) {
+    
+    LoadingDialog(isLoading = firmInfoEditPageState.isLoading)
+
     val scrollState = rememberScrollState()
+
+    val firm=firmInfoEditPageState.firm
 
     val tf_firmInfo = remember {
         mutableStateOf(firm.firm_info)

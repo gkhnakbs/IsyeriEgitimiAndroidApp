@@ -7,7 +7,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
 
 interface CommissionsRepository {
 
-    suspend fun getCommissionInformation() : Either<NetworkError, Commission> // virgülün solu hata alınırsa ne olacağı sağı hata alınmazsa ne olacağı
+    suspend fun getCommissionInformation(commission_id:String) : Either<NetworkError, Commission> // virgülün solu hata alınırsa ne olacağı sağı hata alınmazsa ne olacağı
 
     suspend fun getCommissions() : Either<NetworkError, List<Commission>>
 }

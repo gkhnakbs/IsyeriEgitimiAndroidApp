@@ -10,9 +10,9 @@ import javax.inject.Inject
 
 class CommissionsRepositoryImpl @Inject constructor(private val commissionApi: CommissionApi) : CommissionsRepository {
 
-    override suspend fun getCommissionInformation(): Either<NetworkError, Commission> {
+    override suspend fun getCommissionInformation(commission_id:String): Either<NetworkError, Commission> {
         return Either.catch {
-            commissionApi.getCommissionsInformation()
+            commissionApi.getCommissionsInformation(commission_id)
         }.mapLeft {
             it.toNetworkError()
         }

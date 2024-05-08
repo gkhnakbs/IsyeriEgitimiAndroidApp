@@ -18,12 +18,12 @@ class CommissionPageViewModel @Inject constructor(private val commissionsReposit
     private val _state = MutableStateFlow(CommissionPageState())
     val state=_state.asStateFlow()
 
-    fun getCommissionInformation(){
+    fun getCommissionInformation(commission_id:String){
         viewModelScope.launch {
             _state.update {
                 it.copy(isLoading = true)
             }
-            commissionsRepository.getCommissionInformation()
+            commissionsRepository.getCommissionInformation(commission_id)
                 .onLeft {error->
                     _state.update {
                         it.copy(

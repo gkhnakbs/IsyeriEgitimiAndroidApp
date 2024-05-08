@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.FirmsRepository
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.sendEvent
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -25,11 +28,13 @@ class FirmPageViewModel @Inject constructor(
             _state.update {
                 it.copy(isLoading = true)
             }
+            delay(2000)
             firmRepository.getFirmInformation(firm_id)
                 .onLeft { error ->
                     _state.update {
                         it.copy(error = error.error.message)
                     }
+                    sendEvent(Event.Toast(error.error.message))
                 }
                 .onRight { firm ->
                     _state.update {

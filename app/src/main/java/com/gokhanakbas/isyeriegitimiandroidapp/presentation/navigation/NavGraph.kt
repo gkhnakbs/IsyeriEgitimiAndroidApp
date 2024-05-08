@@ -1,16 +1,11 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Commission
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission.CommissionMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.EntryPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.commissionEntryPage.CommissionEntryPage
@@ -18,7 +13,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.firmEntryPage.
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.lecturerEntryPage.LecturerEntryPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.studentEntryPage.StudentEntryPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertCreatingPage.AdvertCreatingPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.FirmInfoEditPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmInfoEditPage.FirmInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.FirmMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerInfoEditPage.LecturerInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.LecturerMainPage
@@ -31,7 +26,6 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.reportsPage.Re
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.studentsPage.StudentPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentInfoEditPage.StudentInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.StudentMainPage
-import com.google.gson.Gson
 
 
 @Composable
@@ -108,13 +102,12 @@ fun AppNavGraph(
         composable(
             Screen.FirmPage.route,
             arguments = listOf(
-                navArgument("firmObject") {
+                navArgument("firm_id") {
                     type = NavType.StringType
                 }
             )) {
-            val firmObject = it.arguments?.getString("firmObject")
-            val firmJson = Gson().fromJson(firmObject, Firm::class.java)
-            FirmPage(navController = navController, firmObject = firmJson)
+            val firm_id = it.arguments?.getString("firm_id")
+            FirmPage(navController = navController, firm_id = firm_id!!)
         }
 
         composable(
@@ -192,13 +185,12 @@ fun AppNavGraph(
 
         composable(
             Screen.FirmInfoEditPage.route, arguments = listOf(
-                navArgument("firmObject") {
+                navArgument("firm_id") {
                     type = NavType.StringType
                 }
             )) {
-            val firmObject = it.arguments?.getString("firmObject")
-            val json = Gson().fromJson(firmObject, Firm::class.java)
-            FirmInfoEditPage(navController = navController, json)
+            val firm_id = it.arguments?.getString("firm_id")!!
+            FirmInfoEditPage(navController = navController, firm_id = firm_id)
         }
 
     }

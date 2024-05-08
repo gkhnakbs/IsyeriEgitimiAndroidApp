@@ -59,10 +59,10 @@ dependencies {
     //Splash Api
     implementation("androidx.core:core-splashscreen:1.0.1")
 
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2024.04.00"))
+    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -71,16 +71,16 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0-alpha04")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0-rc01")
 
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.05.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.0-alpha06")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.0-alpha08")
 
     //Arrow
     implementation("io.arrow-kt:arrow-core:1.2.4")
@@ -90,8 +90,8 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
 
     //DataStore
-    implementation("androidx.datastore:datastore-core:1.1.0-rc01")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-core:1.1.1")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     //dagger hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
@@ -107,5 +107,5 @@ dependencies {
     implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.3.0")
 
 
-    implementation ("androidx.graphics:graphics-shapes:1.0.0-alpha05")
+    implementation ("androidx.graphics:graphics-shapes:1.0.0-beta01")
 }

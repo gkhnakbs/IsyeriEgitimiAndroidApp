@@ -1,0 +1,151 @@
+<resources>
+    <string name="app_name">Workplace Education</string>
+
+    <string name="ogrenci_giris_sayfasi">Student Entry</string>
+    <string name="izleyici_giris_sayfasi">Lecturer Entry</string>
+    <string name="firma_giris_sayfasi">Firm Entry</string>
+    <string name="komisyon_giris_sayfasi">Commission Entry</string>
+
+    <string name="firma">Firm</string>
+    <string name="izleyici">Lecturer</string>
+    <string name="komisyon">Commission</string>
+    <string name="ogrenci">Student</string>
+
+    <string name="haftalik_rapor">Weekly Report</string>
+    <string name="anket">Survey</string>
+    <string name="form">Form</string>
+    <string name="bilgilerim">My Information</string>
+    <string name="yeteneklerim">My Skills</string>
+    <string name="cikis_yap">Log Out</string>
+    <string name="cikis">Exit</string>
+    <string name="kaydet">Save</string>
+    <string name="favorilere_ekle">Add Favorites</string>
+    <string name="favorilerden_cikar">Remove From Favorites</string>
+    <string name="ilana_git">Go to Advert</string>
+    <string name="favori_ilanlar">Favourite Posts</string>
+    <string name="parola_bos_birakilamaz">Password Field cannot be empty</string>
+    <string name="ekle">Add</string>
+    <string name="yetenek_ekle">Skill Add</string>
+    <string name="raporu_goruntule">Show Report</string>
+    <string name="rapor_basariyla_kaydedildi">Report Was Saved Successfully</string>
+
+    <string name="ana_sayfa">Main Page</string>
+
+    <string name="iptal_et">Cancel</string>
+
+    <string name="cikis_soru">Are you sure you want to make an Log out?</string>
+    <string name="kapat_soru">Are you sure you want to make an Exit?</string>
+    <string name="raporu_kaydetmek_istedigine_emin_misin">Are you sure you want to Save Report?</string>
+    <string name="eger_kaydedersen_tekrar_degistiremeyecek_veya_silemeyeceksin">If You Save , You cannot update or delete this</string>
+
+
+    <string name="basvuru_soru">Are you sure you want to apply?</string>
+
+    <string name="firma_hakkinda">About Firm</string>
+    <string name="ilanlar">Adverts</string>
+    <string name="sil">Delete</string>
+    <string name="basvuranlari_Goster">Show Interviewers</string>
+    <string name="ilan">Advert</string>
+    <string name="ilan_olustur">Create Advert</string>
+    <string name="ilani_duzenle">Edit Advert</string>
+    <string name="gruplar">Groups</string>
+    <string name="grup">Group</string>
+    <string name="calisan_ogrenciler">Working Students</string>
+
+    <string name="grubu_sil">Delete Group</string>
+    <string name="grubu_goruntule">Show Group</string>
+    <string name="grub_olustur">Create Group</string>
+    <string name="olusturulma_tarihi">Creation Date</string>
+    <string name="ogrenci_listesi">Student List</string>
+    <string name="basvuran_listesi">Interviewers List</string>
+    <string name="ogrenciyi_goruntule">Show Student</string>
+    <string name="ogrencinin_gorevlerini_goruntule">Show Student Task</string>
+    <string name="gorev_sayisi">Number Of Tasks</string>
+    <string name="tamamlanan_gorev_sayisi">Completed Tasks</string>
+    <string name="gorev_ver">Give a Task</string>
+    <string name="gorev_basligi">Task Title</string>
+
+    <string name="ilan_baslik">Advert Title</string>
+    <string name="ilan_aciklama">Advert Description</string>
+    <string name="ilan_bolum">Advert Department</string>
+    <string name="ilan_baslangic_tarihi">Advert Start Date</string>
+    <string name="ilan_bitis_tarihi">Advert End Date</string>
+
+    <string name="ilani_yayinla">Publish Advert</string>
+    <string name="ilan_basariyla_yayinlandi">Advert is published successfully</string>
+    <string name="basvuru_basariyla_tamamlandi">Application Successfully Completed</string>
+    <string name="islem_gerceklestirilemedi">Failed to Process</string>
+    <string name="basvuru_zaten_bulunmaktadır">Application Already Available</string>
+
+    <string name="gun_ay_yil">DD/MM/YYYY</string>
+
+    <string name="hakkimda">About Me</string>
+
+    <string name="email">Email</string>
+
+    <string name="senden_beklenenler">What Is Expected Of You</string>
+
+    <string name="basvur">Apply</string>
+    <string name="basvuruldu">Applied</string>
+    <string name="basvurulmus_ilanlar">Applied Adverts</string>
+    <string name="basvuruyu_sil">Remove Applying</string>
+    <string name="basvuruyu_silmek_istedigine_emin_misin">Are you sure to delete Applied?</string>
+    <string name="basvurmak_istedigine_emin_misin">Are you sure to Apply?</string>
+
+    <string name="zorunlu_yazisi_tf">*Required</string>
+    <string name="kayit_ol">Sign Up</string>
+    <string name="giris_yap">Sign In</string>
+    <string name="geri_don">Go Back</string>
+
+    <string name="ilgi_alani">Field of Interest</string>
+
+    <string name="fakulte">Faculty</string>
+    <string name="yas">Age</string>
+    <string name="bolum">Department</string>
+    <string name="is_yeri">WorkPlace</string>
+    <string name="agno">AGNO</string>
+    <string name="mezun_yili">Graduate Year</string>
+
+
+    <string name="en_fazla_11_karakter_olabilir">Maximum 11 characters</string>
+    <string name="en_az_5_karakter_olmalidir">Minimum 5 characters</string>
+    <string name="bos_birakilamaz">Cannot be Empty</string>
+
+    <string name="goster">Show</string>
+    <string name="doldur">Fill</string>
+    <string name="yazdirIndir">Print/Download</string>
+    <string name="firmayi_goster">Show Firm</string>
+
+    <string name="ogrenci_no">Student No</string>
+    <string name="isyeri_firmasi">WorkPlace Firm</string>
+    <string name="tam_ad">Full Name</string>
+    <string name="ogrenci_fakulte">Student Faculty</string>
+    <string name="ogrenci_bolum">Student Department</string>
+    <string name="ogrenci_ortalama">Student WGPA</string>
+    <string name="ogrenci_parola">Student Password</string>
+
+    <string name="firma_no">Firm No</string>
+    <string name="firma_adi">Firm Name</string>
+    <string name="firma_adres">Firm Address</string>
+    <string name="firma_telNo">Firma Phone</string>
+    <string name="firma_mail">Firma Mail</string>
+    <string name="firma_parola">Firm Password</string>
+
+    <string name="izleyici_no">Lecturer No</string>
+    <string name="izleyici_isim">Lecturer Name</string>
+    <string name="izleyici_fakulte">Lecturer Faculty</string>
+    <string name="izleyici_bolum">Lecturer Department</string>
+    <string name="izleyici_unvan">Lecturer Title</string>
+    <string name="izleyici_parola">Lecturer Password</string>
+
+    <string name="komisyon_no">Commission No</string>
+    <string name="komisyon_parola">Commission Password</string>
+
+    <string name="yetenek_baslik">Skill Label</string>
+
+    <string name="baslangic_seviye">Beginning</string>
+    <string name="orta_seviye">Intermediate</string>
+    <string name="ileri_seviye">Advanced</string>
+
+
+</resources>

@@ -50,7 +50,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 fun  CommissionPage(navController: NavController,commission_id : String,viewModel: CommissionPageViewModel= hiltViewModel()) {
 
     LaunchedEffect(key1 = viewModel) {
-        viewModel.getCommissionInformation()
+        viewModel.getCommissionInformation(commission_id)
     }
 
     val state by viewModel.state.collectAsStateWithLifecycle()

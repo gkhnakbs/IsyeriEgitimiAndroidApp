@@ -74,7 +74,7 @@ fun CommissionMainPage(
     Constants.COMMISION_ID = commission_id
 
     LaunchedEffect(key1 = viewModel) {
-        viewModel.getCommissionInformation()
+        viewModel.getCommissionInformation(commission_id)
     }
 
     val state by viewModel.state.collectAsStateWithLifecycle()

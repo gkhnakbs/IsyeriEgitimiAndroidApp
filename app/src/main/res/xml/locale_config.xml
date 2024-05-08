@@ -3,6 +3,7 @@
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
 
     <locale android:name="tr"/> <!-- Turkish -->
-    <locale android:name="en-us"/> <!-- English (United States) -->
+    <locale android:name="en"/> <!-- English (United States) -->
 
 </locale-config>
+

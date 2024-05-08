@@ -10,10 +10,10 @@ class CommissionApi @Inject constructor(private val databaseConnection: Database
 
     val connection=databaseConnection.connection
 
-    fun getCommissionsInformation() : Commission{
+    fun getCommissionsInformation(commission_id:String) : Commission{
         val commission=Commission(Constants.COMMISION_ID,"","","","","","","")
         val statement = connection.createStatement()
-        val result=statement.executeQuery("select * from komisyon where komisyon_id=${Constants.COMMISION_ID.toBigDecimal()}")
+        val result=statement.executeQuery("select * from komisyon where komisyon_id=${commission_id}")
         while (result.next()){
             commission.commission_degree=""
             commission.commission_department=result.getString("komisyon_bolum")

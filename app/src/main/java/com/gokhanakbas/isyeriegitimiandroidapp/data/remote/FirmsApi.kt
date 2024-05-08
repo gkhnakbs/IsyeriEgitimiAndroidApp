@@ -1,6 +1,8 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
+import android.util.Log
 import arrow.core.Either
+import arrow.core.raise.catch
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
@@ -8,7 +10,8 @@ import javax.inject.Inject
 
 class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConnection) {
     // Burada gerçekten bir database bağlantısı yapıp firmanın bilgilerini çekeceğimiz fonksiyon zorunluluğu yer alıyor.
-    //Burada artık Either kullanmaya gerek yok.
+    // Burada artık Either kullanmaya gerek yok.
+
     val connection = databaseconnection.connection
 
     fun getFirms(): List<Firm> {
@@ -37,22 +40,26 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
     fun getFirmsInformation(firm_id: String): Firm {
         val firmObject = Firm(firm_id, "", "", "", "", "", "", "")
         val statement = connection.createStatement()
-        val result = statement.executeQuery("select * from firma where firma_id=${firm_id}")
-        while (result.next()) {
-            firmObject.firm_name = result.getString("firma_ad")
-            firmObject.firm_sector = result.getString("firma_sektor")
-            firmObject.firm_info = result.getString("firma_hakkinda")
-            firmObject.firm_logo = result.getString("firma_logo")
-            firmObject.firm_mail = result.getString("firma_mail")
-            firmObject.firm_address = result.getString("firma_adres")
-            firmObject.firm_phone=""
+        try {
+            val result = statement.executeQuery("select * from firma where firma_id=$firm_id")
+            while (result.next()) {
+                firmObject.firm_name = result.getString("firma_ad")
+                firmObject.firm_sector = result.getString("firma_sektor")
+                firmObject.firm_info = result.getString("firma_hakkinda")
+                firmObject.firm_logo = result.getString("firma_logo")
+                firmObject.firm_mail = result.getString("firma_mail")
+                firmObject.firm_address = result.getString("firma_adres")
+                firmObject.firm_phone = ""
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
         }
 
         return firmObject
     }
 
-    fun getFirmsWorkingStudents(): Either<NetworkError, List<Student>> {
+    fun getFirmsWorkingStudents(): List<Student> {
         val connection = databaseconnection.connection
-        TODO("Not yet implemented")
+        return emptyList<Student>()
     }
 }

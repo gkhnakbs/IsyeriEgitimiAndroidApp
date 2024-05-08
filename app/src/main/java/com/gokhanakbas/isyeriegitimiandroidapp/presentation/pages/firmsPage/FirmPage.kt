@@ -48,20 +48,24 @@ import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 @Composable
 fun FirmPage(
     navController: NavController,
-    firmObject:Firm,
+    firm_id:String,
     firmPageViewModel: FirmPageViewModel = hiltViewModel()  ) {
+
+    LaunchedEffect(key1 = firmPageViewModel) {
+        firmPageViewModel.getFirmInformation(firm_id)
+    }
 
     val firmPageState by firmPageViewModel.state.collectAsState()
 
-    FirmPageContent(navController = navController, firmPageState = firmPageState,firmObject)
+    FirmPageContent(navController = navController, firmPageState = firmPageState)
 }
 
 @Composable
-fun FirmPageContent(navController: NavController,firmPageState: FirmPageState,firm: Firm) {
+fun FirmPageContent(navController: NavController,firmPageState: FirmPageState) {
 
     LoadingDialog(isLoading = firmPageState.isLoading)
 
-    val firmObject=firm
+    val firmObject=firmPageState.firm
 
     val scrollState = rememberScrollState()
 
