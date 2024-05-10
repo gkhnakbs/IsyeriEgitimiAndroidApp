@@ -7,6 +7,8 @@ object Constants {
     const val USER_MAIL = "user_mail"
     const val USER_PASSWORD = "user_password"
 
+    var USER_TYPE=""
+
     var STUDENT_NO=""
     var FIRM_ID=""
     var LECTURER_ID=""
@@ -15,4 +17,5 @@ object Constants {
     const val STUDENT = "student"
     const val LECTURER = "lecturer"
     const val FIRM = "firm"
+    const val COMMISSION = "commission"
 }

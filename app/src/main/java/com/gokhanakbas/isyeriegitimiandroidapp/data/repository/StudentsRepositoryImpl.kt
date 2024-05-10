@@ -58,4 +58,12 @@ class StudentsRepositoryImpl @Inject constructor(private val studentsApi: Studen
         }
     }
 
+    override suspend fun saveStudentPassword(student: Student): Either<NetworkError, Boolean> {
+        return Either.catch {
+            studentsApi.saveStudentPassword(student)
+        }.mapLeft {
+            it.toNetworkError()
+        }
+    }
+
 }

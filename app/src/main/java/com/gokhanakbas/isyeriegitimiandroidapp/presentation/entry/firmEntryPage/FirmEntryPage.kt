@@ -42,17 +42,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
-import com.google.gson.Gson
 
 @Composable
-fun FirmEntryPage(navController: NavController,viewModel: FirmEntryPageViewModel= hiltViewModel()) {
-
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getFirms()
-    }
+fun FirmEntryPage(
+    navController: NavController,
+    viewModel: FirmEntryPageViewModel = hiltViewModel()
+) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -61,15 +58,15 @@ fun FirmEntryPage(navController: NavController,viewModel: FirmEntryPageViewModel
 }
 
 @Composable
-fun FirmEntryPageContent(navController: NavController,state: FirmEntryPageState) {
+fun FirmEntryPageContent(navController: NavController, state: FirmEntryPageState) {
 
-    val focusRequester= remember {
+    val focusRequester = remember {
         FocusRequester()
     }
-    val focusManager= LocalFocusManager.current
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = state.isLoading) {
-        if(!state.isLoading) {
+        if (!state.isLoading) {
             focusRequester.requestFocus()
         }
     }
@@ -78,7 +75,10 @@ fun FirmEntryPageContent(navController: NavController,state: FirmEntryPageState)
 
     val tf_firmNo = remember { mutableStateOf("") }
     val tf_firmPassword = remember { mutableStateOf("") }
+
     val errorState = remember { mutableStateOf(false) }
+    val errorState1 = remember { mutableStateOf(false) }
+
     Column {
         Spacer(modifier = Modifier.height(10.dp))
         Row(
@@ -118,7 +118,7 @@ fun FirmEntryPageContent(navController: NavController,state: FirmEntryPageState)
                 OutlinedTextField(
                     value = tf_firmNo.value,
                     onValueChange = {
-                        tf_firmNo.value = it
+                        tf_firmNo.value = it.trim()
                         if (it.length > 11) {
                             errorState.value = true
                         } else {
@@ -146,15 +146,30 @@ fun FirmEntryPageContent(navController: NavController,state: FirmEntryPageState)
                         focusedBorderColor = GaziKoyuMavi,
                         unfocusedBorderColor = GaziKoyuMavi
                     ),
-                    modifier = Modifier.requiredWidth(300.dp).focusRequester(focusRequester),
+                    modifier = Modifier
+                        .requiredWidth(300.dp)
+                        .focusRequester(focusRequester),
                     isError = errorState.value,
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = tf_firmPassword.value,
-                    onValueChange = { tf_firmPassword.value = it },
+                    onValueChange = {
+                        tf_firmPassword.value = it.trim()
+                        if (it.length < 5) {
+                            errorState1.value = true
+                        } else {
+                            errorState1.value = false
+                        }
+                    },
                     label = { Text(text = stringResource(id = R.string.firma_parola)) },
-                    supportingText = { Text(text = stringResource(id = R.string.zorunlu_yazisi_tf)) },
+                    supportingText = {
+                        if (errorState1.value) {
+                            Text(text = stringResource(id = R.string.en_az_5_karakter_olmalidir))
+                        } else {
+                            Text(text = stringResource(id = R.string.zorunlu_yazisi_tf))
+                        }
+                    },
                     prefix = {
                         Icon(
                             painter = painterResource(id = R.drawable.password_icon),
@@ -168,6 +183,7 @@ fun FirmEntryPageContent(navController: NavController,state: FirmEntryPageState)
                         focusedBorderColor = GaziKoyuMavi,
                         unfocusedBorderColor = GaziKoyuMavi
                     ),
+                    isError = errorState1.value,
                     modifier = Modifier.requiredWidth(300.dp),
                     singleLine = true
                 )
@@ -191,13 +207,35 @@ fun FirmEntryPageContent(navController: NavController,state: FirmEntryPageState)
                 OutlinedButton(
                     onClick = {
                         //Firma Anasayfasina yonlendirilecek
-                        val firm = "2"
+                    if (tf_firmNo.value.isNotEmpty()&&tf_firmPassword.value.isNotEmpty()) {
 
-                        navController.navigate(Screen.FirmMainPage.passNavigate(firm)) {
-                            popUpTo(Screen.FirmEntryPage.route) {
-                                inclusive = true
+                        if (!errorState.value && !errorState1.value) {
+                            var firmValided = ""
+
+                            if (state.firmList.isNotEmpty()) {
+
+                                state.firmList.forEach { firm ->
+                                    if (firm.firm_id == tf_firmNo.value && firm.firm_password == tf_firmPassword.value) {
+                                        firmValided = firm.firm_id
+                                    }
+                                }
+
+                                if (firmValided != "") {
+                                    navController.navigate(Screen.FirmMainPage.passNavigate(firm_id = firmValided)) {
+                                        popUpTo(Screen.FirmEntryPage.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                            } else {
+                                println("boş liste")
+                                navController.popBackStack()
                             }
                         }
+                    }else{
+                        errorState.value=true
+                        errorState1.value=true
+                    }
                     },
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier.size(110.dp, 45.dp),

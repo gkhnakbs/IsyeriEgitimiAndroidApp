@@ -30,7 +30,8 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
                     result.getString("firma_logo"),
                     result.getString("firma_eposta"),
                     result.getString("firma_adres"),
-                    ""
+                    "",
+                    result.getString("firma_parola")
                 )
             )
         }
@@ -38,7 +39,7 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
     }
 
     fun getFirmsInformation(firm_id: String): Firm {
-        val firmObject = Firm(firm_id, "", "", "", "", "", "", "")
+        val firmObject = Firm(firm_id, "", "", "", "", "", "", "","")
         val statement = connection.createStatement()
         try {
             val result = statement.executeQuery("select * from firma where firma_id=$firm_id")
@@ -49,6 +50,7 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
                 firmObject.firm_logo = result.getString("firma_logo")
                 firmObject.firm_mail = result.getString("firma_mail")
                 firmObject.firm_address = result.getString("firma_adres")
+                firmObject.firm_password= result.getString("firma_parola")
                 firmObject.firm_phone = ""
             }
         }catch (e:Exception){
@@ -56,6 +58,11 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
         }
 
         return firmObject
+    }
+
+
+    fun saveFirmInformation(firm:Firm) : Boolean {
+        return true
     }
 
     fun getFirmsWorkingStudents(): List<Student> {

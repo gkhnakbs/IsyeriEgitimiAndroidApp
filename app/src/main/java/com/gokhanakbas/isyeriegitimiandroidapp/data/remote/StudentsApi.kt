@@ -41,6 +41,7 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                         result.getString("firma_logo"),
                         result.getString("firma_eposta"),
                         result.getString("firma_adres"),
+                        "",
                         ""
                     ),
                     result.getString("ogrenci_parola"),
@@ -55,7 +56,7 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
         val studentObject =
             Student(
                 studentNo, "", "", "", "", "", "", "", "", "", "", "",
-                Firm("", "", "", "", "", "", "", ""),
+                Firm("", "", "", "", "", "", "", "",""),
                 "", mutableStateListOf()
             )
         val statement = connection.createStatement()
@@ -84,6 +85,7 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                         result.getString("firma_logo"),
                         result.getString("firma_eposta"),
                         result.getString("firma_adres"),
+                        "",
                         ""
                     )
 
@@ -136,6 +138,12 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
              if(addSkill>0) resultCount+=1
         }
         return resultCount==skillList.size && deleteOldSkill>0
+    }
+
+    fun saveStudentPassword(student: Student) : Boolean {
+        val statement = connection.createStatement()
+        val result = statement.executeUpdate("update ogrenci SET ogrenci_parola= '${student.student_password}' where ogrenci_no = ${student.student_no.toBigDecimal()}")
+        return result>0
     }
 
 }

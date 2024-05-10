@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,26 +31,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FirmPage(
     navController: NavController,
-    firm_id:String,
-    firmPageViewModel: FirmPageViewModel = hiltViewModel()  ) {
+    firm_id: String,
+    firmPageViewModel: FirmPageViewModel = hiltViewModel()
+) {
 
     LaunchedEffect(key1 = firmPageViewModel) {
         firmPageViewModel.getFirmInformation(firm_id)
@@ -61,11 +62,11 @@ fun FirmPage(
 }
 
 @Composable
-fun FirmPageContent(navController: NavController,firmPageState: FirmPageState) {
+fun FirmPageContent(navController: NavController, firmPageState: FirmPageState) {
 
     LoadingDialog(isLoading = firmPageState.isLoading)
 
-    val firmObject=firmPageState.firm
+    val firmObject = firmPageState.firm
 
     val scrollState = rememberScrollState()
 
@@ -91,7 +92,7 @@ fun FirmPageContent(navController: NavController,firmPageState: FirmPageState) {
                         .verticalScroll(scrollState)
                         .clip(RoundedCornerShape(20.dp))
                         .background(Color.White)
-                        .padding(10.dp)
+                        .padding(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 20.dp)
                 ) {
                     Row(
                         modifier = Modifier
@@ -104,10 +105,12 @@ fun FirmPageContent(navController: NavController,firmPageState: FirmPageState) {
                             fontWeight = FontWeight.Bold
                         )
                     }
-                    Spacer(modifier = Modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .background(Color.LightGray))
+                    Spacer(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .fillMaxWidth()
+                            .background(Color.LightGray)
+                    )
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -133,26 +136,55 @@ fun FirmPageContent(navController: NavController,firmPageState: FirmPageState) {
             contentScale = ContentScale.FillWidth
         )
 
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(top = 100.dp)
-                .background(Color.Transparent),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(top = 100.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.gazi_university_logo),
-                contentDescription = "",
-                alignment = Alignment.Center,
-                contentScale = ContentScale.Crop, modifier = Modifier.size(80.dp)
-            )
-            Text(
-                text = firmObject.firm_name,
-                fontSize = 25.sp, fontWeight = FontWeight.Bold
-            )
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .background(Color.Transparent),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.gazi_university_logo),
+                        contentDescription = "",
+                        alignment = Alignment.Center,
+                        contentScale = ContentScale.Crop, modifier = Modifier.size(80.dp)
+                    )
+                    Text(
+                        text = firmObject.firm_name,
+                        fontSize = 25.sp, fontWeight = FontWeight.Bold
+                    )
 
+                }
+                if (Constants.USER_TYPE == Constants.FIRM) {
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        IconButton(onClick = {
+                            navController.navigate(Screen.FirmInfoEditPage.passNavigate(firmObject.firm_id))
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.pencil_icon),
+                                contentDescription = "",
+                                modifier = Modifier.size(22.dp)
+                            )
+                        }
+                    }
+                }
+            }
         }
+
         OutlinedButton(
             onClick = {
                 navController.popBackStack()
@@ -171,7 +203,7 @@ fun FirmPageContent(navController: NavController,firmPageState: FirmPageState) {
                 horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.back_button),
+                    painter = painterResource(id = R.drawable.back_icon),
                     contentDescription = "Go back Icon For Firm Page",
                     modifier = Modifier.size(20.dp)
                 )

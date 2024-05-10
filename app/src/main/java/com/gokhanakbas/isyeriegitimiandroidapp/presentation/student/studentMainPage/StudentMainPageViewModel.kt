@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.student
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainPage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -24,10 +24,21 @@
     <string name="ilana_git">Go to Advert</string>
     <string name="favori_ilanlar">Favourite Posts</string>
     <string name="parola_bos_birakilamaz">Password Field cannot be empty</string>
+    <string name="parola">Password</string>
+    <string name="mevcut_parola">Current Password</string>
+    <string name="yeni_parola">New Password</string>
+    <string name="yeni_parola_tekrar">New Password Again</string>
     <string name="ekle">Add</string>
     <string name="yetenek_ekle">Skill Add</string>
     <string name="raporu_goruntule">Show Report</string>
     <string name="rapor_basariyla_kaydedildi">Report Was Saved Successfully</string>
+
+
+    <string name="buyuk_harf_icermelidir">Must Contain Uppercase Letter</string>
+    <string name="kucuk_harf_icermelidir">Must Contain Uppercase Letter</string>
+    <string name="en_az_8_karakter_olmalidir">Must Contain At Least 8 Characters</string>
+    <string name="mevcut_parolaniz_uyusmuyor">Doesnt Match Current Password</string>
+
 
     <string name="ana_sayfa">Main Page</string>
 
@@ -38,6 +49,7 @@
     <string name="raporu_kaydetmek_istedigine_emin_misin">Are you sure you want to Save Report?</string>
     <string name="eger_kaydedersen_tekrar_degistiremeyecek_veya_silemeyeceksin">If You Save , You cannot update or delete this</string>
 
+    <string name="suan_icin_bos_gozukuyor">It looks like empty</string>
 
     <string name="basvuru_soru">Are you sure you want to apply?</string>
 

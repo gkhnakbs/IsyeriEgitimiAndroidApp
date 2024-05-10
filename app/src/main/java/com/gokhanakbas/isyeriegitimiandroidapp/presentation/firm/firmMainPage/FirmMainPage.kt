@@ -1,8 +1,9 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.student
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,9 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
@@ -27,10 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,8 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,64 +46,52 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.AdvertsOfFirm
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.WorkingStudentsPageForFirm
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPageInfo.FirmInformationForFirm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LogOutQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ScaffoldComp
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.advertListPage.AdvertListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.appliedAdvertsListPage.AppliedAdvertsListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.favouritePostListPage.FavouritePostListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.firmListPage.FirmListPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.formListPage.FormListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.homePagePostFeed.HomePagePostFeed
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.studentListPage.StudentListPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.surveyListPage.SurveyListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.weeklyReportListPage.WeeklyReportListPage
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.Mavi2
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 var lastPage = 1
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun StudentMainPage(
-    navController: NavController,
-    student_no: String,
-    viewModel: StudentMainPageViewModel = hiltViewModel()
-) {
+fun FirmMainPage (navController: NavController, firm_id: String,viewModel: FirmMainPageViewModel = hiltViewModel()) {
 
-    LaunchedEffect(viewModel) {
-        viewModel.getStudentInformation(student_no)
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.getFirmInformation(firm_id)
     }
 
-    Constants.STUDENT_NO = student_no
+    //Constants tanımlamaları
+    Constants.USER_TYPE=Constants.FIRM
+    Constants.FIRM_ID=firm_id
+
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    StudentMainPageContent(navController = navController, studentMainPageState = state)
+    FirmMainPageContent(navController = navController, state = state)
 
 }
 
 @Composable
-fun StudentMainPageContent(
-    navController: NavController,
-    studentMainPageState: StudentMainPageState
-) {
+fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
 
-    val navDrawerState1= remember {
-        DrawerState(DrawerValue.Closed)
-    }
+    val firmObject=state.firm_object
 
     val navDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navScope = rememberCoroutineScope()
     val navDrawerSecilen = remember { mutableIntStateOf(lastPage) }
     val log_out_choice = remember { mutableStateOf(false) }
     val exit_choice = remember { mutableStateOf(false) }
-
-    val studentObject = studentMainPageState.student
-
 
     val liste = listOf(
         NavItem(
@@ -118,18 +101,18 @@ fun StudentMainPageContent(
         ),
         NavItem(
             2,
-            stringResource(id = R.string.ilanlar),
-            painterResource(id = R.drawable.advertisement_icon)
+            stringResource(id = R.string.ogrenci),
+            painterResource(id = R.drawable.student_thin_icon)
         ),
         NavItem(
             3,
-            stringResource(id = R.string.firma),
-            painterResource(id = R.drawable.workplace_icon)
+            stringResource(id = R.string.calisan_ogrenciler),
+            painterResource(id = R.drawable.employee_icon)
         ),
         NavItem(
             4,
-            stringResource(id = R.string.basvurulmus_ilanlar),
-            painterResource(id = R.drawable.apply_icon)
+            stringResource(id = R.string.ilanlar),
+            painterResource(id = R.drawable.adverts_icon)
         ),
         NavItem(
             5,
@@ -140,16 +123,6 @@ fun StudentMainPageContent(
             6,
             stringResource(id = R.string.anket),
             painterResource(id = R.drawable.document_icon)
-        ),
-        NavItem(
-            7,
-            stringResource(id = R.string.haftalik_rapor),
-            painterResource(id = R.drawable.report_icon)
-        ),
-        NavItem(
-            8,
-            stringResource(id = R.string.favori_ilanlar),
-            painterResource(id = R.drawable.bookmark_icon)
         )
     )
 
@@ -167,15 +140,16 @@ fun StudentMainPageContent(
                         .size(250.dp, 100.dp)
                         .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp))
                         .clickable {
-                            navController.navigate(Screen.StudentPage.passNavigate(studentObject.student_no))
+                            //Firma profil sayfasina gidecek firm_id ile .Düzenlenecek yani bu kısım
+                            navController.navigate(Screen.FirmPage.passNavigate(firm_id= firmObject.firm_id))
                         }
+
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.gazi_rektorluk),
+                        painter = painterResource(id = R.drawable.havelsan),
                         contentDescription = "",
-                        modifier =
-                        Modifier
-                            .alpha(0.5f)
+                        modifier = Modifier
+                            .alpha(0.6f)
                             .fillMaxSize()
                             .aspectRatio(1.4f)
                     )
@@ -185,28 +159,21 @@ fun StudentMainPageContent(
                             .align(Alignment.Center)
                             .fillMaxSize()
                     ) {
-                        Box(
+                        Image(
+                            painter = painterResource(id = R.drawable.workplace_icon),
+                            contentDescription = "Firm Photo",
                             modifier = Modifier
-                                .size(40.dp)
-                                .clip(CircleShape)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.fotoyeni),
-                                contentDescription = "Student Photo",
-                                alignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(130.dp),
-                                contentScale = ContentScale.FillBounds
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.size(5.dp, 0.dp))
+                                .clip(
+                                    RoundedCornerShape(40.dp)
+                                )
+                                .border(4.dp, Color.White)
+                                .size(50.dp), contentScale = ContentScale.FillBounds
+                        )
+                        Spacer(modifier = Modifier.size(10.dp, 0.dp))
                         Text(
-                            text = studentObject.student_name,
-                            fontSize = 18.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            textDecoration = TextDecoration.Underline
+                            text = firmObject.firm_name,
+                            fontSize = 22.sp,
+                            color = Color.White
                         )
                     }
                 }
@@ -247,36 +214,30 @@ fun StudentMainPageContent(
                     }
                 )
             }
-        },
-        drawerState = navDrawerState,
-        gesturesEnabled = navDrawerState.isOpen
+        }, drawerState = navDrawerState, gesturesEnabled = navDrawerState.isOpen
     ) {
         when (navDrawerSecilen.intValue) {
-
             1 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                HomePagePostFeed(navController = navController, paddingValues = it)
+                FirmInformationForFirm(firm_id = firmObject.firm_id)
             }
 
             2 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                AdvertListPage(navController = navController, paddingValues = it)
+                StudentListPage(navController = navController, paddingValues = it)
             }
 
             3 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-
-                FirmListPage(navController = navController, paddingValues = it)
+                WorkingStudentsPageForFirm(paddingValues = it, navController = navController)
             }
 
             4 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-
-                AppliedAdvertsListPage(navController = navController, paddingValues = it)
-
+                AdvertsOfFirm(paddingValues = it, navController = navController)
             }
 
             5 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
                 FormListPage(
                     navController = navController,
                     paddingValues = it,
-                    formType = Constants.STUDENT
+                    formType = Constants.FIRM
                 )
             }
 
@@ -284,24 +245,13 @@ fun StudentMainPageContent(
                 SurveyListPage(
                     navController = navController,
                     paddingValues = it,
-                    surveyType = Constants.STUDENT
-                )
-            }
-
-            7 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                WeeklyReportListPage(navController = navController, paddingValues = it)
-            }
-
-            8 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                FavouritePostListPage(
-                    navController = navController,
-                    paddingValues = it,
-                    student_no = studentObject.student_no
+                    surveyType = Constants.FIRM
                 )
             }
         }
-    }
 
+
+    }
     BackHandler(onBack = {
         exit_choice.value = true
     })
@@ -312,10 +262,9 @@ fun StudentMainPageContent(
         LogOutQuestionComp(
             log_out_choice = log_out_choice,
             navController = navController,
-            popUpScreen = Screen.StudentMainPage
+            popUpScreen = Screen.FirmMainPage
         )
     }
-
 }
 
 

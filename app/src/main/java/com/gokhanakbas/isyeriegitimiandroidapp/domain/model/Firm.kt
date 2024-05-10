@@ -13,5 +13,6 @@ data class Firm(
     var firm_mail : String,
     var firm_address : String,
     var firm_phone : String,
+    var firm_password : String,
     var id: String = UUID.randomUUID().toString()
 )

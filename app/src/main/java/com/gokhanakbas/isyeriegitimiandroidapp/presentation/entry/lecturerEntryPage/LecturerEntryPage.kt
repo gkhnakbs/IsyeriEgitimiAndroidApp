@@ -52,10 +52,6 @@ fun LecturerEntryPage(
     viewModel: LecturerEntryPageViewModel = hiltViewModel()
 ) {
 
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getLecturers()
-    }
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LecturerEntryPageContent(navController = navController, state = state)
@@ -125,7 +121,7 @@ fun LecturerEntryPageContent(navController: NavController, state: LecturerEntryP
                 OutlinedTextField(
                     value = tf_teacherStaffNo.value,
                     onValueChange = {
-                        tf_teacherStaffNo.value = it
+                        tf_teacherStaffNo.value = it.trim()
                         errorState.value = it.length > 11
                     },
                     label = { Text(text = stringResource(id = R.string.izleyici_no)) },
@@ -154,7 +150,7 @@ fun LecturerEntryPageContent(navController: NavController, state: LecturerEntryP
                 OutlinedTextField(
                     value = tf_teacherStaffPassword.value,
                     onValueChange = {
-                        tf_teacherStaffPassword.value = it
+                        tf_teacherStaffPassword.value = it.trim()
                         errorState1.value = it.length < 6
                     },
                     label = { Text(text = stringResource(id = R.string.izleyici_parola)) },

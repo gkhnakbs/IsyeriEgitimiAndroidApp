@@ -10,7 +10,7 @@ data class AdvertPageState(
         "",
         "",
         "","","",
-        Firm("", "", "", "", "", "", "", ""),
+        Firm("", "", "", "", "", "", "", "",""),
         emptyList()
     ,""),
     var error : String? = null

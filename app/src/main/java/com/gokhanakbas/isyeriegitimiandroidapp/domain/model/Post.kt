@@ -8,7 +8,7 @@ data class Post(
     val post_date: String,
     val post_photo:String,
     val post_advert_id: String,
-    val post_firm : Firm = Firm("0","","","","","","",""),
+    val post_firm : Firm = Firm("0","","","","","","","",""),
     var post_isFavourite : Boolean,
     val id: String = UUID.randomUUID().toString()
 )

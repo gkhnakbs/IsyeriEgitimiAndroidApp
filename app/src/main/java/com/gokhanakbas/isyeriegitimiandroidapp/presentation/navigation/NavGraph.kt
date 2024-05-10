@@ -14,7 +14,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.lecturerEntryP
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.studentEntryPage.StudentEntryPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertCreatingPage.AdvertCreatingPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmInfoEditPage.FirmInfoEditPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.FirmMainPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage.FirmMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerInfoEditPage.LecturerInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.LecturerMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.lecturersPage.LecturerPage
@@ -25,7 +25,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.formsPage.Form
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.reportsPage.ReportsPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.studentsPage.StudentPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentInfoEditPage.StudentInfoEditPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.StudentMainPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainPage.StudentMainPage
 
 
 @Composable

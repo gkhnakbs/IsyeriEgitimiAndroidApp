@@ -1,16 +1,25 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.homePagePostFeed
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.PostComponent
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
@@ -31,9 +40,9 @@ fun HomePagePostFeed(
     val state by homePagePostFeedViewModel.state.collectAsStateWithLifecycle()
 
     state.post.forEachIndexed { index, post ->
-        state.favouritePostList.forEachIndexed{index2 , favouritePost->
-            if(post.post_advert_id==favouritePost.post_advert_id){
-                post.post_isFavourite=true
+        state.favouritePostList.forEachIndexed { index2, favouritePost ->
+            if (post.post_advert_id == favouritePost.post_advert_id) {
+                post.post_isFavourite = true
             }
         }
     }
@@ -56,18 +65,31 @@ fun HomePagePostFeedContent(
     LoadingDialog(isLoading = homePagePostFeedState.isLoading)
 
 
-
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .padding(paddingValues)) {
-        items(count = homePagePostFeedState.post.size,
-            key = { homePagePostFeedState.post[it].id })
-            {index ->
+    if (homePagePostFeedState.post.size > 0) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(paddingValues)
+        ) {
+            items(count = homePagePostFeedState.post.size,
+                key = { homePagePostFeedState.post[it].id })
+            { index ->
                 PostComponent(
                     navController = navController,
                     post = homePagePostFeedState.post[index]
 
                 )
+            }
+        }
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = stringResource(id = R.string.suan_icin_bos_gozukuyor), color = Color.LightGray)
         }
     }
+
+
 }

@@ -41,11 +41,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import arrow.core.Const
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 
 @Composable
 fun LecturerPage(navController: NavController,lecturer_id : String,viewModel: LecturerPageViewModel= hiltViewModel()) {
@@ -158,17 +160,20 @@ fun LecturerPageContent(navController: NavController,state: LecturerPageState) {
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.weight(0.8f,fill = true),
                         )
-                        IconButton(onClick = {
-                            //Profil duzenleme sayfasina gidecek
-                            navController.navigate(Screen.LecturerInfoEditPage.passNavigate(lecturer_id = lecturerObject.lecturer_id))
-                        }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.pencil_icon),
-                                contentDescription = "",
-                                Modifier.size(24.dp),
-                                tint = Color.White
-                            )
+                        if (Constants.USER_TYPE==Constants.LECTURER){
+                            IconButton(onClick = {
+                                //Profil duzenleme sayfasina gidecek
+                                navController.navigate(Screen.LecturerInfoEditPage.passNavigate(lecturer_id = lecturerObject.lecturer_id))
+                            }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.pencil_icon),
+                                    contentDescription = "",
+                                    Modifier.size(24.dp),
+                                    tint = Color.White
+                                )
+                            }
                         }
+
                     }
                 }
             }

@@ -19,6 +19,10 @@ class FirmEntryPageViewModel @Inject constructor(private val firmsRepository: Fi
     private val _state= MutableStateFlow(FirmEntryPageState())
     val state=_state.asStateFlow()
 
+    init {
+        getFirms()
+    }
+
     fun getFirms(){
         viewModelScope.launch {
             _state.update {

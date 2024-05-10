@@ -20,4 +20,6 @@ interface StudentsRepository {
 
     suspend fun saveStudentsSkills(student_no: String,skillList: MutableList<Skill>) : Either<NetworkError,Boolean>
 
+    suspend fun saveStudentPassword(student: Student) : Either<NetworkError,Boolean>
+
 }

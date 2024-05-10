@@ -130,7 +130,35 @@ class StudentInfoEditPageViewModel @Inject constructor(private val studentsRepos
                 }
             }
         }
+        return result.await()
+    }
 
+    suspend fun saveStudentPassword(student: Student): Boolean {
+        val result = viewModelScope.async {
+            _state.update {
+                it.copy(isLoading = true)
+            }
+
+            val saveResult = studentsRepository.saveStudentPassword(student)
+            _state.update {
+                it.copy(isLoading = false)
+            }
+            when (saveResult) {
+                is Either.Right -> {
+                    _state.update {
+                        it.copy(savedSuccessfully = true)
+                    }
+                    true
+                }
+                is Either.Left -> {
+                    _state.update {
+                        it.copy(savedSuccessfully = false)
+                    }
+                    sendEvent(Event.Toast(saveResult.value.error.message))
+                    true
+                }
+            }
+        }
         return result.await()
     }
 

@@ -11,7 +11,7 @@ import java.sql.DriverManager
 import javax.inject.Inject
 
 
-class DatabaseConnection @Inject constructor() {
+class DatabaseConnection {
 
     var connection : Connection
 
@@ -26,9 +26,9 @@ class DatabaseConnection @Inject constructor() {
                     "postgres",
                     "admin"
                 )
-                println("Baglanti  "+connection.toString())
+                Log.i("databaseState :","Başarılı")
             } catch (e: Exception) {
-                Log.d("Sorun", e.localizedMessage.toString())
+                Log.d("databaseState : ", "Sorun : "+ e.localizedMessage.toString())
             }
 
         return connection

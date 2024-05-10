@@ -9,7 +9,7 @@ data class StudentPageState(
     var isLoading: Boolean = false,
     var student: Student = Student(
         "0", "", "", "", "", "", "", "", "", "", "", "",
-        Firm("", "", "", "", "", "", "", ""), "", mutableStateListOf()
+        Firm("", "", "", "", "", "", "", "",""), "", mutableStateListOf()
     ),
     var skillList: MutableList<Skill> = mutableStateListOf(),
     var error: String? = null

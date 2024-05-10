@@ -1,8 +1,8 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.lecturerEntryPage
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPageInfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.LecturersRepository
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.FirmsRepository
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.sendEvent
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,42 +14,39 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LecturerEntryPageViewModel @Inject constructor(private val lecturersRepository: LecturersRepository) : ViewModel() {
+class FirmMainPageInfoViewModel @Inject constructor(private val firmsRepository: FirmsRepository) : ViewModel() {
 
-    private val _state= MutableStateFlow(LecturerEntryPageState())
+    private val _state= MutableStateFlow(FirmMainPageInfoState())
     val state=_state.asStateFlow()
 
-    init {
-        getLecturers()
-    }
 
-    fun getLecturers() {
+    fun getFirmInformation(firm_id:String){
         viewModelScope.launch {
             _state.update {
-                it.copy(
-                    isLoading = true
-                )
+                it.copy(isLoading = true)
             }
-            delay(2000)
-            lecturersRepository.getLecturers()
-                .onRight { lecturerList->
+            delay(1000)
+            firmsRepository.getFirmInformation(firm_id)
+                .onLeft {error->
                     _state.update {
-                        it.copy(lecturerList = lecturerList)
-                    }
-                }
-                .onLeft { error->
-                    _state.update {
-                        it.copy(error= error.error.message)
+                        it.copy(
+                            error = error.error.message
+                        )
                     }
                     sendEvent(Event.Toast(error.error.message))
+                }
+                .onRight {firm->
+                    _state.update {
+                        it.copy(
+                            firm = firm
+                        )
+                    }
                 }
             _state.update {
                 it.copy(isLoading = false)
             }
         }
-
     }
-
 
 
 }

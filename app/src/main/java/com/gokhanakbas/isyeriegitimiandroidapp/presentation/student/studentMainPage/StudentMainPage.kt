@@ -1,9 +1,8 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainPage
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
@@ -39,55 +40,74 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LogOutQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ScaffoldComp
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.advertListPage.AdvertListPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.appliedAdvertsListPage.AppliedAdvertsListPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.favouritePostListPage.FavouritePostListPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.firmListPage.FirmListPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.formListPage.FormListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.studentListPage.StudentListPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.homePagePostFeed.HomePagePostFeed
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.surveyListPage.SurveyListPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.weeklyReportListPage.WeeklyReportListPage
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.Mavi2
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 var lastPage = 1
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FirmMainPage (navController: NavController, firm_id: String,viewModel: FirmMainPageViewModel= hiltViewModel()) {
+fun StudentMainPage(
+    navController: NavController,
+    student_no: String,
+    viewModel: StudentMainPageViewModel = hiltViewModel()
+) {
 
-    Constants.FIRM_ID=firm_id
-
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getFirmInformation(firm_id)
+    LaunchedEffect(viewModel) {
+        viewModel.getStudentInformation(student_no)
     }
+
+    //Constants tanımlamaları
+    Constants.USER_TYPE=Constants.STUDENT
+    Constants.STUDENT_NO = student_no
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    FirmMainPageContent(navController = navController, state = state)
+    StudentMainPageContent(navController = navController, studentMainPageState = state)
 
 }
 
 @Composable
-fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
+fun StudentMainPageContent(
+    navController: NavController,
+    studentMainPageState: StudentMainPageState
+) {
 
-    val firmObject=state.firm_object
+    val navDrawerState1= remember {
+        DrawerState(DrawerValue.Closed)
+    }
 
     val navDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navScope = rememberCoroutineScope()
     val navDrawerSecilen = remember { mutableIntStateOf(lastPage) }
     val log_out_choice = remember { mutableStateOf(false) }
     val exit_choice = remember { mutableStateOf(false) }
+
+    val studentObject = studentMainPageState.student
+
 
     val liste = listOf(
         NavItem(
@@ -97,18 +117,18 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
         ),
         NavItem(
             2,
-            stringResource(id = R.string.ogrenci),
-            painterResource(id = R.drawable.student_thin_icon)
+            stringResource(id = R.string.ilanlar),
+            painterResource(id = R.drawable.advertisement_icon)
         ),
         NavItem(
             3,
-            stringResource(id = R.string.calisan_ogrenciler),
-            painterResource(id = R.drawable.employee_icon)
+            stringResource(id = R.string.firma),
+            painterResource(id = R.drawable.workplace_icon)
         ),
         NavItem(
             4,
-            stringResource(id = R.string.ilanlar),
-            painterResource(id = R.drawable.adverts_icon)
+            stringResource(id = R.string.basvurulmus_ilanlar),
+            painterResource(id = R.drawable.apply_icon)
         ),
         NavItem(
             5,
@@ -119,6 +139,16 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
             6,
             stringResource(id = R.string.anket),
             painterResource(id = R.drawable.document_icon)
+        ),
+        NavItem(
+            7,
+            stringResource(id = R.string.haftalik_rapor),
+            painterResource(id = R.drawable.report_icon)
+        ),
+        NavItem(
+            8,
+            stringResource(id = R.string.favori_ilanlar),
+            painterResource(id = R.drawable.bookmark_icon)
         )
     )
 
@@ -136,17 +166,15 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
                         .size(250.dp, 100.dp)
                         .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp))
                         .clickable {
-                            //Firma profil sayfasina gidecek firm_id ile .Düzenlenecek yani bu kısım
-                            val firmJson = Gson().toJson(firmObject)
-                            navController.navigate(Screen.FirmPage.route)
+                            navController.navigate(Screen.StudentPage.passNavigate(studentObject.student_no))
                         }
-
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.havelsan),
+                        painter = painterResource(id = R.drawable.gazi_rektorluk),
                         contentDescription = "",
-                        modifier = Modifier
-                            .alpha(0.6f)
+                        modifier =
+                        Modifier
+                            .alpha(0.5f)
                             .fillMaxSize()
                             .aspectRatio(1.4f)
                     )
@@ -156,21 +184,28 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
                             .align(Alignment.Center)
                             .fillMaxSize()
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.workplace_icon),
-                            contentDescription = "Firm Photo",
+                        Box(
                             modifier = Modifier
-                                .clip(
-                                    RoundedCornerShape(40.dp)
-                                )
-                                .border(4.dp, Color.White)
-                                .size(50.dp), contentScale = ContentScale.FillBounds
-                        )
-                        Spacer(modifier = Modifier.size(10.dp, 0.dp))
+                                .size(40.dp)
+                                .clip(CircleShape)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.fotoyeni),
+                                contentDescription = "Student Photo",
+                                alignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(130.dp),
+                                contentScale = ContentScale.FillBounds
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.size(5.dp, 0.dp))
                         Text(
-                            text = firmObject.firm_name,
-                            fontSize = 22.sp,
-                            color = Color.White
+                            text = studentObject.student_name,
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            textDecoration = TextDecoration.Underline
                         )
                     }
                 }
@@ -211,30 +246,36 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
                     }
                 )
             }
-        }, drawerState = navDrawerState, gesturesEnabled = navDrawerState.isOpen
+        },
+        drawerState = navDrawerState,
+        gesturesEnabled = navDrawerState.isOpen
     ) {
         when (navDrawerSecilen.intValue) {
+
             1 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                FirmInformationForFirm(firm_object = firmObject)
+                HomePagePostFeed(navController = navController, paddingValues = it)
             }
 
             2 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                StudentListPage(navController = navController, paddingValues = it)
+                AdvertListPage(navController = navController, paddingValues = it)
             }
 
             3 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                WorkingStudentsPageForFirm(paddingValues = it, navController = navController)
+
+                FirmListPage(navController = navController, paddingValues = it)
             }
 
             4 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                AdvertsOfFirm(paddingValues = it, navController = navController)
+
+                AppliedAdvertsListPage(navController = navController, paddingValues = it)
+
             }
 
             5 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
                 FormListPage(
                     navController = navController,
                     paddingValues = it,
-                    formType = Constants.FIRM
+                    formType = Constants.STUDENT
                 )
             }
 
@@ -242,13 +283,24 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
                 SurveyListPage(
                     navController = navController,
                     paddingValues = it,
-                    surveyType = Constants.FIRM
+                    surveyType = Constants.STUDENT
+                )
+            }
+
+            7 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
+                WeeklyReportListPage(navController = navController, paddingValues = it)
+            }
+
+            8 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
+                FavouritePostListPage(
+                    navController = navController,
+                    paddingValues = it,
+                    student_no = studentObject.student_no
                 )
             }
         }
-
-
     }
+
     BackHandler(onBack = {
         exit_choice.value = true
     })
@@ -259,9 +311,10 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
         LogOutQuestionComp(
             log_out_choice = log_out_choice,
             navController = navController,
-            popUpScreen = Screen.FirmMainPage
+            popUpScreen = Screen.StudentMainPage
         )
     }
+
 }
 
 

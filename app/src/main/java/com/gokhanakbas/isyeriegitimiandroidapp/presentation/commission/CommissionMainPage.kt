@@ -70,12 +70,14 @@ fun CommissionMainPage(
     commission_id: String,
     viewModel: CommissionMainPageViewModel = hiltViewModel()
 ) {
-
-    Constants.COMMISION_ID = commission_id
-
     LaunchedEffect(key1 = viewModel) {
         viewModel.getCommissionInformation(commission_id)
     }
+
+    //Constants tanımlamaları
+    Constants.USER_TYPE=Constants.COMMISSION
+    Constants.COMMISION_ID = commission_id
+
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 

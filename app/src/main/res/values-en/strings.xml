@@ -24,19 +24,48 @@
     <string name="ilana_git">Go to Advert</string>
     <string name="favori_ilanlar">Favourite Posts</string>
     <string name="parola_bos_birakilamaz">Password Field cannot be empty</string>
+    <string name="parola">Password</string>
+    <string name="mevcut_parola">Current Password</string>
+    <string name="yeni_parola">New Password</string>
+    <string name="yeni_parola_tekrar">New Password Again</string>
     <string name="ekle">Add</string>
     <string name="yetenek_ekle">Skill Add</string>
     <string name="raporu_goruntule">Show Report</string>
     <string name="rapor_basariyla_kaydedildi">Report Was Saved Successfully</string>
 
+    <string name="buyuk_harf_icermelidir">Must Contain Uppercase Letter</string>
+    <string name="kucuk_harf_icermelidir">Must Contain Uppercase Letter</string>
+    <string name="en_az_8_karakter_olmalidir">Must Contain At Least 8 Characters</string>
+    <string name="mevcut_parolaniz_uyusmuyor">Doesnt Matches Current Password</string>
+
     <string name="ana_sayfa">Main Page</string>
 
     <string name="iptal_et">Cancel</string>
+
+    <string name="zorunlu_yazisi_tf">*Required</string>
+    <string name="kayit_ol">Sign Up</string>
+    <string name="giris_yap">Sign In</string>
+    <string name="geri_don">Go Back</string>
+
+    <string name="ilgi_alani">Field of Interest</string>
+
+    <string name="fakulte">Faculty</string>
+    <string name="yas">Age</string>
+    <string name="bolum">Department</string>
+    <string name="is_yeri">WorkPlace</string>
+    <string name="agno">AGNO</string>
+    <string name="mezun_yili">Graduate Year</string>
+
+    <string name="en_fazla_11_karakter_olabilir">Maximum 11 characters</string>
+    <string name="en_az_5_karakter_olmalidir">Minimum 5 characters</string>
+    <string name="bos_birakilamaz">Cannot be Empty</string>
+    <string name="suan_icin_bos_gozukuyor">It looks like empty</string>
 
     <string name="cikis_soru">Are you sure you want to make an Log out?</string>
     <string name="kapat_soru">Are you sure you want to make an Exit?</string>
     <string name="raporu_kaydetmek_istedigine_emin_misin">Are you sure you want to Save Report?</string>
     <string name="eger_kaydedersen_tekrar_degistiremeyecek_veya_silemeyeceksin">If You Save , You cannot update or delete this</string>
+
 
 
     <string name="basvuru_soru">Are you sure you want to apply?</string>
@@ -91,25 +120,6 @@
     <string name="basvuruyu_sil">Remove Applying</string>
     <string name="basvuruyu_silmek_istedigine_emin_misin">Are you sure to delete Applied?</string>
     <string name="basvurmak_istedigine_emin_misin">Are you sure to Apply?</string>
-
-    <string name="zorunlu_yazisi_tf">*Required</string>
-    <string name="kayit_ol">Sign Up</string>
-    <string name="giris_yap">Sign In</string>
-    <string name="geri_don">Go Back</string>
-
-    <string name="ilgi_alani">Field of Interest</string>
-
-    <string name="fakulte">Faculty</string>
-    <string name="yas">Age</string>
-    <string name="bolum">Department</string>
-    <string name="is_yeri">WorkPlace</string>
-    <string name="agno">AGNO</string>
-    <string name="mezun_yili">Graduate Year</string>
-
-
-    <string name="en_fazla_11_karakter_olabilir">Maximum 11 characters</string>
-    <string name="en_az_5_karakter_olmalidir">Minimum 5 characters</string>
-    <string name="bos_birakilamaz">Cannot be Empty</string>
 
     <string name="goster">Show</string>
     <string name="doldur">Fill</string>

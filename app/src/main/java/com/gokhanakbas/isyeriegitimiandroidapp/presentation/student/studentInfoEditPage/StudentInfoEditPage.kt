@@ -11,12 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -56,7 +60,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun StudentInfoEditPage(
@@ -93,7 +96,36 @@ fun StudentInfoEditPageContent(
 
     val tf_studentInfo = remember { mutableStateOf("") }
     val tf_studentEmail = remember { mutableStateOf("") }
+
+    val tf_studentCurrentPassword = remember { mutableStateOf("") }
+    val tf_studentNewPassword = remember { mutableStateOf("") }
+    val tf_studentNewPasswordValid = remember { mutableStateOf("") }
+
     val tf_studentSkillList = remember { mutableStateListOf<Skill>() }
+
+    val currentPasswordErrorState = remember { mutableStateOf(false) } //Uyuşup uyuşmuyor
+
+    val newPasswordErrorState =
+        remember { mutableStateOf(false) }  //8 karakter , Büyük harf , Küçük harf
+    val newPasswordValidErrorState =
+        remember { mutableStateOf(false) }   // 8 karakter , Büyük harf , Küçük harf
+
+    val upperCaseSentenceColor = remember {
+        mutableStateOf(Color.Red)
+    }
+    val lowerCaseSentenceColor = remember {
+        mutableStateOf(Color.Red)
+    }
+    val eightCharacterSentenceColor = remember {
+        mutableStateOf(Color.Red)
+    }
+    val calisanFunc = remember {
+        mutableStateOf(0)
+    }
+    val calismisFunc = remember {
+        mutableStateOf(0)
+    }
+
 
     LaunchedEffect(key1 = studentInfoEditPageState.skillList) {
         tf_studentInfo.value = student.student_info
@@ -118,7 +150,7 @@ fun StudentInfoEditPageContent(
                 .background(GaziAcikMavi)
                 .verticalScroll(scrollState)
                 .padding(top = 40.dp, start = 10.dp, bottom = 10.dp, end = 10.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .clip(RoundedCornerShape(20.dp)), verticalArrangement = Arrangement.Top
         ) {
             OutlinedTextField(
                 value = student.student_no,
@@ -253,6 +285,164 @@ fun StudentInfoEditPageContent(
                 ), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 label = { Text(text = stringResource(id = R.string.email)) }
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp), horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = stringResource(id = R.string.parola),
+                    fontWeight = FontWeight.Black,
+                    textDecoration = TextDecoration.Underline,
+                    fontSize = 22.sp
+                )
+            }
+            OutlinedTextField(
+                value = tf_studentCurrentPassword.value,
+                onValueChange = {
+                    tf_studentCurrentPassword.value = it
+                    currentPasswordErrorState.value = false
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 15.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    unfocusedBorderColor = GaziKoyuMavi,
+                    focusedBorderColor = GaziKoyuMavi,
+                ), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                isError = currentPasswordErrorState.value,
+                supportingText = {
+                    if (currentPasswordErrorState.value) Text(
+                        text = stringResource(
+                            id = R.string.mevcut_parolaniz_uyusmuyor
+                        ), color = Color.Red
+                    )
+                },
+                label = { Text(text = stringResource(id = R.string.mevcut_parola)) }
+            )
+            OutlinedTextField(
+                value = tf_studentNewPassword.value,
+                onValueChange = {
+                    tf_studentNewPassword.value = it
+
+                    if (it.length >= 8) eightCharacterSentenceColor.value = Color.Green else {
+                        eightCharacterSentenceColor.value = Color.Red
+                        newPasswordErrorState.value = true
+                    }
+
+                    if (containsLowerCase(it)) lowerCaseSentenceColor.value = Color.Green else {
+                        lowerCaseSentenceColor.value = Color.Red
+                        newPasswordErrorState.value = true
+                    }
+
+                    if (containsUpperCase(it)) upperCaseSentenceColor.value = Color.Green else {
+                        upperCaseSentenceColor.value = Color.Red
+                        newPasswordErrorState.value = true
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 15.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    unfocusedBorderColor = GaziKoyuMavi,
+                    focusedBorderColor = GaziKoyuMavi,
+                ), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                isError = newPasswordErrorState.value,
+                supportingText = {
+                    Column(
+                        modifier = Modifier
+                            .padding(all = 15.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.en_az_8_karakter_olmalidir),
+                                color = eightCharacterSentenceColor.value,
+                                fontSize = 14.sp
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Icon(
+                                imageVector = if (eightCharacterSentenceColor.value == Color.Red) Icons.Default.Close else Icons.Default.Check,
+                                contentDescription = "",
+                                tint = eightCharacterSentenceColor.value,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.buyuk_harf_icermelidir),
+                                color = upperCaseSentenceColor.value,
+                                fontSize = 14.sp
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Icon(
+                                imageVector = if (upperCaseSentenceColor.value == Color.Red) Icons.Default.Close else Icons.Default.Check,
+                                contentDescription = "",
+                                tint = upperCaseSentenceColor.value,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.kucuk_harf_icermelidir),
+                                color = lowerCaseSentenceColor.value,
+                                fontSize = 14.sp
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Icon(
+                                imageVector = if (lowerCaseSentenceColor.value == Color.Red) Icons.Default.Close else Icons.Default.Check,
+                                contentDescription = "",
+                                tint = lowerCaseSentenceColor.value,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
+                },
+                label = { Text(text = stringResource(id = R.string.yeni_parola)) }
+            )
+
+            OutlinedTextField(
+                value = tf_studentNewPasswordValid.value,
+                onValueChange = {
+                    tf_studentNewPasswordValid.value = it
+                    if (tf_studentNewPassword.value.trim() != it) newPasswordValidErrorState.value =
+                        true
+                    else newPasswordValidErrorState.value = false
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 15.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    unfocusedBorderColor = GaziKoyuMavi,
+                    focusedBorderColor = GaziKoyuMavi,
+                ), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                label = { Text(text = stringResource(id = R.string.yeni_parola_tekrar)) }
+            )
+
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
                 Row(
                     modifier = Modifier
@@ -306,14 +496,15 @@ fun StudentInfoEditPageContent(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(text = tf_studentSkillList[index].skill_name, fontSize = 20.sp)
-                            Text(text = when(tf_studentSkillList[index].skill_level){
-                                "İleri" -> stringResource(id = R.string.ileri_seviye)
-                                "Orta" -> stringResource(id = R.string.orta_seviye)
-                                else -> {
-                                    stringResource(id = R.string.baslangic_seviye)
-                                }
-                            }
-                            , fontSize = 20.sp)
+                            Text(
+                                text = when (tf_studentSkillList[index].skill_level) {
+                                    "İleri" -> stringResource(id = R.string.ileri_seviye)
+                                    "Orta" -> stringResource(id = R.string.orta_seviye)
+                                    else -> {
+                                        stringResource(id = R.string.baslangic_seviye)
+                                    }
+                                }, fontSize = 20.sp
+                            )
                         }
                         IconButton(onClick = {
                             tf_studentSkillList.apply {
@@ -331,63 +522,51 @@ fun StudentInfoEditPageContent(
                 }
             }
 
+
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 OutlinedButton(
                     onClick = {
+
                         // Ogrenci Bilgilerini kaydetme islemleri gerceklesecek
                         CoroutineScope(Dispatchers.Main).launch {
 
                             if (tf_studentInfo.value.trim() != student.student_info || tf_studentEmail.value.trim() != student.student_mail) {
+                                calisanFunc.value += 1
 
                                 student.student_mail = tf_studentEmail.value.trim()
                                 student.student_info = tf_studentInfo.value.trim()
 
-                                if (tf_studentSkillList != studentInfoEditPageState.skillList) {
-                                    val job1 =
-                                        async { viewModel.saveStudentInformation(student = student) }
-                                    val job2 =
-                                        async {
-                                            viewModel.saveStudentSkills(
-                                                student_no = student.student_no,
-                                                skillList = tf_studentSkillList
-                                            )
-                                        }
-                                    if (job1.await() && job2.await()) {
-                                        withContext(Dispatchers.Main) {
-                                            if (viewModel.state.value.savedSuccessfully && viewModel.state.value.savedSkillsSuccessfully) {
-                                                navController.popBackStack()
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    val job1 =
-                                        async { viewModel.saveStudentInformation(student = student) }
-                                    if (job1.await()) {
-                                        withContext(Dispatchers.Main) {
-                                            if (viewModel.state.value.savedSuccessfully) {
-                                                navController.popBackStack()
-                                            }
-                                        }
-                                    }
-                                }
-                            } else if (tf_studentInfo.value.trim() == student.student_info && tf_studentEmail.value.trim() == student.student_mail
-                                && tf_studentSkillList != student.student_skillList
-                            ) {
-                                val job2 =
-                                    async {
-                                        viewModel.saveStudentSkills(
-                                            student_no = student.student_no,
-                                            skillList = tf_studentSkillList
-                                        )
-                                    }
-                                if (job2.await()) {
-                                    withContext(Dispatchers.Main) {
-                                        if (viewModel.state.value.savedSkillsSuccessfully) {
-                                            navController.popBackStack()
-                                        }
-                                    }
+                                val job1 =
+                                    async { viewModel.saveStudentInformation(student = student) }
+                                if (job1.await()) {
+                                    calismisFunc.value += 1
                                 }
                             }
+                            if (tf_studentSkillList != student.student_skillList) {
+                                calisanFunc.value += 1
+                                val job2 = async {
+                                    viewModel.saveStudentSkills(
+                                        student_no = student.student_no,
+                                        skillList = tf_studentSkillList
+                                    )
+                                }
+                                if (job2.await()) {
+                                    calismisFunc.value += 1
+                                }
+                            }
+                            if (tf_studentCurrentPassword.value != "" && !newPasswordValidErrorState.value) {
+                                calisanFunc.value += 1
+                                if (tf_studentCurrentPassword.value == student.student_password) {
+                                    student.student_password = tf_studentNewPasswordValid.value
+                                    val job3 = async { viewModel.saveStudentPassword(student) }
+                                    if (job3.await()) {
+                                        calismisFunc.value += 1
+                                    }
+                                } else {
+                                    currentPasswordErrorState.value = true
+                                }
+                            }
+
                         }
                     },
                     modifier = Modifier
@@ -433,10 +612,34 @@ fun StudentInfoEditPageContent(
         LaunchedEffect(key1 = newSkill.value.skill_name) {
             if (newSkill.value.skill_name != "") {
                 tf_studentSkillList.add(newSkill.value)
-                newSkill.value = Skill("","","","")
+                newSkill.value = Skill("", "", "", "")
             }
 
         }
 
+
+        LaunchedEffect(key1 = calismisFunc.value) {
+            if (calismisFunc.value == calisanFunc.value) {
+                navController.popBackStack()
+            }
+        }
     }
+}
+
+fun containsLowerCase(text: String): Boolean {
+    for (char in text) {
+        if (char.isLowerCase()) {
+            return true
+        }
+    }
+    return false
+}
+
+fun containsUpperCase(text: String): Boolean {
+    for (char in text) {
+        if (char.isUpperCase()) {
+            return true
+        }
+    }
+    return false
 }

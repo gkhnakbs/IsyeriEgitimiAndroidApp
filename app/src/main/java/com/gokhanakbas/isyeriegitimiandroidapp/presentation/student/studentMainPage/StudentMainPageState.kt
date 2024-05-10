@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.student
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainPage
 
 import androidx.collection.MutableObjectList
 import androidx.compose.runtime.mutableStateListOf
@@ -10,7 +10,7 @@ data class StudentMainPageState(
     var isLoading: Boolean = false,
     var student: Student = Student(
         "0", "", "", "", "", "", "", "", "", "", "", "",
-        Firm("", "", "", "", "", "", "", ""), "", mutableStateListOf()
+        Firm("", "", "", "", "", "", "", "",""), "", mutableStateListOf()
     ),
     var error: String? = null
 )

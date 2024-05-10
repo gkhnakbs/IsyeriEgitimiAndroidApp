@@ -72,7 +72,12 @@ sealed class Screen(var route: String) {
         }
     }
 
-    object FirmInfoEditPage : Screen("firmInfoEditPage")
+    object FirmInfoEditPage : Screen("firmInfoEditPage/{firm_id}"){
+        fun passNavigate(firm_id: String): String {
+            route = "firmInfoEditPage/$firm_id"
+            return route
+        }
+    }
 
     object AdvertPage : Screen("advertPage/{advert_id}") {
         fun passNavigate(advert_id: String): String {

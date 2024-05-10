@@ -91,7 +91,7 @@ fun FirmInfoEditPageContent(navController: NavController,firmInfoEditPageState: 
                 .verticalScroll(scrollState)
                 .padding(10.dp)
                 .clip(RoundedCornerShape(20.dp))
-        ) {
+        ){
             OutlinedTextField(
                 value = firm.firm_name,
                 onValueChange = {},
@@ -105,7 +105,7 @@ fun FirmInfoEditPageContent(navController: NavController,firmInfoEditPageState: 
                     unfocusedBorderColor = GaziKoyuMavi,
                     focusedBorderColor = GaziKoyuMavi,
                 ), readOnly = true,
-                label = { Text(text = stringResource(id = R.string.izleyici_no)) }
+                label = { Text(text = stringResource(id = R.string.firma_no)) }
             )
 
             OutlinedTextField(

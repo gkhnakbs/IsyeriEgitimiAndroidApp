@@ -45,6 +45,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.Load
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.SkillComp
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 
 @Composable
 fun StudentPage(
@@ -143,21 +144,24 @@ fun StudentPageContent(navController: NavController, studentPageState: StudentPa
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.weight(0.8f, fill = true)
                             )
-                            IconButton(onClick = {
-                                //Profil duzenleme sayfasina gidecek
-                                navController.navigate(
-                                    Screen.StudentInfoEditPage.passNavigate(
-                                        studentObject.student_no
+                            if (Constants.USER_TYPE==Constants.STUDENT){
+                                IconButton(onClick = {
+                                    //Profil duzenleme sayfasina gidecek
+                                    navController.navigate(
+                                        Screen.StudentInfoEditPage.passNavigate(
+                                            studentObject.student_no
+                                        )
                                     )
-                                )
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.pencil_icon),
-                                    contentDescription = "Student Info Edit Icon",
-                                    modifier = Modifier.size(20.dp),
-                                    tint = Color.White,
-                                )
+                                }) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.pencil_icon),
+                                        contentDescription = "Student Info Edit Icon",
+                                        modifier = Modifier.size(20.dp),
+                                        tint = Color.White,
+                                    )
+                                }
                             }
+
                         }
                     }
                 }

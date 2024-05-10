@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

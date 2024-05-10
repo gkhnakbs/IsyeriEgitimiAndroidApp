@@ -24,10 +24,20 @@
     <string name="ilana_git">İlana Git</string>
     <string name="favori_ilanlar">Favori İlanlar</string>
     <string name="parola_bos_birakilamaz">Parola Alanı Boş Bırakılamaz</string>
+    <string name="parola">Parola</string>
+    <string name="mevcut_parola">Mevcut Parola</string>
+    <string name="yeni_parola">Yeni Parola</string>
+    <string name="yeni_parola_tekrar">Yeni Parola Tekrar</string>
     <string name="ekle">Ekle</string>
     <string name="yetenek_ekle">Yetenek Ekle</string>
     <string name="raporu_goruntule">Raporu Görüntüle</string>
     <string name="rapor_basariyla_kaydedildi">Rapor Başarıyla Kaydedildi</string>
+
+
+    <string name="buyuk_harf_icermelidir">Büyük Harf İçermelidir</string>
+    <string name="kucuk_harf_icermelidir">Küçük Harf İçermelidir</string>
+    <string name="en_az_8_karakter_olmalidir">En az 8 karakter olmalıdır</string>
+    <string name="mevcut_parolaniz_uyusmuyor">Mevcut Parolanız Uyuşmuyor</string>
 
 
     <string name="ana_sayfa">Ana Sayfa</string>
@@ -51,6 +61,7 @@
     <string name="en_fazla_11_karakter_olabilir">En fazla 11 karakter olabilir</string>
     <string name="en_az_5_karakter_olmalidir">En az 5 karakter olmalıdır</string>
     <string name="bos_birakilamaz">Boş Bırakılamaz</string>
+    <string name="suan_icin_bos_gozukuyor">Şuan için boş gözüküyor</string>
 
     <string name="cikis_soru">Hesaptan çıkış yapmak istediğine emin misin?</string>
     <string name="kapat_soru">Uygulamadan çıkış yapmak istediğine emin misin?</string>

@@ -32,6 +32,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
                         "",
                         result.getString("firma_eposta"),
                         result.getString("firma_adres"),
+                        "",
                         ""
                     ),
                     emptyList(),
@@ -63,6 +64,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
                         "",
                         result.getString("firma_eposta"),
                         result.getString("firma_adres"),
+                        "",
                         ""
                     ),
                     emptyList(),
@@ -93,6 +95,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
                     "",
                     result.getString("firma_eposta"),
                     result.getString("firma_adres"),
+                    "",
                     ""
                 ),
                 emptyList(),
@@ -124,6 +127,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
                         "",
                         result.getString("firma_eposta"),
                         result.getString("firma_adres"),
+                        "",
                         ""
                     ),
                     emptyList(),
@@ -163,7 +167,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
 
         }catch (e:Exception){
-            Log.d("basvuru",e.localizedMessage)
+            Log.d("basvuru",e.localizedMessage!!)
         }
         return sonuc
     }

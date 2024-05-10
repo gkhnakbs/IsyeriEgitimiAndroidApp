@@ -29,6 +29,7 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
                         "",
                         result.getString("firma_eposta"),
                         result.getString("firma_adres"),
+                        "",
                         ""
                     ),
                     post_isFavourite = false
@@ -61,6 +62,7 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
                         "",
                         result.getString("firma_eposta"),
                         result.getString("firma_adres"),
+                        "",
                         ""
                     ),
                     post_isFavourite = true
