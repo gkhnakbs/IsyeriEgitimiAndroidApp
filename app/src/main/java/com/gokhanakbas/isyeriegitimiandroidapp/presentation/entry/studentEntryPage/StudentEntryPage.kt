@@ -122,11 +122,7 @@ fun StudentEntryPageContent(
                     value = tf_studentNumber.value ,
                     onValueChange = {
                         tf_studentNumber.value=it.trim()
-                        if(it.trim().length>11){
-                            errorState.value=true
-                        }else{
-                            errorState.value=false
-                        }
+                        errorState.value = it.trim().length>11
                                     },
                     label = { Text(text = stringResource(id = R.string.ogrenci_no)) },
                     supportingText = {
@@ -162,11 +158,7 @@ fun StudentEntryPageContent(
                     value = tf_studentPassword.value,
                     onValueChange = {
                         tf_studentPassword.value = it.trim()
-                        if (it.length < 5) {
-                            errorState1.value = true
-                        }else{
-                            errorState1.value=false
-                        }
+                        errorState1.value = it.length < 5
                     },
                     label = { Text(text = stringResource(id = R.string.ogrenci_parola)) },
                     supportingText = {

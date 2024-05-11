@@ -55,4 +55,16 @@ class LecturerApi @Inject constructor(private val databaseConnection: DatabaseCo
         return lecturerList
     }
 
+    fun saveLecturerInformation(lecturer: Lecturer) : Boolean{
+        val statement = connection.createStatement()
+        val result=statement.executeUpdate("update izleyici set izleyici_hakkinda='${lecturer.lecturer_info}' , izleyici_eposta='${lecturer.lecturer_mail}'  where lecturer_id=${lecturer.lecturer_id.toBigDecimal()}")
+        return result>0
+    }
+
+    fun saveLecturerPassword(lecturer: Lecturer):Boolean{
+        val statement = connection.createStatement()
+        val result=statement.executeUpdate("update izleyici set izleyici_parola='${lecturer.lecturer_password}' where lecturer_id=${lecturer.lecturer_id.toBigDecimal()}")
+        return result>0
+    }
+
 }

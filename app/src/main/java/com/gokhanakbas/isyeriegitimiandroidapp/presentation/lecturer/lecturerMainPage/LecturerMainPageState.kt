@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerMainPage
 
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 

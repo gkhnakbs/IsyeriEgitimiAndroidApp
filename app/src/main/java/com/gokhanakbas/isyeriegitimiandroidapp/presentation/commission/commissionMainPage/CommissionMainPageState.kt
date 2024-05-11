@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission.commissionMainPage
 
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Commission
 

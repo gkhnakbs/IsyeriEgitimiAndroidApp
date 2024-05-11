@@ -26,24 +26,26 @@ import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziMavi
 
 @Composable
-fun FirmInformationForFirm(
+fun FirmMainPageInfo(
     firm_id: String,
     viewModel: FirmMainPageInfoViewModel = hiltViewModel()
 ) {
-
     LaunchedEffect(key1 = viewModel) {
         viewModel.getFirmInformation(firm_id)
     }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    FirmInfoForFirmContent(state = state)
+    FirmMainPageInfoContent(state = state)
 }
 
 @Composable
-fun FirmInfoForFirmContent(state: FirmMainPageInfoState) {
+fun FirmMainPageInfoContent(state: FirmMainPageInfoState) {
 
-    val firm=state.firm
+    var firm=state.firm
+    LaunchedEffect(key1 = state.firm.firm_name) {
+        firm=state.firm
+    }
 
     LoadingDialog(isLoading = state.isLoading)
 
@@ -67,7 +69,7 @@ fun FirmInfoForFirmContent(state: FirmMainPageInfoState) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = state.firm.firm_name, fontSize = 35.sp, textAlign = TextAlign.Center)
+                Text(text = firm.firm_name, fontSize = 35.sp, textAlign = TextAlign.Center)
             }
 
         }
@@ -84,7 +86,7 @@ fun FirmInfoForFirmContent(state: FirmMainPageInfoState) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = state.firm.firm_info, fontSize = 35.sp, textAlign = TextAlign.Center)
+                Text(text = firm.firm_info, fontSize = 35.sp, textAlign = TextAlign.Center)
             }
         }
         Box(
@@ -100,7 +102,7 @@ fun FirmInfoForFirmContent(state: FirmMainPageInfoState) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = state.firm.firm_mail, fontSize = 35.sp, textAlign = TextAlign.Center)
+                Text(text = firm.firm_mail, fontSize = 35.sp, textAlign = TextAlign.Center)
             }
         }
     }

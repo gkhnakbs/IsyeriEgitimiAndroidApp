@@ -25,7 +25,7 @@ class FirmMainPageInfoViewModel @Inject constructor(private val firmsRepository:
             _state.update {
                 it.copy(isLoading = true)
             }
-            delay(1000)
+            delay(2000)
             firmsRepository.getFirmInformation(firm_id)
                 .onLeft {error->
                     _state.update {

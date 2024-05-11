@@ -146,13 +146,13 @@ class StudentInfoEditPageViewModel @Inject constructor(private val studentsRepos
             when (saveResult) {
                 is Either.Right -> {
                     _state.update {
-                        it.copy(savedSuccessfully = true)
+                        it.copy(savedPasswordSuccessfully = true)
                     }
                     true
                 }
                 is Either.Left -> {
                     _state.update {
-                        it.copy(savedSuccessfully = false)
+                        it.copy(savedPasswordSuccessfully = false)
                     }
                     sendEvent(Event.Toast(saveResult.value.error.message))
                     true

@@ -37,6 +37,14 @@ class FirmsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun saveFirmPassword(firm: Firm): Either<NetworkError, Boolean> {
+        return Either.catch {
+            firmsApi.saveFirmPassword(firm)
+        }.mapLeft {
+            it.toNetworkError()
+        }
+    }
+
 
     override suspend fun getFirmsWorkingStudents(): Either<NetworkError, List<Student>> {
         TODO("Not yet implemented")

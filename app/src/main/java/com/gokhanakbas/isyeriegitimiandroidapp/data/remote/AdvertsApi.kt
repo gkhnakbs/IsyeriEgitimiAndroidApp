@@ -1,10 +1,8 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
 import android.util.Log
-import androidx.compose.runtime.rememberCoroutineScope
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
-import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 import javax.inject.Inject
 
 class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseConnection) {

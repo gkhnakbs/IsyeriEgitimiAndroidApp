@@ -38,7 +38,7 @@
     <string name="kucuk_harf_icermelidir">Küçük Harf İçermelidir</string>
     <string name="en_az_8_karakter_olmalidir">En az 8 karakter olmalıdır</string>
     <string name="mevcut_parolaniz_uyusmuyor">Mevcut Parolanız Uyuşmuyor</string>
-
+    <string name="yeni_parolaniz_uyusmuyor">Yeni Parolanız Uyuşmuyor</string>
 
     <string name="ana_sayfa">Ana Sayfa</string>
 

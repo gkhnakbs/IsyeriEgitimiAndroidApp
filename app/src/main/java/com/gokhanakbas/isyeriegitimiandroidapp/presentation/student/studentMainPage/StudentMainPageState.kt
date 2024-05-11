@@ -1,9 +1,7 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainPage
 
-import androidx.collection.MutableObjectList
 import androidx.compose.runtime.mutableStateListOf
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Skill
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 
 data class StudentMainPageState(

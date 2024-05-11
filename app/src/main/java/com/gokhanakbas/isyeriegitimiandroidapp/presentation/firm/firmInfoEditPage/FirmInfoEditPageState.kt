@@ -6,6 +6,7 @@ data class FirmInfoEditPageState(
     var isLoading:Boolean=false,
     var firm:Firm=Firm("","","","","","","","",""),
     var savedSuccessfully : Boolean=false,
+    var savedPasswordSuccessfully : Boolean=false,
     var error : String?=null
 
 )

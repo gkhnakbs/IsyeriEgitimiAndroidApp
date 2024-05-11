@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission.commissionMainPage
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -55,10 +56,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.Load
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LogOutQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ScaffoldComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.firmListPage.FirmListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.formListPage.FormListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.homePagePostFeed.HomePagePostFeed
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.studentListPage.StudentListPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.surveyListPage.SurveyListPage
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.Mavi2
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 import kotlinx.coroutines.launch
@@ -67,29 +65,33 @@ var lastPage = 1
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LecturerMainPage(navController: NavController, lecturer_id: String,viewModel: LecturerMainPageViewModel= hiltViewModel()) {
-
+fun CommissionMainPage(
+    navController: NavController,
+    commission_id: String,
+    viewModel: CommissionMainPageViewModel = hiltViewModel()
+) {
     LaunchedEffect(key1 = viewModel) {
-        viewModel.getLecturersInformation(lecturer_id)
+        viewModel.getCommissionInformation(commission_id)
     }
 
     //Constants tanımlamaları
-    Constants.USER_TYPE=Constants.LECTURER
-    Constants.LECTURER_ID=lecturer_id
+    Constants.USER_TYPE=Constants.COMMISSION
+    Constants.COMMISION_ID = commission_id
 
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LecturerMainPageContent(navController = navController, lecturerMainPageState = state)
+    CommissionPageContent(navController = navController, state = state)
+
 
 }
 
 @Composable
-fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: LecturerMainPageState) {
+fun CommissionPageContent(navController: NavController, state: CommissionMainPageState) {
 
-    LoadingDialog(isLoading = lecturerMainPageState.isLoading)
+    LoadingDialog(isLoading = state.isLoading)
 
-    val lecturerObject= lecturerMainPageState.lecturer
+    val commissionObject = state.commission
 
     val navDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navScope = rememberCoroutineScope()
@@ -148,7 +150,7 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
                         .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp))
                         .clickable {
                             //Izleyicinin kendi sayfasina gidecek
-                            navController.navigate(Screen.LecturerPage.passNavigate(lecturer_id = lecturerObject.lecturer_id))
+
                         }
                 ) {
                     Image(
@@ -178,7 +180,7 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
                         )
                         Spacer(modifier = Modifier.size(5.dp, 0.dp))
                         Text(
-                            text = lecturerObject.lecturer_degree + lecturerObject.lecturer_name,
+                            text = commissionObject.commission_degree + commissionObject.commission_name,
                             fontSize = 18.sp,
                             color = Color.White
                         )
@@ -239,6 +241,7 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
                         selectedIconColor = Color.Black,
                         unselectedIconColor = Color.White
                     )
+
                 )
                 Spacer(
                     modifier = Modifier
@@ -251,7 +254,9 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
     ) {
         when (navDrawerSecilen.intValue) {
             1 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                HomePagePostFeed(navController = navController, paddingValues = it)
+                Column {
+
+                }
             }
 
             2 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
@@ -263,27 +268,26 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
             }
 
             4 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                GroupsPageForLecturer(navController = navController, paddingValues = it)
+                Column {
+
+                }
             }
 
             5 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                FormListPage(
-                    navController = navController,
-                    paddingValues = it,
-                    formType = Constants.LECTURER
-                )
+                Column {
+
+                }
             }
 
             6 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                SurveyListPage(
-                    navController = navController,
-                    paddingValues = it,
-                    surveyType = Constants.LECTURER
-                )
-            }
-        }
-    }
+                Column {
 
+                }
+            }
+
+        }
+
+    }
     BackHandler(onBack = {
         exit_choice.value = true
     })
@@ -294,8 +298,10 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
         LogOutQuestionComp(
             log_out_choice = log_out_choice,
             navController = navController,
-            popUpScreen = Screen.LecturerMainPage
+            popUpScreen = Screen.CommissionMainPage
         )
     }
 }
+
+
 

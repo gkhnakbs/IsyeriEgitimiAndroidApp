@@ -24,31 +24,36 @@ class FirmInfoEditPageViewModel @Inject constructor(private val firmsRepository:
     val state = _state.asStateFlow()
 
 
-    fun getFirmInformation(firm_id: String) {
-        viewModelScope.launch {
+    suspend fun getFirmInformation(firm_id: String) : Boolean {
+        val result=viewModelScope.async {
 
             _state.update {
                 it.copy(isLoading = true)
             }
-
-            firmsRepository.getFirmInformation(firm_id)
-                .onRight { firm ->
-                    _state.update {
-                        it.copy(firm = firm)
-                    }
-                }
-                .onLeft { error ->
-                    _state.update {
-                        it.copy(error = error.error.message)
-                    }
-                    sendEvent(Event.Toast(error.error.message))
-                }
-
+            delay(2000)
+            val saveResult=firmsRepository.getFirmInformation(firm_id)
             _state.update {
                 it.copy(isLoading = false)
             }
+            when (saveResult) {
+                is Either.Right -> {
+                    _state.update {
+                        it.copy(firm =saveResult.value)
+                    }
+                    true
+                }
+
+                is Either.Left -> {
+                    _state.update {
+                        it.copy(error = saveResult.value.error.message)
+                    }
+                    sendEvent(Event.Toast(saveResult.value.error.message))
+                    false
+                }
+            }
 
         }
+        return result.await()
     }
 
     suspend fun saveFirmInformation(firm: Firm): Boolean {
@@ -74,7 +79,38 @@ class FirmInfoEditPageViewModel @Inject constructor(private val firmsRepository:
                         it.copy(savedSuccessfully = false)
                     }
                     sendEvent(Event.Toast(saveResult.value.error.message))
+                    false
+                }
+            }
+        }
+        return result.await()
+    }
+
+
+    suspend fun saveFirmPassword(firm: Firm): Boolean {
+        val result = viewModelScope.async {
+            _state.update {
+                it.copy(isLoading = true)
+            }
+            delay(2000)
+            val saveResult = firmsRepository.saveFirmPassword(firm)
+            _state.update {
+                it.copy(isLoading = false)
+            }
+            when (saveResult) {
+                is Either.Right -> {
+                    _state.update {
+                        it.copy(savedPasswordSuccessfully = true)
+                    }
                     true
+                }
+
+                is Either.Left -> {
+                    _state.update {
+                        it.copy(savedPasswordSuccessfully = false)
+                    }
+                    sendEvent(Event.Toast(saveResult.value.error.message))
+                    false
                 }
             }
         }

@@ -1,33 +1,23 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.studentListPage
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,28 +28,21 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
-import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
-import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
-import com.google.gson.Gson
-import dagger.hilt.android.scopes.ActivityRetainedScoped
-import dagger.hilt.android.scopes.ActivityScoped
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.StudentListRowComp
 
 @Composable
 internal fun StudentListPage(
     navController: NavController,
     paddingValues: PaddingValues,
-    viewModel: StudentListPageViewModel = hiltViewModel()) {
+    viewModel: StudentListPageViewModel = hiltViewModel()
+) {
 
     LaunchedEffect(key1 = viewModel) {
         viewModel.getStudentList()
@@ -67,7 +50,11 @@ internal fun StudentListPage(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    StudentListPageContent(navController = navController, paddingValues =paddingValues, studentListPageState =state)
+    StudentListPageContent(
+        navController = navController,
+        paddingValues = paddingValues,
+        studentListPageState = state
+    )
 }
 
 @Composable
@@ -76,15 +63,15 @@ fun StudentListPageContent(
     paddingValues: PaddingValues,
     studentListPageState: StudentListPageState
 ) {
-    println("isLoading : "+studentListPageState.isLoading)
+    println("isLoading : " + studentListPageState.isLoading)
     LoadingDialog(isLoading = studentListPageState.isLoading)
-    
+
     val tf_student_name = remember {
         mutableStateOf("")
     }
 
     val focus = LocalFocusManager.current
-    val studentListOf= studentListPageState.student
+    val studentListOf = studentListPageState.student
 
     Column(
         modifier = Modifier
@@ -150,59 +137,8 @@ fun StudentListPageContent(
                     studentListOf[it].id
                 },
                 itemContent = {
-                    val student_object = studentListOf[it]
-                    Card(
-                        modifier = Modifier
-                            .padding(top = 5.dp, bottom = 5.dp)
-                            .heightIn(55.dp),
-                    ) {
-                        Row(modifier = Modifier
-                            .fillMaxSize()) {
-                            Row(
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(start = 5.dp)
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.student_thin_icon),
-                                    contentDescription = "", modifier = Modifier.size(30.dp)
-                                )
-                                Text(
-                                    text = student_object.student_name,
-                                    fontSize = 22.sp, modifier = Modifier.requiredWidth(190.dp)
-                                )
-                                Row(
-                                    horizontalArrangement = Arrangement.End,
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    OutlinedButton(
-                                        onClick = {
-
-                                            val studentJson = Gson().toJson(student_object)
-                                            navController.navigate(
-                                                Screen.StudentPage.route
-                                            )
-
-                                        }, elevation = ButtonDefaults.buttonElevation(
-                                            defaultElevation = 5.dp
-                                        ), colors = ButtonDefaults.elevatedButtonColors(
-                                            containerColor = GaziAcikMavi,
-                                            contentColor = GaziKoyuMavi
-                                        )
-                                    ) {
-                                        Text(
-                                            text = "Ogrenciyi Goruntule",
-                                            fontSize = 14.sp,
-                                            textAlign = TextAlign.Center
-                                        )
-                                    }
-                                }
-
-                            }
-                        }
-
-                    }
+                    val studentObject = studentListOf[it]
+                    StudentListRowComp(navController = navController, student = studentObject)
                 }
             )
         }

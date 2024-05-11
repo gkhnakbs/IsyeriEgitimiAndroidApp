@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerMainPage
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
@@ -8,7 +8,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -50,13 +49,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.GroupsPageForLecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LogOutQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ScaffoldComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.firmListPage.FirmListPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.formListPage.FormListPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.homePagePostFeed.HomePagePostFeed
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.studentListPage.StudentListPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.surveyListPage.SurveyListPage
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.Mavi2
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 import kotlinx.coroutines.launch
@@ -65,33 +68,29 @@ var lastPage = 1
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CommissionMainPage(
-    navController: NavController,
-    commission_id: String,
-    viewModel: CommissionMainPageViewModel = hiltViewModel()
-) {
+fun LecturerMainPage(navController: NavController, lecturer_id: String,viewModel: LecturerMainPageViewModel = hiltViewModel()) {
+
     LaunchedEffect(key1 = viewModel) {
-        viewModel.getCommissionInformation(commission_id)
+        viewModel.getLecturersInformation(lecturer_id)
     }
 
     //Constants tanımlamaları
-    Constants.USER_TYPE=Constants.COMMISSION
-    Constants.COMMISION_ID = commission_id
+    Constants.USER_TYPE=Constants.LECTURER
+    Constants.LECTURER_ID=lecturer_id
 
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    CommissionPageContent(navController = navController, state = state)
-
+    LecturerMainPageContent(navController = navController, lecturerMainPageState = state)
 
 }
 
 @Composable
-fun CommissionPageContent(navController: NavController, state: CommissionMainPageState) {
+fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: LecturerMainPageState) {
 
-    LoadingDialog(isLoading = state.isLoading)
+    LoadingDialog(isLoading = lecturerMainPageState.isLoading)
 
-    val commissionObject = state.commission
+    val lecturerObject= lecturerMainPageState.lecturer
 
     val navDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navScope = rememberCoroutineScope()
@@ -150,7 +149,7 @@ fun CommissionPageContent(navController: NavController, state: CommissionMainPag
                         .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp))
                         .clickable {
                             //Izleyicinin kendi sayfasina gidecek
-
+                            navController.navigate(Screen.LecturerPage.passNavigate(lecturer_id = lecturerObject.lecturer_id))
                         }
                 ) {
                     Image(
@@ -180,7 +179,7 @@ fun CommissionPageContent(navController: NavController, state: CommissionMainPag
                         )
                         Spacer(modifier = Modifier.size(5.dp, 0.dp))
                         Text(
-                            text = commissionObject.commission_degree + commissionObject.commission_name,
+                            text = lecturerObject.lecturer_degree + lecturerObject.lecturer_name,
                             fontSize = 18.sp,
                             color = Color.White
                         )
@@ -241,7 +240,6 @@ fun CommissionPageContent(navController: NavController, state: CommissionMainPag
                         selectedIconColor = Color.Black,
                         unselectedIconColor = Color.White
                     )
-
                 )
                 Spacer(
                     modifier = Modifier
@@ -254,9 +252,7 @@ fun CommissionPageContent(navController: NavController, state: CommissionMainPag
     ) {
         when (navDrawerSecilen.intValue) {
             1 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                Column {
-
-                }
+                HomePagePostFeed(navController = navController, paddingValues = it)
             }
 
             2 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
@@ -268,26 +264,27 @@ fun CommissionPageContent(navController: NavController, state: CommissionMainPag
             }
 
             4 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                Column {
-
-                }
+                GroupsPageForLecturer(navController = navController, paddingValues = it)
             }
 
             5 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                Column {
-
-                }
+                FormListPage(
+                    navController = navController,
+                    paddingValues = it,
+                    formType = Constants.LECTURER
+                )
             }
 
             6 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                Column {
-
-                }
+                SurveyListPage(
+                    navController = navController,
+                    paddingValues = it,
+                    surveyType = Constants.LECTURER
+                )
             }
-
         }
-
     }
+
     BackHandler(onBack = {
         exit_choice.value = true
     })
@@ -298,10 +295,8 @@ fun CommissionPageContent(navController: NavController, state: CommissionMainPag
         LogOutQuestionComp(
             log_out_choice = log_out_choice,
             navController = navController,
-            popUpScreen = Screen.CommissionMainPage
+            popUpScreen = Screen.LecturerMainPage
         )
     }
 }
-
-
 

@@ -1,7 +1,5 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
-import android.util.Log
-import androidx.collection.MutableObjectList
 import androidx.compose.runtime.mutableStateListOf
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Skill
@@ -76,6 +74,7 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                 studentObject.student_address = result.getString("ogrenci_adres")
                 studentObject.student_phone = result.getString("ogrenci_tel_no")
                 studentObject.student_mail=result.getString("ogrenci_eposta")
+                studentObject.student_password=result.getString("ogrenci_parola")
                 studentObject.student_workPlace =
                     Firm(
                         result.getBigDecimal("firma_id").toString(),
@@ -88,6 +87,7 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                         "",
                         ""
                     )
+
 
             }
         return studentObject
@@ -130,8 +130,6 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
     fun saveStudentSkills(student_no: String,skillList: MutableList<Skill>) : Boolean{
         val statement=connection.createStatement()
         val deleteOldSkill=statement.executeUpdate("delete from yetenek where ogrenci_no=$student_no")
-        println("deleteoldSkill result $deleteOldSkill")
-        println("studentSkillSize ${skillList.size}")
         var resultCount=0
         skillList.forEachIndexed{ index , skill ->
             val addSkill=statement.executeUpdate("insert into yetenek(yetenek_baslik,yetenek_seviye,ogrenci_no) VALUES('${skill.skill_name}','${skill.skill_level}',$student_no)")

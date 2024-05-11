@@ -1,7 +1,5 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentInfoEditPage
 
-import androidx.collection.MutableObjectList
-import androidx.collection.emptyObjectList
 import androidx.compose.runtime.mutableStateListOf
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Skill

@@ -1,10 +1,6 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
-import android.util.Log
-import arrow.core.Either
-import arrow.core.raise.catch
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import javax.inject.Inject
 
@@ -39,7 +35,7 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
     }
 
     fun getFirmsInformation(firm_id: String): Firm {
-        val firmObject = Firm(firm_id, "", "", "", "", "", "", "","")
+        val firmObject = Firm(firm_id, "", "","","", "", "", "","")
         val statement = connection.createStatement()
         try {
             val result = statement.executeQuery("select * from firma where firma_id=$firm_id")
@@ -48,7 +44,7 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
                 firmObject.firm_sector = result.getString("firma_sektor")
                 firmObject.firm_info = result.getString("firma_hakkinda")
                 firmObject.firm_logo = result.getString("firma_logo")
-                firmObject.firm_mail = result.getString("firma_mail")
+                firmObject.firm_mail = result.getString("firma_eposta")
                 firmObject.firm_address = result.getString("firma_adres")
                 firmObject.firm_password= result.getString("firma_parola")
                 firmObject.firm_phone = ""
@@ -62,7 +58,15 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
 
 
     fun saveFirmInformation(firm:Firm) : Boolean {
-        return true
+        val statement = connection.createStatement()
+        val result=statement.executeUpdate("update firma SET firma_eposta='${firm.firm_mail}', firma_adres='${firm.firm_address}' , firma_hakkinda='${firm.firm_info}' where firma_id=${firm.firm_id.toBigDecimal()}")
+        return result>0
+        }
+
+    fun saveFirmPassword(firm:Firm) : Boolean {
+        val statement = connection.createStatement()
+        val result=statement.executeUpdate("update firma set firma_parola='${firm.firm_password}' where firma_id=${firm.firm_id.toBigDecimal()}")
+        return result>0
     }
 
     fun getFirmsWorkingStudents(): List<Student> {

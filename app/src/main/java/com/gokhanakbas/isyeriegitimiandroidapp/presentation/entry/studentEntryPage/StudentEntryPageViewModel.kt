@@ -30,7 +30,7 @@ class StudentEntryPageViewModel @Inject constructor(private val studentsReposito
     }
 
 
-    fun getStudents() {
+    private fun getStudents() {
         viewModelScope.launch {
             _state.update {
                 it.copy(isLoading = true)

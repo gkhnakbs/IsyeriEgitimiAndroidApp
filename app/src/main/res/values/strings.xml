@@ -38,7 +38,7 @@
     <string name="kucuk_harf_icermelidir">Must Contain Uppercase Letter</string>
     <string name="en_az_8_karakter_olmalidir">Must Contain At Least 8 Characters</string>
     <string name="mevcut_parolaniz_uyusmuyor">Doesnt Match Current Password</string>
-
+    <string name="yeni_parolaniz_uyusmuyor">Doesnt Matches New Password</string>
 
     <string name="ana_sayfa">Main Page</string>
 

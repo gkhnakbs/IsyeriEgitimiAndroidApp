@@ -48,7 +48,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.AdvertsOfFirm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.WorkingStudentsPageForFirm
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPageInfo.FirmInformationForFirm
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPageInfo.FirmMainPageInfo
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LogOutQuestionComp
@@ -218,7 +218,7 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
     ) {
         when (navDrawerSecilen.intValue) {
             1 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                FirmInformationForFirm(firm_id = firmObject.firm_id)
+                FirmMainPageInfo(firm_id = firmObject.firm_id)
             }
 
             2 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {

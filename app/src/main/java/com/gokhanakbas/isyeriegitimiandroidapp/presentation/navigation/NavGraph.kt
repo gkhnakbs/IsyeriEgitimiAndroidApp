@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission.CommissionMainPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission.commissionMainPage.CommissionMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.EntryPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.commissionEntryPage.CommissionEntryPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.firmEntryPage.FirmEntryPage
@@ -16,7 +16,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertCreatingP
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmInfoEditPage.FirmInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage.FirmMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerInfoEditPage.LecturerInfoEditPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.LecturerMainPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerMainPage.LecturerMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.lecturersPage.LecturerPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.SurveyPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.advertsPage.AdvertPage

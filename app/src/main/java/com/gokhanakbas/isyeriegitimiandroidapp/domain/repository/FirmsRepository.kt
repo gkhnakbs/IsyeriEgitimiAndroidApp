@@ -16,6 +16,8 @@ interface FirmsRepository {
 
     suspend fun saveFirmInformation(firm:Firm) : Either<NetworkError,Boolean>
 
+    suspend fun saveFirmPassword(firm:Firm) : Either<NetworkError,Boolean>
+
     suspend fun getFirmsWorkingStudents(): Either<NetworkError, List<Student>>  //Burada firmanın çalışan öğrencileri çekilecek
 
 }

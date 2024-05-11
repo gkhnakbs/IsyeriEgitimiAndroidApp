@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -120,10 +121,10 @@ fun StudentInfoEditPageContent(
         mutableStateOf(Color.Red)
     }
     val calisanFunc = remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
     val calismisFunc = remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
 
 
@@ -131,6 +132,7 @@ fun StudentInfoEditPageContent(
         tf_studentInfo.value = student.student_info
         tf_studentEmail.value = student.student_mail
         tf_studentSkillList.addAll(studentInfoEditPageState.skillList)
+        student.student_skillList=studentInfoEditPageState.skillList
     }
 
     val skillEntryState = remember {
@@ -282,7 +284,8 @@ fun StudentInfoEditPageContent(
                     disabledContainerColor = Color.White,
                     unfocusedBorderColor = GaziKoyuMavi,
                     focusedBorderColor = GaziKoyuMavi,
-                ), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 label = { Text(text = stringResource(id = R.string.email)) }
             )
 
@@ -322,6 +325,7 @@ fun StudentInfoEditPageContent(
                         ), color = Color.Red
                     )
                 },
+                singleLine = true,
                 label = { Text(text = stringResource(id = R.string.mevcut_parola)) }
             )
             OutlinedTextField(
@@ -329,24 +333,33 @@ fun StudentInfoEditPageContent(
                 onValueChange = {
                     tf_studentNewPassword.value = it
 
-                    if (it.length >= 8) eightCharacterSentenceColor.value = Color.Green else {
+                    if (it.length >= 8) {
+                        eightCharacterSentenceColor.value = Color.Green
+                        newPasswordErrorState.value = false
+                    }   else {
                         eightCharacterSentenceColor.value = Color.Red
                         newPasswordErrorState.value = true
                     }
 
-                    if (containsLowerCase(it)) lowerCaseSentenceColor.value = Color.Green else {
+                    if (containsLowerCase(it)){
+                        lowerCaseSentenceColor.value = Color.Green
+                        newPasswordErrorState.value = false
+                    } else {
                         lowerCaseSentenceColor.value = Color.Red
                         newPasswordErrorState.value = true
                     }
 
-                    if (containsUpperCase(it)) upperCaseSentenceColor.value = Color.Green else {
+                    if (containsUpperCase(it)){
+                        upperCaseSentenceColor.value = Color.Green
+                        newPasswordErrorState.value = false
+                    } else {
                         upperCaseSentenceColor.value = Color.Red
                         newPasswordErrorState.value = true
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = 15.dp),
+                    .padding(top = 15.dp, start = 15.dp, end = 15.dp, bottom = 5.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor = Color.White,
                     focusedContainerColor = Color.White,
@@ -419,6 +432,7 @@ fun StudentInfoEditPageContent(
                         }
                     }
                 },
+                singleLine = true,
                 label = { Text(text = stringResource(id = R.string.yeni_parola)) }
             )
 
@@ -426,9 +440,7 @@ fun StudentInfoEditPageContent(
                 value = tf_studentNewPasswordValid.value,
                 onValueChange = {
                     tf_studentNewPasswordValid.value = it
-                    if (tf_studentNewPassword.value.trim() != it) newPasswordValidErrorState.value =
-                        true
-                    else newPasswordValidErrorState.value = false
+                    newPasswordValidErrorState.value = tf_studentNewPassword.value.trim() != it.trim()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -440,6 +452,10 @@ fun StudentInfoEditPageContent(
                     unfocusedBorderColor = GaziKoyuMavi,
                     focusedBorderColor = GaziKoyuMavi,
                 ), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true,
+                isError = newPasswordValidErrorState.value,
+                supportingText = { if (newPasswordValidErrorState.value) Text(text = stringResource(
+                    id = R.string.yeni_parolaniz_uyusmuyor) , fontSize = 14.sp,color=Color.Red)  },
                 label = { Text(text = stringResource(id = R.string.yeni_parola_tekrar)) }
             )
 
@@ -531,7 +547,9 @@ fun StudentInfoEditPageContent(
                         CoroutineScope(Dispatchers.Main).launch {
 
                             if (tf_studentInfo.value.trim() != student.student_info || tf_studentEmail.value.trim() != student.student_mail) {
-                                calisanFunc.value += 1
+                                println("test1")
+
+                                calisanFunc.intValue += 1
 
                                 student.student_mail = tf_studentEmail.value.trim()
                                 student.student_info = tf_studentInfo.value.trim()
@@ -539,11 +557,14 @@ fun StudentInfoEditPageContent(
                                 val job1 =
                                     async { viewModel.saveStudentInformation(student = student) }
                                 if (job1.await()) {
-                                    calismisFunc.value += 1
+                                    calismisFunc.intValue += 1
+                                }else{
+                                    calisanFunc.intValue-=1
                                 }
                             }
-                            if (tf_studentSkillList != student.student_skillList) {
-                                calisanFunc.value += 1
+                            if (tf_studentSkillList.toList() != student.student_skillList.toList()) {
+                                println("test2")
+                                calisanFunc.intValue += 1
                                 val job2 = async {
                                     viewModel.saveStudentSkills(
                                         student_no = student.student_no,
@@ -551,22 +572,27 @@ fun StudentInfoEditPageContent(
                                     )
                                 }
                                 if (job2.await()) {
-                                    calismisFunc.value += 1
+                                    calismisFunc.intValue += 1
+                                }else{
+                                    calisanFunc.intValue-=1
                                 }
                             }
-                            if (tf_studentCurrentPassword.value != "" && !newPasswordValidErrorState.value) {
-                                calisanFunc.value += 1
+                            if (tf_studentCurrentPassword.value != "" && tf_studentNewPassword.value!=""  && !newPasswordValidErrorState.value) {
+
                                 if (tf_studentCurrentPassword.value == student.student_password) {
+                                    println("test3")
+                                    calisanFunc.intValue += 1
                                     student.student_password = tf_studentNewPasswordValid.value
                                     val job3 = async { viewModel.saveStudentPassword(student) }
                                     if (job3.await()) {
-                                        calismisFunc.value += 1
+                                        calismisFunc.intValue += 1
+                                    }else{
+                                        calisanFunc.intValue-=1
                                     }
                                 } else {
                                     currentPasswordErrorState.value = true
                                 }
                             }
-
                         }
                     },
                     modifier = Modifier
@@ -618,9 +644,9 @@ fun StudentInfoEditPageContent(
         }
 
 
-        LaunchedEffect(key1 = calismisFunc.value) {
-            if (calismisFunc.value == calisanFunc.value) {
-                navController.popBackStack()
+        LaunchedEffect(key1 = calismisFunc.intValue ) {
+            if (calismisFunc.intValue == calisanFunc.intValue && calisanFunc.intValue!=0) {
+               navController.popBackStack()
             }
         }
     }

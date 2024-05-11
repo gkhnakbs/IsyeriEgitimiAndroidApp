@@ -13,5 +13,7 @@ interface LecturersRepository {
 
     suspend fun getLecturersGroups(): Either<NetworkError, List<Group>>  // Burada ise izleyicinin grupları çekilecek
 
+    suspend fun saveLecturerInformation(lecturer: Lecturer): Either<NetworkError,Boolean>
 
+    suspend fun saveLecturerPassword(lecturer: Lecturer): Either<NetworkError, Boolean>
 }
