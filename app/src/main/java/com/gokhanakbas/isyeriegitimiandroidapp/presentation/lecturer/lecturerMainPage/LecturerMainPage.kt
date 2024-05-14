@@ -184,7 +184,6 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
                             color = Color.White
                         )
                     }
-
                 }
                 liste.forEachIndexed { index, icerik ->
                     NavigationDrawerItem(
@@ -209,7 +208,6 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
                             unselectedTextColor = Color.White,
                             selectedIconColor = Color.Black,
                             unselectedIconColor = Color.White
-
                         )
                     )
                     Spacer(

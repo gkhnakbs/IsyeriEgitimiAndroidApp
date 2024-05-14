@@ -39,7 +39,11 @@ class LecturersRepositoryImpl @Inject constructor(private val lecturerApi: Lectu
     }
 
     override suspend fun saveLecturerInformation(lecturer: Lecturer): Either<NetworkError, Boolean> {
-        TODO("Not yet implemented")
+        return Either.catch {
+            lecturerApi.saveLecturerInformation(lecturer)
+        }.mapLeft {
+            it.toNetworkError()
+        }
     }
 
     override suspend fun saveLecturerPassword(lecturer: Lecturer): Either<NetworkError, Boolean> {

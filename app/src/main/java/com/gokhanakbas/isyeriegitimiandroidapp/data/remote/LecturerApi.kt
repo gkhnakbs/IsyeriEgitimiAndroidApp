@@ -19,9 +19,10 @@ class LecturerApi @Inject constructor(private val databaseConnection: DatabaseCo
             lecturer.lecturer_department = result.getString("izleyici_bolum")
             lecturer.lecturer_name =
                 result.getString("izleyici_ad") + " " + result.getString("izleyici_soyad")
-            lecturer.lecturer_degree = "Derece Prof."
+            lecturer.lecturer_degree = ""
             lecturer.lecturer_info = result.getString("izleyici_hakkinda")
             lecturer.lecturer_mail = result.getString("izleyici_eposta")
+            lecturer.lecturer_password = result.getString("izleyici_parola")
             lecturer.lecturer_specificField = "Spesifik Alan"
         }
         return lecturer
@@ -45,7 +46,7 @@ class LecturerApi @Inject constructor(private val databaseConnection: DatabaseCo
                     result.getString("izleyici_fakulte"),
                     result.getString("izleyici_bolum"),
                     "Spesifik Alan",
-                    "Derece Prof.",
+                    "",
                     result.getString("izleyici_eposta"),
                     result.getString("izleyici_hakkinda"),
                     result.getString("izleyici_parola")
@@ -57,13 +58,13 @@ class LecturerApi @Inject constructor(private val databaseConnection: DatabaseCo
 
     fun saveLecturerInformation(lecturer: Lecturer) : Boolean{
         val statement = connection.createStatement()
-        val result=statement.executeUpdate("update izleyici set izleyici_hakkinda='${lecturer.lecturer_info}' , izleyici_eposta='${lecturer.lecturer_mail}'  where lecturer_id=${lecturer.lecturer_id.toBigDecimal()}")
+        val result=statement.executeUpdate("update izleyici set izleyici_hakkinda='${lecturer.lecturer_info}' , izleyici_eposta='${lecturer.lecturer_mail}'  where izleyici_id=${lecturer.lecturer_id.toBigDecimal()}")
         return result>0
     }
 
     fun saveLecturerPassword(lecturer: Lecturer):Boolean{
         val statement = connection.createStatement()
-        val result=statement.executeUpdate("update izleyici set izleyici_parola='${lecturer.lecturer_password}' where lecturer_id=${lecturer.lecturer_id.toBigDecimal()}")
+        val result=statement.executeUpdate("update izleyici set izleyici_parola='${lecturer.lecturer_password}' where izleyici_id=${lecturer.lecturer_id.toBigDecimal()}")
         return result>0
     }
 

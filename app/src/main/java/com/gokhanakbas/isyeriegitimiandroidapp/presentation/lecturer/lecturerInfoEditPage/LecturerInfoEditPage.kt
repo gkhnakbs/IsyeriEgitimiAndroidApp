@@ -78,6 +78,7 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
     LoadingDialog(isLoading = state.isLoading)
 
     var lecturer=state.lecturer
+
     val scrollState = rememberScrollState()
 
     val tf_lecturerInfo = remember {
@@ -408,6 +409,7 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
                         // Izleyici Bilgilerini kaydetme islemleri gerceklesecek
                         CoroutineScope(Dispatchers.IO).launch {
                             if(tf_lecturerInfo.value!=lecturer.lecturer_info || tf_lecturerEmail.value!=lecturer.lecturer_mail){
+
                                 lecturer.lecturer_info=tf_lecturerInfo.value.trim()
                                 lecturer.lecturer_mail=tf_lecturerEmail.value.trim()
                                 calisanFunc.intValue+=1
@@ -422,13 +424,14 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
 
                             if(tf_lecturerCurrentPassword.value!=""&&tf_lecturerNewPassword.value!=""&&!newPasswordValidErrorState.value){
 
+                                println("tf password ${tf_lecturerNewPassword.value} lecturer password${lecturer.lecturer_password}  ")
+
                                 if(tf_lecturerCurrentPassword.value==lecturer.lecturer_password){
                                     lecturer.lecturer_password=tf_lecturerNewPassword.value
                                     calisanFunc.intValue+=1
 
-
-                                    val job = async { viewModel.saveLecturerPassword(lecturer) }
-                                    if(job.await()){
+                                    val job2 = async { viewModel.saveLecturerPassword(lecturer) }
+                                    if(job2.await()){
                                         calismisFunc.intValue+=1
                                     }
                                     else{

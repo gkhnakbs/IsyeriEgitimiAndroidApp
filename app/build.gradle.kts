@@ -57,55 +57,47 @@ android {
 
 dependencies {
     //Splash Api
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.androidx.core.splashscreen)
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0-rc01")
-
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.05.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.0-alpha08")
-
-    //Arrow
-    implementation("io.arrow-kt:arrow-core:1.2.4")
-    implementation("io.arrow-kt:arrow-fx-coroutines:1.2.4")
-
-    //Coil
-    implementation("io.coil-kt:coil-compose:2.6.0")
-
-    //DataStore
-    implementation("androidx.datastore:datastore-core:1.1.1")
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
-
-    //dagger hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.gson)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
 
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Arrow - Asenkronize işleri yürütmek için kullanılan bir kütüphane
+    implementation(libs.arrow.core)
+    implementation(libs.arrow.fx.coroutines)
+
+    //Coil  - Fotoğraf Yüklemek İçin
+    implementation(libs.coil.compose)
+
+    //DataStore   - Localde veri depolamak için
+    implementation(libs.androidx.datastore.core)
+    implementation(libs.androidx.datastore.preferences)
+
+    //dagger hilt  - Bağımlılık Enejksiyonu için
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     //PostgreSQL
-    implementation("org.postgresql:postgresql:42.2.9")
+    implementation(libs.postgresql)
     //implementation("postgresql:postgresql:9.1-901-1.jdbc4")
-
-    //Calendar Dialog
-    implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.3.0")
-
-
-    implementation ("androidx.graphics:graphics-shapes:1.0.0-beta01")
 }

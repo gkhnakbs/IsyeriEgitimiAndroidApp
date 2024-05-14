@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,8 +15,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -209,42 +212,44 @@ fun StudentMainPageContent(
                         )
                     }
                 }
-                liste.forEachIndexed { index, icerik ->
+                Column(modifier=Modifier.verticalScroll(rememberScrollState())){
+                    liste.forEachIndexed { index, icerik ->
+                        NavigationDrawerItem(
+                            label = { Text(text = icerik.nav_name) },
+                            selected = navDrawerSecilen.intValue == index + 1,
+                            onClick = {
+                                navDrawerSecilen.intValue = index + 1
+                                lastPage = index + 1
+                                navScope.launch { navDrawerState.close() }
+                            }, modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
+                            icon = {
+                                Icon(
+                                    painter = icerik.nav_icon,
+                                    contentDescription = "",
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            },
+                            colors = NavigationDrawerItemDefaults.colors(
+                                selectedContainerColor = GaziAcikMavi
+                            )
+                        )
+                    }
                     NavigationDrawerItem(
-                        label = { Text(text = icerik.nav_name) },
-                        selected = navDrawerSecilen.intValue == index + 1,
+                        label = { Text(text = stringResource(id = R.string.cikis_yap)) },
+                        selected = false,
                         onClick = {
-                            navDrawerSecilen.intValue = index + 1
-                            lastPage = index + 1
                             navScope.launch { navDrawerState.close() }
+                            log_out_choice.value = true
                         }, modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
                         icon = {
                             Icon(
-                                painter = icerik.nav_icon,
+                                painter = painterResource(id = R.drawable.logout_icon),
                                 contentDescription = "",
                                 modifier = Modifier.size(20.dp)
                             )
-                        },
-                        colors = NavigationDrawerItemDefaults.colors(
-                            selectedContainerColor = GaziAcikMavi
-                        )
+                        }
                     )
                 }
-                NavigationDrawerItem(
-                    label = { Text(text = stringResource(id = R.string.cikis_yap)) },
-                    selected = false,
-                    onClick = {
-                        navScope.launch { navDrawerState.close() }
-                        log_out_choice.value = true
-                    }, modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.logout_icon),
-                            contentDescription = "",
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                )
             }
         },
         drawerState = navDrawerState,
