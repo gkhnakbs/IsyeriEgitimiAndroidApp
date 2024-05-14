@@ -70,14 +70,16 @@ fun PostComponent(navController: NavController, post: Post) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(horizontalArrangement = Arrangement.Start) {
+                    Row(modifier=Modifier.weight(0.7f), verticalAlignment = Alignment.CenterVertically){
                         Image(
                             painter = painterResource(id = R.drawable.gazi_university_logo),
                             contentDescription = "",
                             modifier = Modifier
                                 .size(30.dp)
+                                .weight(0.2f)
                                 .clickable {
                                     navController.navigate(Screen.FirmPage.passNavigate(firm_id = post.post_firm.firm_id))
                                 })
@@ -86,13 +88,13 @@ fun PostComponent(navController: NavController, post: Post) {
                             text = post.post_firm.firm_name,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.clickable {
+                            modifier = Modifier
+                                .weight(0.8f)
+                                .clickable {
                                 navController.navigate(Screen.FirmPage.passNavigate(firm_id = post.post_firm.firm_id))
                             })
                     }
-                    Row(horizontalArrangement = Arrangement.End) {
-                        Text(text = post.post_date, fontSize = 18.sp, color = Color.LightGray)
-                    }
+                    Text(text = post.post_date, fontSize = 18.sp, color = Color.LightGray, modifier = Modifier.weight(0.3f))
 
                 }
 

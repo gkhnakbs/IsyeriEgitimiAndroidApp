@@ -52,7 +52,6 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.google.gson.Gson
-import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 
 @Composable
 fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavController) {
@@ -228,9 +227,6 @@ fun GivingTaskPage(taskGivingPageState: MutableState<Boolean>) {
     }
     taskEndDate.value = stringResource(id = R.string.gun_ay_yil)
 
-    val calendarStartState = rememberUseCaseState()
-    val calendarEndState = rememberUseCaseState()
-
     BasicAlertDialog(
         onDismissRequest = { taskGivingPageState.value = false },
         modifier = Modifier
@@ -338,35 +334,4 @@ fun GivingTaskPage(taskGivingPageState: MutableState<Boolean>) {
             }
         }
     }
-
-    /* Start Date Dialog
-    CalendarDialog(
-        state = calendarStartState,
-        selection = CalendarSelection.Date(
-            onSelectDate = {
-                taskStartDate.value = it.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-                           }),
-        config = CalendarConfig(
-            monthSelection = true,
-            yearSelection = true,
-            boundary =  ,
-            style = CalendarStyle.MONTH
-        ), properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
-    )
-
-    //End Date Dialog
-    CalendarDialog(
-        state = calendarEndState,
-        selection = CalendarSelection.Date(
-            onSelectDate = {
-                taskEndDate.value = it.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-            }),
-        config = CalendarConfig(
-            monthSelection = true,
-            yearSelection = true,
-            maxYear = 2024,
-            minYear = 2024,
-            style = CalendarStyle.MONTH
-        ), properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
-    )*/
 }

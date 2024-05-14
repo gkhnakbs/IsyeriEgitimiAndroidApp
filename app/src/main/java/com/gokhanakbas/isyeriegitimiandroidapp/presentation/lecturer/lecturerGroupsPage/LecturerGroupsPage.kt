@@ -1,5 +1,6 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerGroupsPage
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,7 +31,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -42,33 +45,48 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Group
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.StudentTask
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.google.gson.Gson
 
 var studentIdForTask = 1
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GroupsPageForLecturer(paddingValues: PaddingValues, navController: NavController) {
+fun LecturerGroupsPage(paddingValues: PaddingValues, navController: NavController,viewModel: LecturerGroupsPageViewModel = hiltViewModel()) {
+
+    LaunchedEffect(Unit) {
+        viewModel.getGroups("1")
+    }
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LecturerGroupsPageContent(
+        navController = navController,
+        paddingValues = paddingValues,
+        state = state
+    )
+
+}
+
+@Composable
+fun LecturerGroupsPageContent(navController: NavController, paddingValues: PaddingValues,state: LecturerGroupsPageState) {
+
     val studentListOf = emptyList<Student>()
 
-    val groupList = remember {
-        arrayListOf(
-            Group(1, "Grup 1", studentListOf, "22.02.2024"),
-            Group(2, "Grup 2", studentListOf, "23.02.2024"),
-            Group(3, "Grup 3", studentListOf, "24.02.2024"),
-            Group(4, "Grup 4", studentListOf, "25.02.2024"),
-            Group(5, "Grup 5", studentListOf, "26.02.2024"),
-            Group(6, "Grup 6", studentListOf, "27.02.2024"),
-            Group(7, "Grup 7", studentListOf, "28.02.2024"),
-        )
-    }
+    val groupList = state.groupList
+
+    LoadingDialog(isLoading = state.isLoading)
+
     val alertDialogOfStudentList = remember { mutableStateOf(false) }
     val studentTaskTrackingPageState = remember { mutableStateOf(false) }
 
@@ -85,7 +103,7 @@ fun GroupsPageForLecturer(paddingValues: PaddingValues, navController: NavContro
                 .fillMaxSize()
         ) {
             items(
-                count = groupList.count(),
+                count = groupList.size,
                 key = { groupList[it].id },
             ) {
                 index = it
@@ -121,19 +139,6 @@ fun GroupsPageForLecturer(paddingValues: PaddingValues, navController: NavContro
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            OutlinedButton(
-                                onClick = {
-                                    groupList.removeAt(it)
-                                },
-                                shape = RoundedCornerShape(10.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color.Red,
-                                    contentColor = Color.White
-                                )
-                            ) {
-                                Text(text = stringResource(id = R.string.grubu_sil))
-                            }
-                            Spacer(modifier = Modifier.width(10.dp))
                             OutlinedButton(
                                 onClick = {
                                     alertDialogOfStudentList.value = true
@@ -275,10 +280,7 @@ fun AlertDialogOfStudentList(
                                     onClick = {
                                         //Ogrenciyi gosterecek
                                         alertDialogOfStudentList.value = false
-                                        val studentJson = Gson().toJson(student)
-                                        navController.navigate(
-                                            Screen.StudentPage.route
-                                        )
+                                        navController.navigate(Screen.StudentPage.passNavigate(student.student_no))
                                     }, colors = ButtonDefaults.outlinedButtonColors(
                                         containerColor = Color.Green,
                                         contentColor = Color.White
@@ -290,7 +292,7 @@ fun AlertDialogOfStudentList(
                                     onClick = {
                                         //Ogrenciyi gorevlerini gosterecek onun için burada global değişken olan studentIdForTask değerini değiştirecek
                                         studentTaskTrackingPageState.value = true
-                                        studentIdForTask = student.student_no.toInt()
+
                                     }, colors = ButtonDefaults.outlinedButtonColors(
                                         containerColor = GaziAcikMavi,
                                         contentColor = Color.White

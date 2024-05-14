@@ -5,7 +5,7 @@ import java.util.UUID
 
 @Immutable
 data class Group(
-    var group_id: Int,
+    var group_id: String,
     var group_name: String,
     var studentList: List<Student>,
     var group_creationDate: String,

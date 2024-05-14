@@ -20,7 +20,7 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
                     result.getString("post_baslik"),
                     "22.03.2024",
                     "",
-                    result.getString("ilan_id"),
+                    result.getBigDecimal("ilan_id").toString(),
                     Firm(
                         result.getBigDecimal("firma_id").toString(),
                         result.getString("firma_ad"),
@@ -44,7 +44,7 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
 
         val statement = connection.createStatement()
 
-        val result = statement.executeQuery("select i.*,f.* from favori_ilan as fi JOIN ilan as i ON fi.ilan_id=i.ilan_id JOIN firma as f ON f.firma_id=i.firma_id where fi.ogrenci_no=${student_no}")
+        val result = statement.executeQuery("select i.*,f.* from favori_ilan as fi JOIN ilan as i ON fi.ilan_id=i.ilan_id JOIN firma as f ON f.firma_id=i.firma_id where fi.ogrenci_no=${student_no.toBigDecimal()}")
 
         while (result.next()) {
             postList.add(
@@ -53,7 +53,7 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
                     post_label = result.getString("post_baslik"),
                     post_date = "22.03.2024",
                     post_photo = "",
-                    post_advert_id =  result.getString("ilan_id"),
+                    post_advert_id =  result.getBigDecimal("ilan_id").toString(),
                     post_firm =  Firm(
                         result.getBigDecimal("firma_id").toString(),
                         result.getString("firma_ad"),

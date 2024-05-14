@@ -22,13 +22,13 @@ class DatabaseConnection {
             try {
                 Class.forName("org.postgresql.Driver")
                 connection= DriverManager.getConnection(
-                    "jdbc:postgresql://10.0.2.2:5432/gaziOnline",
+                    "jdbc:postgresql://10.0.2.2:5432/gaziOnline1",
                     "postgres",
                     "admin"
                 )
                 Log.i("databaseState :","Başarılı")
             } catch (e: Exception) {
-                Log.d("databaseState : ", "Sorun : "+ e.localizedMessage.toString())
+                Log.d("databaseState : ", "Sorun : "+ e.localizedMessage!!.toString())
             }
 
         return connection

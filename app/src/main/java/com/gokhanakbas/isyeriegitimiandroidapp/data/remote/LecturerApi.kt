@@ -1,7 +1,10 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
+import androidx.compose.runtime.mutableStateListOf
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Group
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 import javax.inject.Inject
 
@@ -28,9 +31,59 @@ class LecturerApi @Inject constructor(private val databaseConnection: DatabaseCo
         return lecturer
     }
 
-    fun getLecturerGroups(): List<Group> {
+    fun getLecturerGroups(lecturer_id: String): List<Group> {
+        val groups = ArrayList<Group>()
+        val statement=connection.createStatement()
+        val result=statement.executeQuery("Select * FROM ogrenci_grup where izleyici_id=${lecturer_id.toBigDecimal()}")
+        while (result.next()){
+            groups.add(
+                Group(
+                    result.getBigDecimal("grup_id").toString(),
+                    result.getString("grup_ad"),
+                    getGroupStudents(result.getString("grup_id")),
+                    result.getString("grup_olusturulmaTarihi")
+                )
+            )
+        }
+        return groups
+    }
 
-        return emptyList()
+    private fun getGroupStudents(grup_id : String) : List<Student> {
+        val ogrenciList = ArrayList<Student>()
+        val statement = connection.createStatement()
+        val result=statement.executeQuery("Select o.*,f.* from gruptaki_ogrenciler as go JOIN ogrenci as o ON o.ogrenci_no=go.ogrenci_no JOIN firma as f ON f.firma_id=o.firma_id where grup_id=${grup_id.toBigDecimal()}")
+        while (result.next()){
+            ogrenciList.add(
+                Student(
+                    result.getBigDecimal("ogrenci_no").toString(),
+                    result.getString("ogrenci_ad") + " " + result.getString("ogrenci_soyad"),
+                    "20Default",
+                    result.getString("ogrenci_fakulte"),
+                    "Bilgisayar Mühendisliği Default",
+                    result.getString("ogrenci_kimlik_no"),
+                    result.getString("ogrenci_sinif"),
+                    result.getString("ogrenci_agno"),
+                    result.getString("ogrenci_hakkinda"),
+                    result.getString("ogrenci_adres"),
+                    result.getString("ogrenci_tel_no"),
+                    result.getString("ogrenci_eposta"),
+                    Firm(
+                        result.getBigDecimal("firma_id").toString(),
+                        result.getString("firma_ad"),
+                        result.getString("firma_sektor"),
+                        result.getString("firma_hakkinda"),
+                        result.getString("firma_logo"),
+                        result.getString("firma_eposta"),
+                        result.getString("firma_adres"),
+                        "",
+                        ""
+                    ),
+                    result.getString("ogrenci_parola"),
+                    mutableStateListOf()
+                )
+            )
+        }
+        return ogrenciList
     }
 
     fun getLecturers(): List<Lecturer> {

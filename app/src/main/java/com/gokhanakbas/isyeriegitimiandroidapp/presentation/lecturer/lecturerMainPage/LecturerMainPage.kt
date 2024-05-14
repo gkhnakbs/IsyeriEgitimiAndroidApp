@@ -49,7 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.GroupsPageForLecturer
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerGroupsPage.LecturerGroupsPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
@@ -262,7 +262,7 @@ fun LecturerMainPageContent(navController: NavController,lecturerMainPageState: 
             }
 
             4 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                GroupsPageForLecturer(navController = navController, paddingValues = it)
+                LecturerGroupsPage(navController = navController, paddingValues = it)
             }
 
             5 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {

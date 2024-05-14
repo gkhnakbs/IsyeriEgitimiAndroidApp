@@ -84,7 +84,7 @@ fun StudentMainPage(
     }
 
     //Constants tanımlamaları
-    Constants.USER_TYPE=Constants.STUDENT
+    Constants.USER_TYPE = Constants.STUDENT
     Constants.STUDENT_NO = student_no
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -99,7 +99,7 @@ fun StudentMainPageContent(
     studentMainPageState: StudentMainPageState
 ) {
 
-    val navDrawerState1= remember {
+    val navDrawerState1 = remember {
         DrawerState(DrawerValue.Closed)
     }
 
@@ -212,7 +212,11 @@ fun StudentMainPageContent(
                         )
                     }
                 }
-                Column(modifier=Modifier.verticalScroll(rememberScrollState())){
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Top
+                ) {
                     liste.forEachIndexed { index, icerik ->
                         NavigationDrawerItem(
                             label = { Text(text = icerik.nav_name) },
