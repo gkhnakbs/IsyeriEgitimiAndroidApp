@@ -3,4 +3,5 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.kotlinJetbrains) apply false
     alias(libs.plugins.daggerHiltAndroid) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
 }

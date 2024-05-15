@@ -19,7 +19,8 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 lifecycleRuntimeCompose = "2.8.0"
 material3 = "1.2.1"
-navigationCompose = "2.7.7"
+navigationCompose = "2.8.0-beta01"
+serialization = "1.6.3"
 postgresql = "42.2.9"
 uiTestManifest = "1.7.0-beta01"
 
@@ -35,7 +36,10 @@ androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersi
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeCompose" }
+
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json" , version.ref="serialization" }
+
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
@@ -53,7 +57,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 
 [plugins]
-
 androidApplication= { id = "com.android.application" , version.ref= "androidApplication"}
 kotlinJetbrains= { id = "org.jetbrains.kotlin.android" , version.ref= "kotlinAndroid"}
 daggerHiltAndroid= { id = "com.google.dagger.hilt.android" , version.ref= "daggerHiltAndroid"}
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref="kotlinAndroid" }
