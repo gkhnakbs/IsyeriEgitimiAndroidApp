@@ -8,6 +8,5 @@ data class Skill(
     var skill_id:String,
     var skill_name:String,
     var skill_level:String,
-    var skill_additionDate:String,
     var id : String = UUID.randomUUID().toString()
 )

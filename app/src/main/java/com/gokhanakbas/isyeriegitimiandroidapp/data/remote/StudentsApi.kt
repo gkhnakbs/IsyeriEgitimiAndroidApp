@@ -2,6 +2,7 @@ package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
 import androidx.compose.runtime.mutableStateListOf
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Skill
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import javax.inject.Inject
@@ -113,12 +114,23 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                 Skill(
                     result.getBigDecimal("yetenek_id").toString(),
                     result.getString("yetenek_baslik"),
-                    result.getString("yetenek_seviye"),
-                    result.getString("yetenek_eklenmeTarihi")
+                    result.getString("yetenek_seviye")
                 )
             )
         }
         return skillList
+    }
+
+    fun getGroupsLecturerInformation(student_no : String) : Lecturer{
+        val groupsLecturer = Lecturer("","","","","","","","","")
+        val statement=connection.createStatement()
+        val result=statement.executeQuery("select i.* from izleyici as i JOIN ogrenci_grup as og ON og.izleyici_id=i.izleyici_id JOIN gruptaki_ogrenciler as go ON go.grup_id=og.grup_id where go.ogrenci_no=${student_no.toBigDecimal()}")
+        while (result.next()){
+            groupsLecturer.lecturer_id=result.getBigDecimal("izleyici_id").toString()
+            groupsLecturer.lecturer_name=result.getString("izleyici_ad") +" "+result.getString("izleyici_soyad")
+            //Öğrenci için sadece başta izleyicinin adı ve soyadı gösterileceği için bu kadarı yeter
+        }
+        return groupsLecturer
     }
 
     fun saveStudentInformation(student: Student) : Boolean {

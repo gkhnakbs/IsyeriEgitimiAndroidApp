@@ -4,6 +4,7 @@ import androidx.collection.MutableObjectList
 import arrow.core.Either
 import com.gokhanakbas.isyeriegitimiandroidapp.data.mapper.toNetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.data.remote.StudentsApi
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Skill
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
@@ -38,6 +39,14 @@ class StudentsRepositoryImpl @Inject constructor(private val studentsApi: Studen
     override suspend fun getSkills(student_no:String): Either<NetworkError, MutableList<Skill>> {
         return Either.catch {
             studentsApi.getSkills(student_no)
+        }.mapLeft {
+            it.toNetworkError()
+        }
+    }
+
+    override suspend fun getGroupsLecturerInformation(student_no: String): Either<NetworkError, Lecturer> {
+        return Either.catch {
+            studentsApi.getGroupsLecturerInformation(student_no)
         }.mapLeft {
             it.toNetworkError()
         }

@@ -2,6 +2,7 @@ package com.gokhanakbas.isyeriegitimiandroidapp.domain.repository
 
 import androidx.collection.MutableObjectList
 import arrow.core.Either
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Skill
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
@@ -15,6 +16,8 @@ interface StudentsRepository {
     suspend fun login_student(student_no:String,student_password:String): Either<NetworkError,Boolean>
 
     suspend fun getSkills(student_no:String) : Either<NetworkError, MutableList<Skill>>
+
+    suspend fun getGroupsLecturerInformation(student_no:String) : Either<NetworkError, Lecturer>
 
     suspend fun saveStudentsInformation(student:Student) : Either<NetworkError,Boolean>
 

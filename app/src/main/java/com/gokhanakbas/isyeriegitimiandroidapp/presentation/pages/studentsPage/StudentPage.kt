@@ -15,7 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -57,6 +62,7 @@ fun StudentPage(
     LaunchedEffect(key1 = studentPageViewModel) {
         studentPageViewModel.getStudentInformation(student_no)
         studentPageViewModel.getSkills(student_no)
+        studentPageViewModel.getGroupsLecturerInformation(student_no)
     }
 
     val state by studentPageViewModel.state.collectAsStateWithLifecycle()
@@ -144,7 +150,7 @@ fun StudentPageContent(navController: NavController, studentPageState: StudentPa
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.weight(0.8f, fill = true)
                             )
-                            if (Constants.USER_TYPE==Constants.STUDENT){
+                            if (Constants.USER_TYPE == Constants.STUDENT) {
                                 IconButton(onClick = {
                                     //Profil duzenleme sayfasina gidecek
                                     navController.navigate(
@@ -256,7 +262,7 @@ fun StudentPageContent(navController: NavController, studentPageState: StudentPa
                                         .padding(10.dp)
                                 )
                             }
-                            Row{
+                            Row {
                                 OutlinedTextField(
                                     value = tf_studentMail,
                                     onValueChange = { },
@@ -268,79 +274,133 @@ fun StudentPageContent(navController: NavController, studentPageState: StudentPa
                                         .fillMaxWidth()
                                         .padding(10.dp)
                                 )
+                            }
                         }
+
+
                     }
-
-
-                }
-                Text(
-                    text = stringResource(id = R.string.hakkimda),
-                    fontSize = 23.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(10.dp),
-                    textDecoration = TextDecoration.Underline
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top=5.dp, start = 10.dp, end = 10.dp, bottom = 10.dp)
-                ) {
-                    Text(text = studentObject.student_info, fontSize = 18.sp)
+                    Text(
+                        text = stringResource(id = R.string.hakkimda),
+                        fontSize = 23.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(10.dp),
+                        textDecoration = TextDecoration.Underline
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 5.dp, start = 10.dp, end = 10.dp, bottom = 10.dp)
+                    ) {
+                        Text(text = studentObject.student_info, fontSize = 18.sp)
+                    }
                 }
             }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(GaziAcikMavi),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Top
             ) {
-                Text(
-                    text = stringResource(id = R.string.yeteneklerim),
-                    fontSize = 23.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(10.dp),
-                    textDecoration = TextDecoration.Underline
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                repeat(studentPageState.skillList.size) { index ->
-                    val skill = studentPageState.skillList[index]
-                    SkillComp(skill = skill)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(GaziAcikMavi),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.yeteneklerim),
+                        fontSize = 23.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(10.dp),
+                        textDecoration = TextDecoration.Underline
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    repeat(studentPageState.skillList.size) { index ->
+                        val skill = studentPageState.skillList[index]
+                        SkillComp(skill = skill)
+                    }
                 }
             }
-        }
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(GaziAcikMavi),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.grup_bilgileri),
+                        fontSize = 23.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(10.dp),
+                        textDecoration = TextDecoration.Underline
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
 
-    }
-    OutlinedButton(
-        onClick = {
-            navController.popBackStack()
-        }, colors = ButtonDefaults.buttonColors(
-            containerColor = GaziAcikMavi,
-            contentColor = Color.Black
-        ), shape = RoundedCornerShape(10.dp), modifier = Modifier
-            .padding(8.dp)
-            .align(Alignment.TopStart)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+                    Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp), shape = RoundedCornerShape(20.dp) , colors = CardDefaults.cardColors(
+                            containerColor = Color.White
+                        )) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                modifier = Modifier.weight(0.8f),
+                                text = studentPageState.groupsLecturer.lecturer_name,
+                                textDecoration = TextDecoration.Underline,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 20.sp
+                            )
+                            IconButton(onClick = {
+                                navController.navigate(
+                                    Screen.LecturerPage.passNavigate(
+                                        studentPageState.groupsLecturer.lecturer_id
+                                    )
+                                )
+                            }, modifier = Modifier.weight(0.2f)) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = ""
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        OutlinedButton(
+            onClick = {
+                navController.popBackStack()
+            }, colors = ButtonDefaults.buttonColors(
+                containerColor = GaziAcikMavi,
+                contentColor = Color.Black
+            ), shape = RoundedCornerShape(10.dp), modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.TopStart)
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.back_button),
-                contentDescription = "",
-                modifier = Modifier.size(20.dp)
-            )
-            Text(text = stringResource(id = R.string.geri_don))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.back_button),
+                    contentDescription = "",
+                    modifier = Modifier.size(20.dp)
+                )
+                Text(text = stringResource(id = R.string.geri_don))
+            }
+
         }
 
     }
-
-}
 }
