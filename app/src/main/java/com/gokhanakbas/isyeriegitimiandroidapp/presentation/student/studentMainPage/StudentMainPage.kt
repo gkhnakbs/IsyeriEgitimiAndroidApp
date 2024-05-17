@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,6 +54,7 @@ import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LogOutQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ScaffoldComp
@@ -68,6 +70,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.Mavi2
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 import kotlinx.coroutines.launch
+import okhttp3.internal.immutableListOf
 
 var lastPage = 1
 
@@ -76,18 +79,15 @@ var lastPage = 1
 fun StudentMainPage(
     navController: NavController,
     student_no: String,
-    viewModel: StudentMainPageViewModel = hiltViewModel()
+    viewModel: StudentMainPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
-
-    LaunchedEffect(viewModel) {
-        viewModel.getStudentInformation(student_no)
-    }
-
     //Constants tanımlamaları
     Constants.USER_TYPE = Constants.STUDENT
     Constants.STUDENT_NO = student_no
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+    state.student = sharedViewModel.student!!
 
     StudentMainPageContent(navController = navController, studentMainPageState = state)
 
@@ -98,11 +98,6 @@ fun StudentMainPageContent(
     navController: NavController,
     studentMainPageState: StudentMainPageState
 ) {
-
-    val navDrawerState1 = remember {
-        DrawerState(DrawerValue.Closed)
-    }
-
     val navDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navScope = rememberCoroutineScope()
     val navDrawerSecilen = remember { mutableIntStateOf(lastPage) }
@@ -111,49 +106,48 @@ fun StudentMainPageContent(
 
     val studentObject = studentMainPageState.student
 
-
-    val liste = listOf(
-        NavItem(
-            1,
-            stringResource(id = R.string.ana_sayfa),
-            painterResource(id = R.drawable.home_icon)
-        ),
-        NavItem(
-            2,
-            stringResource(id = R.string.ilanlar),
-            painterResource(id = R.drawable.advertisement_icon)
-        ),
-        NavItem(
-            3,
-            stringResource(id = R.string.firma),
-            painterResource(id = R.drawable.workplace_icon)
-        ),
-        NavItem(
-            4,
-            stringResource(id = R.string.basvurulmus_ilanlar),
-            painterResource(id = R.drawable.apply_icon)
-        ),
-        NavItem(
-            5,
-            stringResource(id = R.string.form),
-            painterResource(id = R.drawable.form_icon)
-        ),
-        NavItem(
-            6,
-            stringResource(id = R.string.anket),
-            painterResource(id = R.drawable.document_icon)
-        ),
-        NavItem(
-            7,
-            stringResource(id = R.string.haftalik_rapor),
-            painterResource(id = R.drawable.report_icon)
-        ),
-        NavItem(
-            8,
-            stringResource(id = R.string.favori_ilanlar),
-            painterResource(id = R.drawable.bookmark_icon)
+    val liste = immutableListOf(
+            NavItem(
+                1,
+                stringResource(id = R.string.ana_sayfa),
+                painterResource(id = R.drawable.home_icon)
+            ),
+            NavItem(
+                2,
+                stringResource(id = R.string.ilanlar),
+                painterResource(id = R.drawable.advertisement_icon)
+            ),
+            NavItem(
+                3,
+                stringResource(id = R.string.firma),
+                painterResource(id = R.drawable.workplace_icon)
+            ),
+            NavItem(
+                4,
+                stringResource(id = R.string.basvurulmus_ilanlar),
+                painterResource(id = R.drawable.apply_icon)
+            ),
+            NavItem(
+                5,
+                stringResource(id = R.string.form),
+                painterResource(id = R.drawable.form_icon)
+            ),
+            NavItem(
+                6,
+                stringResource(id = R.string.anket),
+                painterResource(id = R.drawable.document_icon)
+            ),
+            NavItem(
+                7,
+                stringResource(id = R.string.haftalik_rapor),
+                painterResource(id = R.drawable.report_icon)
+            ),
+            NavItem(
+                8,
+                stringResource(id = R.string.favori_ilanlar),
+                painterResource(id = R.drawable.bookmark_icon)
+            )
         )
-    )
 
     ModalNavigationDrawer(
         drawerContent = {

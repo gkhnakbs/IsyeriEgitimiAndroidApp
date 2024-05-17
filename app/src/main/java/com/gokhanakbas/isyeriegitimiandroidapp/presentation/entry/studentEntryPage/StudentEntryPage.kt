@@ -41,7 +41,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 
@@ -49,20 +51,23 @@ import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 @Composable
 fun StudentEntryPage(
     navController: NavController,
-    viewModel: StudentEntryPageViewModel = hiltViewModel()
+    viewModel: StudentEntryPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
     val studentEntryPageState by viewModel.state.collectAsStateWithLifecycle()
 
     StudentEntryPageContent(
         navController = navController,
-        studentEntryPageState = studentEntryPageState
+        studentEntryPageState = studentEntryPageState,
+        sharedViewModel = sharedViewModel
     )
 }
 
 @Composable
 fun StudentEntryPageContent(
     navController: NavController,
-    studentEntryPageState: StudentEntryPageState
+    studentEntryPageState: StudentEntryPageState,
+    sharedViewModel: SharedViewModel
 ) {
 
     val focusRequester= remember {
@@ -204,6 +209,7 @@ fun StudentEntryPageContent(
                 OutlinedButton(
                     onClick = {
                         var studentValided = ""
+                        var studentValid : Student?=null
                         if (tf_studentNumber.value.trim().isNotEmpty() || tf_studentPassword.value.trim().isNotEmpty()) {
                             if (!errorState.value && !errorState1.value) {
 
@@ -212,16 +218,13 @@ fun StudentEntryPageContent(
                                     studentEntryPageState.student_list!!.forEach { student ->
                                         if (student.student_no == tf_studentNumber.value && student.student_password == tf_studentPassword.value) {
                                             studentValided = student.student_no
+                                            studentValid=student
                                         }
                                     }
 
                                     if (studentValided != "") {
-
-                                        navController.navigate(
-                                            Screen.StudentMainPage.passNavigate(
-                                                studentValided
-                                            )
-                                        ) {
+                                        sharedViewModel.addStudent(studentValid)
+                                        navController.navigate(Screen.StudentMainPage.route) {
                                             popUpTo(Screen.StudentEntryPage.route) {
                                                 inclusive = true
                                             }

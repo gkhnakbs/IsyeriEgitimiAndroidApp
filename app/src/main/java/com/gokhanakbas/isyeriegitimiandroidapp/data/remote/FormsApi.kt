@@ -13,7 +13,7 @@ class FormsApi @Inject constructor(private val databaseconnection: DatabaseConne
         while (result.next()) {
             formList.add(
                 Form(
-                    result.getBigDecimal("form_id").toInt(),
+                    result.getBigDecimal("form_id").toString(),
                     result.getString("form_baslik"),
                     result.getString("form_aciklama")
                 )
@@ -30,7 +30,7 @@ class FormsApi @Inject constructor(private val databaseconnection: DatabaseConne
         while (result.next()) {
             formList.add(
                 Form(
-                    result.getBigDecimal("form_id").toInt(),
+                    result.getBigDecimal("form_id").toString(),
                     result.getString("form_baslik"),
                     result.getString("form_aciklama")
                 )
@@ -47,7 +47,7 @@ class FormsApi @Inject constructor(private val databaseconnection: DatabaseConne
         while (result.next()) {
             formList.add(
                 Form(
-                    result.getBigDecimal("form_id").toInt(),
+                    result.getBigDecimal("form_id").toString(),
                     result.getString("form_baslik"),
                     result.getString("form_aciklama")
                 )
@@ -64,7 +64,7 @@ class FormsApi @Inject constructor(private val databaseconnection: DatabaseConne
         while (result.next()) {
             formList.add(
                 Form(
-                    result.getBigDecimal("form_id").toInt(),
+                    result.getBigDecimal("form_id").toString(),
                     result.getString("form_baslik"),
                     result.getString("form_aciklama")
                 )
@@ -81,7 +81,7 @@ class FormsApi @Inject constructor(private val databaseconnection: DatabaseConne
         while (result.next()) {
             formList.add(
                 Form(
-                    result.getBigDecimal("form_id").toInt(),
+                    result.getBigDecimal("form_id").toString(),
                     result.getString("form_baslik"),
                     result.getString("form_aciklama")
                 )

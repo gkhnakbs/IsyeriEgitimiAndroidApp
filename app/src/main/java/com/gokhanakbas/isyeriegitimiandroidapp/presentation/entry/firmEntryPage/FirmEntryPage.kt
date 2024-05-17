@@ -41,24 +41,27 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 
 @Composable
 fun FirmEntryPage(
     navController: NavController,
-    viewModel: FirmEntryPageViewModel = hiltViewModel()
+    viewModel: FirmEntryPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    FirmEntryPageContent(navController = navController, state = state)
+    FirmEntryPageContent(navController = navController, state = state,sharedViewModel = sharedViewModel)
 
 }
 
 @Composable
-fun FirmEntryPageContent(navController: NavController, state: FirmEntryPageState) {
+private fun FirmEntryPageContent(navController: NavController, state: FirmEntryPageState,sharedViewModel: SharedViewModel) {
 
     val focusRequester = remember {
         FocusRequester()
@@ -207,6 +210,7 @@ fun FirmEntryPageContent(navController: NavController, state: FirmEntryPageState
                 OutlinedButton(
                     onClick = {
                         //Firma Anasayfasina yonlendirilecek
+                        var firmValid : Firm?=null
                     if (tf_firmNo.value.isNotEmpty()&&tf_firmPassword.value.isNotEmpty()) {
 
                         if (!errorState.value && !errorState1.value) {
@@ -217,10 +221,12 @@ fun FirmEntryPageContent(navController: NavController, state: FirmEntryPageState
                                 state.firmList.forEach { firm ->
                                     if (firm.firm_id == tf_firmNo.value && firm.firm_password == tf_firmPassword.value) {
                                         firmValided = firm.firm_id
+                                        firmValid=firm
                                     }
                                 }
 
                                 if (firmValided != "") {
+                                    sharedViewModel.addFirm(firmValid)
                                     navController.navigate(Screen.FirmMainPage.passNavigate(firm_id = firmValided)) {
                                         popUpTo(Screen.FirmEntryPage.route) {
                                             inclusive = true

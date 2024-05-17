@@ -42,13 +42,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 
 @Composable
 fun CommissionEntryPage(
     navController: NavController,
-    viewModel: CommissionEntryPageViewModel = hiltViewModel()
+    viewModel: CommissionEntryPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
 
     LaunchedEffect(key1 = viewModel) {

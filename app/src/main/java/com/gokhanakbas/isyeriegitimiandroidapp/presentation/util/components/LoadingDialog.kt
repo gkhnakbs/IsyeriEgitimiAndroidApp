@@ -22,7 +22,7 @@ fun LoadingDialog(isLoading: Boolean) {
 
     if (isLoading) {
         Dialog(
-            onDismissRequest = { /*TODO*/ },
+            onDismissRequest = {  },
             properties = DialogProperties(dismissOnClickOutside = false)
         ) {
             Box(

@@ -1,6 +1,9 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Commission
@@ -10,70 +13,71 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Group
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Singleton
 
 
 class SharedViewModel : ViewModel() {
 
-    var student : Student = Student("","","","","","","","","","","","", Firm("","","","","","","","",""),"",
-        mutableStateListOf() )
+    var student by mutableStateOf<Student?>(null)
         private set
 
-    fun addStudent(newStudent: Student){
+    fun addStudent(newStudent: Student?){
         student=newStudent
     }
 
-    var lecturer : Lecturer =Lecturer("","","","","","","","","")
+    var lecturer by mutableStateOf<Lecturer?>(null)
         private set
 
-    fun addLecturer(newLecturer: Lecturer){
+    fun addLecturer(newLecturer: Lecturer?){
         lecturer=newLecturer
     }
 
 
-    var firm : Firm = Firm("","","","","","","","","")
+    var firm by mutableStateOf<Firm?>(null)
         private set
 
-    fun addFirm(newFirm: Firm){
+    fun addFirm(newFirm: Firm?){
         firm=newFirm
     }
 
 
-    var commission : Commission = Commission("","","","","","","","")
-        private set
+    var commission by mutableStateOf<Commission?>(null)
+    private set
 
-    fun addCommission(newCommission: Commission){
+    fun addCommission(newCommission: Commission?){
         commission=newCommission
     }
 
 
-    var advert : Advert = Advert("","","","","",Firm("","","","","","","","",""), emptyList(),"")
-        private set
+    var advert by mutableStateOf<Advert?>(null)
+    private set
 
-    fun addAdvert(newAdvert: Advert){
+    fun addAdvert(newAdvert: Advert?){
         advert=newAdvert
     }
 
 
-    var report : Report = Report("","","","")
+    var report by mutableStateOf<Report?>(null)
         private set
 
-    fun addReport(newReport: Report){
+    fun addReport(newReport: Report?){
         report=newReport
     }
 
 
-    var form : Form = Form("","")
+    var form by mutableStateOf<Form?>(null)
         private set
 
-    fun addForm(newForm: Form){
+    fun addForm(newForm: Form?){
         form=newForm
     }
 
 
-    var group : Group = Group("","", emptyList(),"")
+    var group by mutableStateOf<Group?>(null)
         private set
 
-    fun addGroup(newGroup: Group){
+    fun addGroup(newGroup: Group?){
         group=newGroup
     }
 

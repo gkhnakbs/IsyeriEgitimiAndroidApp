@@ -32,6 +32,8 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainP
 fun AppNavGraph(
     navController: NavHostController
 ) {
+    val sharedViewModel=SharedViewModel()
+
     NavHost(navController = navController, startDestination = Screen.EntryPage.route) {
 
         composable(Screen.EntryPage.route) {
@@ -39,19 +41,19 @@ fun AppNavGraph(
         }
 
         composable(Screen.StudentEntryPage.route) {
-            StudentEntryPage(navController = navController)
+            StudentEntryPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
         composable(Screen.FirmEntryPage.route) {
-            FirmEntryPage(navController = navController)
+            FirmEntryPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
         composable(Screen.LecturerEntryPage.route) {
-            LecturerEntryPage(navController = navController)
+            LecturerEntryPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
         composable(Screen.CommissionEntryPage.route) {
-            CommissionEntryPage(navController = navController)
+            CommissionEntryPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
         composable(
@@ -62,7 +64,7 @@ fun AppNavGraph(
                 }
             )) {
             val student_no = it.arguments?.getString("student_no")
-            StudentMainPage(navController = navController, student_no = student_no!!)
+            StudentMainPage(navController = navController, student_no = student_no!!, sharedViewModel = sharedViewModel)
 
         }
 

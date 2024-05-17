@@ -2,19 +2,14 @@ package com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation
 
 sealed class Screen(var route: String) {
 
-    object EntryPage : Screen("entryPageSelection")
+    data object EntryPage : Screen("entryPageSelection")
 
-    object StudentEntryPage : Screen("studentEntryPage")
-    object FirmEntryPage : Screen("firmEntryPage")
-    object LecturerEntryPage : Screen("lecturerEntryPage")
-    object CommissionEntryPage : Screen("commissionEntryPage")
+    data object StudentEntryPage : Screen("studentEntryPage")
+    data object FirmEntryPage : Screen("firmEntryPage")
+    data object LecturerEntryPage : Screen("lecturerEntryPage")
+    data object CommissionEntryPage : Screen("commissionEntryPage")
 
-    object StudentMainPage : Screen("studentMainPage/{student_no}") {
-        fun passNavigate(student_no: String): String {
-            route = "studentMainPage/$student_no"
-            return route
-        }
-    }
+    data object StudentMainPage : Screen("studentMainPage")
 
     object FirmMainPage : Screen("firmMainPage/{firm_id}") {
         fun passNavigate(firm_id: String): String {
