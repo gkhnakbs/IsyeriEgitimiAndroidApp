@@ -53,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Skill
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.SkillEntryComp
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
@@ -66,34 +67,31 @@ import kotlinx.coroutines.launch
 fun StudentInfoEditPage(
     navController: NavController,
     student_no: String,
-    viewModel: StudentInfoEditPageViewModel = hiltViewModel()
+    viewModel: StudentInfoEditPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
-
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getStudentInformation(student_no)
-        viewModel.getSkills(student_no)
-    }
-
-    val state by viewModel.state.collectAsStateWithLifecycle()
 
     StudentInfoEditPageContent(
         navController = navController,
-        studentInfoEditPageState = state,
-        viewModel = viewModel
+        viewModel = viewModel,
+        sharedViewModel = sharedViewModel
     )
 
 }
 
 @Composable
-fun StudentInfoEditPageContent(
+private fun StudentInfoEditPageContent(
     navController: NavController,
-    studentInfoEditPageState: StudentInfoEditPageState,
-    viewModel: StudentInfoEditPageViewModel
+    viewModel: StudentInfoEditPageViewModel,
+    sharedViewModel: SharedViewModel
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LoadingDialog(isLoading = studentInfoEditPageState.isLoading)
+    state.student=sharedViewModel.student!!
 
-    val student = studentInfoEditPageState.student
+    LoadingDialog(isLoading = state.isLoading)
+
+    val student = state.student
 
     val tf_studentInfo = remember { mutableStateOf("") }
     val tf_studentEmail = remember { mutableStateOf("") }
@@ -128,11 +126,8 @@ fun StudentInfoEditPageContent(
     }
 
 
-    LaunchedEffect(key1 = studentInfoEditPageState.skillList) {
-        tf_studentInfo.value = student.student_info
-        tf_studentEmail.value = student.student_mail
-        tf_studentSkillList.addAll(studentInfoEditPageState.skillList)
-        student.student_skillList=studentInfoEditPageState.skillList
+    LaunchedEffect(key1 = sharedViewModel) {
+        tf_studentSkillList.addAll(sharedViewModel.student!!.student_skillList)
     }
 
     val skillEntryState = remember {
@@ -285,6 +280,7 @@ fun StudentInfoEditPageContent(
                     unfocusedBorderColor = GaziKoyuMavi,
                     focusedBorderColor = GaziKoyuMavi,
                 ),
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 label = { Text(text = stringResource(id = R.string.email)) }
             )
@@ -336,12 +332,12 @@ fun StudentInfoEditPageContent(
                     if (it.length >= 8) {
                         eightCharacterSentenceColor.value = Color.Green
                         newPasswordErrorState.value = false
-                    }   else {
+                    } else {
                         eightCharacterSentenceColor.value = Color.Red
                         newPasswordErrorState.value = true
                     }
 
-                    if (containsLowerCase(it)){
+                    if (containsLowerCase(it)) {
                         lowerCaseSentenceColor.value = Color.Green
                         newPasswordErrorState.value = false
                     } else {
@@ -349,7 +345,7 @@ fun StudentInfoEditPageContent(
                         newPasswordErrorState.value = true
                     }
 
-                    if (containsUpperCase(it)){
+                    if (containsUpperCase(it)) {
                         upperCaseSentenceColor.value = Color.Green
                         newPasswordErrorState.value = false
                     } else {
@@ -440,7 +436,8 @@ fun StudentInfoEditPageContent(
                 value = tf_studentNewPasswordValid.value,
                 onValueChange = {
                     tf_studentNewPasswordValid.value = it
-                    newPasswordValidErrorState.value = tf_studentNewPassword.value.trim() != it.trim()
+                    newPasswordValidErrorState.value =
+                        tf_studentNewPassword.value.trim() != it.trim()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -454,8 +451,13 @@ fun StudentInfoEditPageContent(
                 ), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true,
                 isError = newPasswordValidErrorState.value,
-                supportingText = { if (newPasswordValidErrorState.value) Text(text = stringResource(
-                    id = R.string.yeni_parolaniz_uyusmuyor) , fontSize = 14.sp,color=Color.Red)  },
+                supportingText = {
+                    if (newPasswordValidErrorState.value) Text(
+                        text = stringResource(
+                            id = R.string.yeni_parolaniz_uyusmuyor
+                        ), fontSize = 14.sp, color = Color.Red
+                    )
+                },
                 label = { Text(text = stringResource(id = R.string.yeni_parola_tekrar)) }
             )
 
@@ -558,8 +560,9 @@ fun StudentInfoEditPageContent(
                                     async { viewModel.saveStudentInformation(student = student) }
                                 if (job1.await()) {
                                     calismisFunc.intValue += 1
-                                }else{
-                                    calisanFunc.intValue-=1
+                                    sharedViewModel.addStudent(sharedViewModel.student!!.copy(student_mail = student.student_mail, student_info = student.student_info))
+                                } else {
+                                    calisanFunc.intValue -= 1
                                 }
                             }
                             if (tf_studentSkillList.toList() != student.student_skillList.toList()) {
@@ -573,11 +576,12 @@ fun StudentInfoEditPageContent(
                                 }
                                 if (job2.await()) {
                                     calismisFunc.intValue += 1
-                                }else{
-                                    calisanFunc.intValue-=1
+                                    sharedViewModel.addStudent(sharedViewModel.student!!.copy(student_skillList = student.student_skillList))
+                                } else {
+                                    calisanFunc.intValue -= 1
                                 }
                             }
-                            if (tf_studentCurrentPassword.value != "" && tf_studentNewPassword.value!=""  && !newPasswordValidErrorState.value) {
+                            if (tf_studentCurrentPassword.value != "" && tf_studentNewPassword.value != "" && !newPasswordValidErrorState.value) {
 
                                 if (tf_studentCurrentPassword.value == student.student_password) {
                                     println("test3")
@@ -586,8 +590,9 @@ fun StudentInfoEditPageContent(
                                     val job3 = async { viewModel.saveStudentPassword(student) }
                                     if (job3.await()) {
                                         calismisFunc.intValue += 1
-                                    }else{
-                                        calisanFunc.intValue-=1
+                                        sharedViewModel.addStudent(sharedViewModel.student!!.copy(student_password = student.student_password))
+                                    } else {
+                                        calisanFunc.intValue -= 1
                                     }
                                 } else {
                                     currentPasswordErrorState.value = true
@@ -644,9 +649,9 @@ fun StudentInfoEditPageContent(
         }
 
 
-        LaunchedEffect(key1 = calismisFunc.intValue ) {
-            if (calismisFunc.intValue == calisanFunc.intValue && calisanFunc.intValue!=0) {
-               navController.popBackStack()
+        LaunchedEffect(key1 = calismisFunc.intValue) {
+            if (calismisFunc.intValue == calisanFunc.intValue && calisanFunc.intValue != 0) {
+                navController.popBackStack()
             }
         }
     }

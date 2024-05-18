@@ -29,6 +29,17 @@ class FirmsRepositoryImpl @Inject constructor(
         }.mapLeft { it.toNetworkError() }
     }
 
+    override suspend fun login_firm(
+        firm_id: String,
+        firm_password: String
+    ): Either<NetworkError, Firm> {
+        return Either.catch {
+            firmsApi.loginFirm(firm_id = firm_id,firm_password=firm_password)
+        }.mapLeft {
+            it.toNetworkError()
+        }
+    }
+
     override suspend fun saveFirmInformation(firm: Firm): Either<NetworkError, Boolean> {
         return Either.catch {
             firmsApi.saveFirmInformation(firm)

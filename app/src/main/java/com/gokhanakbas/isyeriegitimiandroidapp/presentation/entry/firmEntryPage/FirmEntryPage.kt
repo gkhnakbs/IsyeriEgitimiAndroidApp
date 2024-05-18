@@ -41,11 +41,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun FirmEntryPage(
@@ -54,24 +59,30 @@ fun FirmEntryPage(
     sharedViewModel: SharedViewModel
 ) {
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    FirmEntryPageContent(navController = navController, state = state,sharedViewModel = sharedViewModel)
+    FirmEntryPageContent(
+        navController = navController,
+        viewModel = viewModel,
+        sharedViewModel = sharedViewModel
+    )
 
 }
 
 @Composable
-private fun FirmEntryPageContent(navController: NavController, state: FirmEntryPageState,sharedViewModel: SharedViewModel) {
+private fun FirmEntryPageContent(
+    navController: NavController,
+    viewModel: FirmEntryPageViewModel,
+    sharedViewModel: SharedViewModel
+) {
 
     val focusRequester = remember {
         FocusRequester()
     }
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(key1 = state.isLoading) {
-        if (!state.isLoading) {
-            focusRequester.requestFocus()
-        }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = navController) {
+        focusRequester.requestFocus()
     }
 
     LoadingDialog(isLoading = state.isLoading)
@@ -210,38 +221,39 @@ private fun FirmEntryPageContent(navController: NavController, state: FirmEntryP
                 OutlinedButton(
                     onClick = {
                         //Firma Anasayfasina yonlendirilecek
-                        var firmValid : Firm?=null
-                    if (tf_firmNo.value.isNotEmpty()&&tf_firmPassword.value.isNotEmpty()) {
 
-                        if (!errorState.value && !errorState1.value) {
-                            var firmValided = ""
+                        if (tf_firmNo.value.isNotEmpty() && tf_firmPassword.value.isNotEmpty()) {
 
-                            if (state.firmList.isNotEmpty()) {
+                            if (!errorState.value && !errorState1.value) {
 
-                                state.firmList.forEach { firm ->
-                                    if (firm.firm_id == tf_firmNo.value && firm.firm_password == tf_firmPassword.value) {
-                                        firmValided = firm.firm_id
-                                        firmValid=firm
+                                focusManager.clearFocus()
+
+                                CoroutineScope(Dispatchers.IO).launch {
+
+                                    val job = async {
+                                        viewModel.checkLoginCredentials(
+                                            tf_firmNo.value.trim(),
+                                            tf_firmPassword.value.trim()
+                                        )
                                     }
-                                }
 
-                                if (firmValided != "") {
-                                    sharedViewModel.addFirm(firmValid)
-                                    navController.navigate(Screen.FirmMainPage.passNavigate(firm_id = firmValided)) {
-                                        popUpTo(Screen.FirmEntryPage.route) {
-                                            inclusive = true
+                                    if (job.await()) {
+                                        withContext(Dispatchers.Main) {
+                                            sharedViewModel.addFirm(state.loginSuccessfullyFirm)
+                                            navController.navigate(Screen.FirmMainPage.route)
                                         }
+                                    } else {
+                                        Event.Toast("Girilen Bilgiler Yanlış")
                                     }
+
                                 }
-                            } else {
-                                println("boş liste")
-                                navController.popBackStack()
+
+
                             }
+                        } else {
+                            errorState.value = true
+                            errorState1.value = true
                         }
-                    }else{
-                        errorState.value=true
-                        errorState1.value=true
-                    }
                     },
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier.size(110.dp, 45.dp),

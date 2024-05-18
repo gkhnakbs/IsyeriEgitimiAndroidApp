@@ -2,10 +2,13 @@ package com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.lecturerEntry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.LecturersRepository
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.sendEvent
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,35 +22,38 @@ class LecturerEntryPageViewModel @Inject constructor(private val lecturersReposi
     private val _state= MutableStateFlow(LecturerEntryPageState())
     val state=_state.asStateFlow()
 
-    init {
-        getLecturers()
-    }
-
-    fun getLecturers() {
-        viewModelScope.launch {
+    suspend fun checkLoginCredentials(lecturer_id:String,lecturer_password : String) : Boolean {
+        val resultState : Deferred<Boolean> =viewModelScope.async {
             _state.update {
-                it.copy(
-                    isLoading = true
-                )
+                it.copy(isLoading = true)
             }
             delay(2000)
-            lecturersRepository.getLecturers()
-                .onRight { lecturerList->
-                    _state.update {
-                        it.copy(lecturerList = lecturerList)
-                    }
-                }
-                .onLeft { error->
-                    _state.update {
-                        it.copy(error= error.error.message)
-                    }
-                    sendEvent(Event.Toast(error.error.message))
-                }
+            val result=lecturersRepository.login_lecturer(lecturer_id = lecturer_id, lecturer_password = lecturer_password)
             _state.update {
                 it.copy(isLoading = false)
             }
-        }
+            when(result){
+                is Either.Left->{
+                    _state.update {
+                        it.copy(error = result.value.error.message)
+                    }
+                    sendEvent(Event.Toast(result.value.error.message))
+                    false
+                }
+                is Either.Right->{
+                    if(result.value.lecturer_id!=""){
+                        _state.update {
+                            it.copy(loginSuccesfullyLecturer = result.value)
+                        }
+                        true
+                    }else{
+                        false
+                    }
 
+                }
+            }
+        }
+        return resultState.await()
     }
 
 

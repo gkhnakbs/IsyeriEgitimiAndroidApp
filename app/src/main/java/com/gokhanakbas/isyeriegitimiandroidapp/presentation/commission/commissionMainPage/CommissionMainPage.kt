@@ -51,6 +51,7 @@ import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LogOutQuestionComp
@@ -68,7 +69,8 @@ var lastPage = 1
 fun CommissionMainPage(
     navController: NavController,
     commission_id: String,
-    viewModel: CommissionMainPageViewModel = hiltViewModel()
+    viewModel: CommissionMainPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
     LaunchedEffect(key1 = viewModel) {
         viewModel.getCommissionInformation(commission_id)
@@ -80,7 +82,7 @@ fun CommissionMainPage(
 
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-
+    state.commission=sharedViewModel.commission!!
     CommissionPageContent(navController = navController, state = state)
 
 

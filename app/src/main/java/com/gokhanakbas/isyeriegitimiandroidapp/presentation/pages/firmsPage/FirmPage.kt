@@ -40,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
@@ -49,16 +50,21 @@ import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 fun FirmPage(
     navController: NavController,
     firm_id: String,
-    firmPageViewModel: FirmPageViewModel = hiltViewModel()
+    firmPageViewModel: FirmPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
 
-    LaunchedEffect(key1 = firmPageViewModel) {
-        firmPageViewModel.getFirmInformation(firm_id)
+    val state by firmPageViewModel.state.collectAsState()
+
+    if(Constants.USER_TYPE!=Constants.FIRM){
+        LaunchedEffect(key1 = firmPageViewModel) {
+            firmPageViewModel.getFirmInformation(firm_id)
+        }
+    }else{
+        state.firm=sharedViewModel.firm!!
     }
 
-    val firmPageState by firmPageViewModel.state.collectAsState()
-
-    FirmPageContent(navController = navController, firmPageState = firmPageState)
+    FirmPageContent(navController = navController, firmPageState = state)
 }
 
 @Composable

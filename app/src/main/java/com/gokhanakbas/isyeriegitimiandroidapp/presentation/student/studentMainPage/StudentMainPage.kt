@@ -53,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
@@ -78,25 +79,24 @@ var lastPage = 1
 @Composable
 fun StudentMainPage(
     navController: NavController,
-    student_no: String,
     viewModel: StudentMainPageViewModel = hiltViewModel(),
     sharedViewModel: SharedViewModel
 ) {
     //Constants tanımlamaları
     Constants.USER_TYPE = Constants.STUDENT
-    Constants.STUDENT_NO = student_no
+    Constants.STUDENT_NO = sharedViewModel.student!!.student_no
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     state.student = sharedViewModel.student!!
 
-    StudentMainPageContent(navController = navController, studentMainPageState = state)
+    StudentMainPageContent(navController = navController, studentObject =  sharedViewModel.student!!)
 
 }
 
 @Composable
-fun StudentMainPageContent(
+private fun StudentMainPageContent(
     navController: NavController,
-    studentMainPageState: StudentMainPageState
+    studentObject : Student
 ) {
     val navDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navScope = rememberCoroutineScope()
@@ -104,7 +104,6 @@ fun StudentMainPageContent(
     val log_out_choice = remember { mutableStateOf(false) }
     val exit_choice = remember { mutableStateOf(false) }
 
-    val studentObject = studentMainPageState.student
 
     val liste = immutableListOf(
             NavItem(

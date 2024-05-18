@@ -186,11 +186,7 @@ fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavC
                             OutlinedButton(
                                 onClick = {
                                     //öğrencinin bilgilerini görümtüleyecek
-
-                                    val studentJson = Gson().toJson(student)
-                                    navController.navigate(
-                                        Screen.StudentPage.route
-                                    )
+                                    navController.navigate(Screen.StudentPage.passNavigate(student_no = student.student_no))
 
                                 },
                                 border = BorderStroke(1.dp, Color.Black),

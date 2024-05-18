@@ -14,6 +14,8 @@ interface FirmsRepository {
 
     suspend fun getFirmInformation(firm_id:String): Either<NetworkError, Firm>
 
+    suspend fun login_firm(firm_id:String,firm_password:String): Either<NetworkError,Firm> // Giriş kontrolü
+
     suspend fun saveFirmInformation(firm:Firm) : Either<NetworkError,Boolean>
 
     suspend fun saveFirmPassword(firm:Firm) : Either<NetworkError,Boolean>

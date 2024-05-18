@@ -45,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentInfoEditPage.containsLowerCase
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentInfoEditPage.containsUpperCase
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
@@ -59,25 +60,36 @@ import kotlinx.coroutines.launch
 fun LecturerInfoEditPage(
     navController: NavController,
     lecturer_id: String,
-    viewModel: LecturerInfoEditPageViewModel = hiltViewModel()
+    viewModel: LecturerInfoEditPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
 
-    LaunchedEffect(key1 = viewModel) {
+    /*LaunchedEffect(key1 = viewModel) {
         viewModel.getLecturerInformation(lecturer_id)
-    }
+    }*/
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LecturerInfoEditPageContent(navController = navController, state = state, viewModel = viewModel)
+    state.lecturer = sharedViewModel.lecturer!!
+    LecturerInfoEditPageContent(
+        navController = navController,
+        state = state,
+        viewModel = viewModel,
+        sharedViewModel = sharedViewModel
+    )
 
 }
 
 @Composable
-fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInfoEditPageState,viewModel: LecturerInfoEditPageViewModel) {
+fun LecturerInfoEditPageContent(
+    navController: NavController,
+    state: LecturerInfoEditPageState,
+    viewModel: LecturerInfoEditPageViewModel,
+    sharedViewModel: SharedViewModel
+) {
 
     LoadingDialog(isLoading = state.isLoading)
 
-    var lecturer=state.lecturer
+    var lecturer = state.lecturer
 
     val scrollState = rememberScrollState()
 
@@ -117,9 +129,9 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
     }
 
     LaunchedEffect(key1 = state.lecturer.lecturer_id) {
-        lecturer=state.lecturer
-        tf_lecturerInfo.value=state.lecturer.lecturer_info
-        tf_lecturerEmail.value=state.lecturer.lecturer_mail
+        lecturer = state.lecturer
+        tf_lecturerInfo.value = state.lecturer.lecturer_info
+        tf_lecturerEmail.value = state.lecturer.lecturer_mail
     }
 
     Box(
@@ -275,12 +287,12 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
                     if (it.length >= 8) {
                         eightCharacterSentenceColor.value = Color.Green
                         newPasswordErrorState.value = false
-                    }   else {
+                    } else {
                         eightCharacterSentenceColor.value = Color.Red
                         newPasswordErrorState.value = true
                     }
 
-                    if (containsLowerCase(it)){
+                    if (containsLowerCase(it)) {
                         lowerCaseSentenceColor.value = Color.Green
                         newPasswordErrorState.value = false
                     } else {
@@ -288,7 +300,7 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
                         newPasswordErrorState.value = true
                     }
 
-                    if (containsUpperCase(it)){
+                    if (containsUpperCase(it)) {
                         upperCaseSentenceColor.value = Color.Green
                         newPasswordErrorState.value = false
                     } else {
@@ -379,7 +391,8 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
                 value = tf_lecturerNewPasswordValid.value,
                 onValueChange = {
                     tf_lecturerNewPasswordValid.value = it
-                    newPasswordValidErrorState.value = tf_lecturerNewPassword.value.trim() != it.trim()
+                    newPasswordValidErrorState.value =
+                        tf_lecturerNewPassword.value.trim() != it.trim()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -393,8 +406,13 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
                 ), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true,
                 isError = newPasswordValidErrorState.value,
-                supportingText = { if (newPasswordValidErrorState.value) Text(text = stringResource(
-                    id = R.string.yeni_parolaniz_uyusmuyor) , fontSize = 14.sp,color=Color.Red)  },
+                supportingText = {
+                    if (newPasswordValidErrorState.value) Text(
+                        text = stringResource(
+                            id = R.string.yeni_parolaniz_uyusmuyor
+                        ), fontSize = 14.sp, color = Color.Red
+                    )
+                },
                 label = { Text(text = stringResource(id = R.string.yeni_parola_tekrar)) }
             )
 
@@ -408,37 +426,46 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
                     onClick = {
                         // Izleyici Bilgilerini kaydetme islemleri gerceklesecek
                         CoroutineScope(Dispatchers.IO).launch {
-                            if(tf_lecturerInfo.value!=lecturer.lecturer_info || tf_lecturerEmail.value!=lecturer.lecturer_mail){
+                            if (tf_lecturerInfo.value != lecturer.lecturer_info || tf_lecturerEmail.value != lecturer.lecturer_mail) {
 
-                                lecturer.lecturer_info=tf_lecturerInfo.value.trim()
-                                lecturer.lecturer_mail=tf_lecturerEmail.value.trim()
-                                calisanFunc.intValue+=1
+                                lecturer.lecturer_info = tf_lecturerInfo.value.trim()
+                                lecturer.lecturer_mail = tf_lecturerEmail.value.trim()
+                                calisanFunc.intValue += 1
                                 val job = async { viewModel.saveLecturerInformation(lecturer) }
-                                if(job.await()){
-                                    calismisFunc.intValue+=1
-                                }
-                                else{
-                                    calismisFunc.intValue-=1
+                                if (job.await()) {
+                                    calismisFunc.intValue += 1
+                                    sharedViewModel.addLecturer(
+                                        sharedViewModel.lecturer!!.copy(
+                                            lecturer_info = lecturer.lecturer_info,
+                                            lecturer_mail = lecturer.lecturer_mail
+                                        )
+                                    )
+                                } else {
+                                    calismisFunc.intValue -= 1
                                 }
                             }
 
-                            if(tf_lecturerCurrentPassword.value!=""&&tf_lecturerNewPassword.value!=""&&!newPasswordValidErrorState.value){
+                            if (tf_lecturerCurrentPassword.value != "" && tf_lecturerNewPassword.value != "" && !newPasswordValidErrorState.value) {
 
                                 println("tf password ${tf_lecturerNewPassword.value} lecturer password${lecturer.lecturer_password}  ")
 
-                                if(tf_lecturerCurrentPassword.value==lecturer.lecturer_password){
-                                    lecturer.lecturer_password=tf_lecturerNewPassword.value
-                                    calisanFunc.intValue+=1
+                                if (tf_lecturerCurrentPassword.value == lecturer.lecturer_password) {
+                                    lecturer.lecturer_password = tf_lecturerNewPassword.value
+                                    calisanFunc.intValue += 1
 
                                     val job2 = async { viewModel.saveLecturerPassword(lecturer) }
-                                    if(job2.await()){
-                                        calismisFunc.intValue+=1
+                                    if (job2.await()) {
+                                        calismisFunc.intValue += 1
+                                        sharedViewModel.addLecturer(
+                                            sharedViewModel.lecturer!!.copy(
+                                                lecturer_password = lecturer.lecturer_password
+                                            )
+                                        )
+                                    } else {
+                                        calisanFunc.intValue -= 1
                                     }
-                                    else{
-                                        calisanFunc.intValue-=1
-                                    }
-                                }else{
-                                    currentPasswordErrorState.value=true
+                                } else {
+                                    currentPasswordErrorState.value = true
                                 }
 
                             }
@@ -477,7 +504,7 @@ fun LecturerInfoEditPageContent(navController: NavController, state: LecturerInf
         }
 
         LaunchedEffect(key1 = calismisFunc.intValue) {
-            if(calisanFunc.intValue==calismisFunc.intValue && calisanFunc.intValue!=0){
+            if (calisanFunc.intValue == calismisFunc.intValue && calisanFunc.intValue != 0) {
                 navController.popBackStack()
             }
         }

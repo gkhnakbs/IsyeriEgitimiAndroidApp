@@ -2,6 +2,8 @@ package com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.studentEntryP
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.StudentsRepository
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.sendEvent
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
@@ -25,33 +27,37 @@ class StudentEntryPageViewModel @Inject constructor(private val studentsReposito
     private val _state = MutableStateFlow(StudentEntryPageState())
     val state = _state.asStateFlow()
 
-    init {
-        getStudents()
-    }
-
-
-    private fun getStudents() {
-        viewModelScope.launch {
+    suspend fun checkLoginCredentials(student_no:String,student_password : String) : Boolean {
+        val resultState : Deferred<Boolean> =viewModelScope.async {
             _state.update {
                 it.copy(isLoading = true)
             }
-            delay(3000)
-            studentsRepository.getStudents()
-                .onLeft { error ->
-                    _state.update {
-                        it.copy(error = error.error.message)
-                    }
-                    sendEvent(Event.Toast(error.error.message))
-                }
-                .onRight { list ->
-                    _state.update {
-                        it.copy(student_list = list)
-                    }
-
-                }
+            delay(2000)
+            val result=studentsRepository.login_student(student_no = student_no, student_password = student_password)
             _state.update {
                 it.copy(isLoading = false)
             }
+            when(result){
+                is Either.Left->{
+                    _state.update {
+                        it.copy(error = result.value.error.message)
+                    }
+                    sendEvent(Event.Toast(result.value.error.message))
+                    false
+                }
+                is Either.Right->{
+                    if(result.value.student_no!=""){
+                        _state.update {
+                            it.copy(loginSuccesfullyStudent = result.value)
+                        }
+                        true
+                    }else{
+                        false
+                    }
+
+                }
+            }
         }
+        return resultState.await()
     }
 }

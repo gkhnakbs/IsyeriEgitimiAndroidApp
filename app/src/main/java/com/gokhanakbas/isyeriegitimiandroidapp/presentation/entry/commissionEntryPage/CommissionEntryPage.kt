@@ -59,12 +59,12 @@ fun CommissionEntryPage(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    CommissionEntryPageContent(navController = navController, state = state)
+    CommissionEntryPageContent(navController = navController, state = state,sharedViewModel = sharedViewModel )
 
 }
 
 @Composable
-fun CommissionEntryPageContent(navController: NavController, state: CommissionEntryPageState) {
+fun CommissionEntryPageContent(navController: NavController, state: CommissionEntryPageState,sharedViewModel: SharedViewModel) {
 
     val focusRequester = remember {
         FocusRequester()
@@ -197,7 +197,9 @@ fun CommissionEntryPageContent(navController: NavController, state: CommissionEn
                 OutlinedButton(
                     onClick = {
                         //Komisyon Anasayfasina yonlendirilecek
-                        val commission_id = "1"
+                        val commission_id = ""
+
+                        //sharedViewModel.addCommission()   bu işlemi yeri gelince yapacaksın şuan giriş kontrolü yok.
                         navController.navigate(Screen.CommissionMainPage.passNavigate(commission_id))
                     },
                     shape = RoundedCornerShape(15.dp),

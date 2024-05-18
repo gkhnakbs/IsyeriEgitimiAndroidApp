@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
@@ -28,19 +29,20 @@ import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziMavi
 @Composable
 fun FirmMainPageInfo(
     firm_id: String,
-    viewModel: FirmMainPageInfoViewModel = hiltViewModel()
+    viewModel: FirmMainPageInfoViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
-    LaunchedEffect(key1 = viewModel) {
+    /*LaunchedEffect(key1 = viewModel) {
         viewModel.getFirmInformation(firm_id)
-    }
+    }*/
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-
+    state.firm=sharedViewModel.firm!!
     FirmMainPageInfoContent(state = state)
 }
 
 @Composable
-fun FirmMainPageInfoContent(state: FirmMainPageInfoState) {
+private fun FirmMainPageInfoContent(state: FirmMainPageInfoState) {
 
     var firm=state.firm
     LaunchedEffect(key1 = state.firm.firm_name) {

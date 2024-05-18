@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -45,7 +44,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Skill
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.SkillComp
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
@@ -56,24 +57,49 @@ import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 fun StudentPage(
     navController: NavController,
     student_no: String,
-    studentPageViewModel: StudentPageViewModel = hiltViewModel()
+    studentPageViewModel: StudentPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
-
-    LaunchedEffect(key1 = studentPageViewModel) {
-        studentPageViewModel.getStudentInformation(student_no)
-        studentPageViewModel.getSkills(student_no)
-        studentPageViewModel.getGroupsLecturerInformation(student_no)
-    }
-
     val state by studentPageViewModel.state.collectAsStateWithLifecycle()
 
-    StudentPageContent(navController = navController, studentPageState = state)
+    if (Constants.USER_TYPE != Constants.STUDENT) {
+        LaunchedEffect(key1 = studentPageViewModel) {
+            studentPageViewModel.getStudentInformation(student_no)
+            studentPageViewModel.getSkills(student_no)
+            studentPageViewModel.getGroupsLecturerInformation(student_no)
+        }
+
+    } else {
+
+        LaunchedEffect(key1 = studentPageViewModel) {
+            if (sharedViewModel.student!!.student_skillList.isEmpty()) {
+                studentPageViewModel.getSkills(student_no)
+
+            }
+            studentPageViewModel.getGroupsLecturerInformation(student_no)
+        }
+        state.student = sharedViewModel.student!!
+        sharedViewModel.addLecturer(state.groupsLecturer)
+        //Skill listide getStudentInformation içinde çekene kadar şimdilik böyle aşağıdaki gibi yapacağız.
+        sharedViewModel.addStudent(sharedViewModel.student!!.copy(student_skillList = state.skillList))
+    }
+
+
+    StudentPageContent(
+        navController = navController,
+        studentPageState = state,
+        sharedViewModel = sharedViewModel
+    )
 
 }
 
 
 @Composable
-fun StudentPageContent(navController: NavController, studentPageState: StudentPageState) {
+fun StudentPageContent(
+    navController: NavController,
+    studentPageState: StudentPageState,
+    sharedViewModel: SharedViewModel
+) {
 
     LoadingDialog(isLoading = studentPageState.isLoading)
 
@@ -295,88 +321,95 @@ fun StudentPageContent(navController: NavController, studentPageState: StudentPa
                     }
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Column(
+            if (studentPageState.skillList.isNotEmpty()) {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(GaziAcikMavi),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Top
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.yeteneklerim),
-                        fontSize = 23.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(10.dp),
-                        textDecoration = TextDecoration.Underline
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    repeat(studentPageState.skillList.size) { index ->
-                        val skill = studentPageState.skillList[index]
-                        SkillComp(skill = skill)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(GaziAcikMavi),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.yeteneklerim),
+                            fontSize = 23.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(10.dp),
+                            textDecoration = TextDecoration.Underline
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        repeat(studentPageState.skillList.size) { index ->
+                            val skill = studentPageState.skillList[index]
+                            SkillComp(skill = skill)
+                        }
                     }
                 }
             }
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(GaziAcikMavi),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Top
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.grup_bilgileri),
-                        fontSize = 23.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(10.dp),
-                        textDecoration = TextDecoration.Underline
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
+            if (Constants.USER_TYPE == Constants.STUDENT) {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(GaziAcikMavi),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.grup_bilgileri),
+                            fontSize = 23.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(10.dp),
+                            textDecoration = TextDecoration.Underline
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
 
-                    Card(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp), shape = RoundedCornerShape(20.dp) , colors = CardDefaults.cardColors(
-                            containerColor = Color.White
-                        )) {
-                        Row(
+                        Card(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(5.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                modifier = Modifier.weight(0.8f),
-                                text = studentPageState.groupsLecturer.lecturer_name,
-                                textDecoration = TextDecoration.Underline,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 20.sp
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.White
                             )
-                            IconButton(onClick = {
-                                navController.navigate(
-                                    Screen.LecturerPage.passNavigate(
-                                        studentPageState.groupsLecturer.lecturer_id
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(5.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    modifier = Modifier.weight(0.8f),
+                                    text = studentPageState.groupsLecturer.lecturer_name,
+                                    textDecoration = TextDecoration.Underline,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 20.sp
+                                )
+                                IconButton(onClick = {
+                                    navController.navigate(
+                                        Screen.LecturerPage.passNavigate(
+                                            studentPageState.groupsLecturer.lecturer_id
+                                        )
                                     )
-                                )
-                            }, modifier = Modifier.weight(0.2f)) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = ""
-                                )
+                                }, modifier = Modifier.weight(0.2f)) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = ""
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
-
         }
         OutlinedButton(
             onClick = {

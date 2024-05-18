@@ -14,14 +14,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -49,6 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentInfoEditPage.containsLowerCase
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentInfoEditPage.containsUpperCase
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
@@ -58,32 +57,33 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun FirmInfoEditPage(
     navController: NavController,
     firm_id: String,
-    viewModel: FirmInfoEditPageViewModel = hiltViewModel()
+    viewModel: FirmInfoEditPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
 
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getFirmInformation(firm_id)
-    }
-
+    /* LaunchedEffect(key1 = viewModel) {
+         viewModel.getFirmInformation(firm_id)
+     }*/
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+    state.firm = sharedViewModel.firm!!
 
-    FirmInfoEditPageContent(navController, state, viewModel)
+    FirmInfoEditPageContent(navController, state, viewModel, sharedViewModel = sharedViewModel)
 
 }
 
 
 @Composable
-fun FirmInfoEditPageContent(
+private fun FirmInfoEditPageContent(
     navController: NavController,
     firmInfoEditPageState: FirmInfoEditPageState,
-    viewModel: FirmInfoEditPageViewModel
+    viewModel: FirmInfoEditPageViewModel,
+    sharedViewModel: SharedViewModel
 ) {
 
     LoadingDialog(isLoading = firmInfoEditPageState.isLoading)
@@ -136,7 +136,7 @@ fun FirmInfoEditPageContent(
     LaunchedEffect(key1 = firmInfoEditPageState.firm.firm_info) {
         tf_firmInfo.value = firm.firm_info
         tf_firmMail.value = firm.firm_mail
-        tf_firmAddress.value=firm.firm_address
+        tf_firmAddress.value = firm.firm_address
     }
 
 
@@ -421,7 +421,11 @@ fun FirmInfoEditPageContent(
                 label = { Text(text = stringResource(id = R.string.yeni_parola_tekrar)) }
             )
 
-            Row(modifier=Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 OutlinedButton(
                     onClick = {
 
@@ -437,6 +441,15 @@ fun FirmInfoEditPageContent(
 
                                 if (job.await()) {
                                     calismisFunc.intValue += 1
+                                    sharedViewModel.addFirm(
+                                        sharedViewModel.firm!!.copy(
+                                            firm_info = firm.firm_info,
+                                            firm_address = firm.firm_address,
+                                            firm_mail = firm.firm_mail
+                                        )
+                                    )
+                                } else {
+                                    calisanFunc.intValue -= 1
                                 }
 
 
@@ -449,12 +462,16 @@ fun FirmInfoEditPageContent(
                                     val job1 = async { viewModel.saveFirmPassword(firm) }
                                     if (job1.await()) {
                                         calismisFunc.intValue += 1
+                                        sharedViewModel.addFirm(
+                                            sharedViewModel.firm!!.copy(
+                                                firm_password = firm.firm_password
+                                            )
+                                        )
+                                    } else {
+                                        calisanFunc.intValue -= 1
                                     }
-                                    else{
-                                        calisanFunc.intValue-=1
-                                    }
-                                }else{
-                                    currentPasswordErrorState.value=true
+                                } else {
+                                    currentPasswordErrorState.value = true
                                 }
 
                             }

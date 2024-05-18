@@ -57,14 +57,8 @@ fun AppNavGraph(
         }
 
         composable(
-            Screen.StudentMainPage.route,
-            arguments = listOf(
-                navArgument("student_no") {
-                    type = NavType.StringType
-                }
-            )) {
-            val student_no = it.arguments?.getString("student_no")
-            StudentMainPage(navController = navController, student_no = student_no!!, sharedViewModel = sharedViewModel)
+            Screen.StudentMainPage.route) {
+            StudentMainPage(navController = navController, sharedViewModel = sharedViewModel)
 
         }
 
@@ -75,7 +69,7 @@ fun AppNavGraph(
                 }
             )) {
             val firm_id = it.arguments?.getString("firm_id")
-            FirmMainPage(navController = navController, firm_id = firm_id!!)
+            FirmMainPage(navController = navController, firm_id = firm_id!!, sharedViewModel = sharedViewModel)
         }
 
         composable(
@@ -86,7 +80,7 @@ fun AppNavGraph(
             )
         ) {
             val lecturer_id = it.arguments?.getString("lecturer_id")!!
-            LecturerMainPage(navController = navController, lecturer_id)
+            LecturerMainPage(navController = navController, lecturer_id, sharedViewModel = sharedViewModel)
         }
 
         composable(
@@ -98,7 +92,7 @@ fun AppNavGraph(
             )
         ) {
             val commission_id = it.arguments?.getString("commission_id")!!
-            CommissionMainPage(navController = navController, commission_id)
+            CommissionMainPage(navController = navController, commission_id, sharedViewModel = sharedViewModel)
         }
 
         composable(
@@ -109,7 +103,7 @@ fun AppNavGraph(
                 }
             )) {
             val firm_id = it.arguments?.getString("firm_id")
-            FirmPage(navController = navController, firm_id = firm_id!!)
+            FirmPage(navController = navController, firm_id = firm_id!!, sharedViewModel = sharedViewModel)
         }
 
         composable(
@@ -119,7 +113,7 @@ fun AppNavGraph(
                 }
             )) {
             val student_no = it.arguments?.getString("student_no")
-            StudentPage(navController = navController, student_no!!)
+            StudentPage(navController = navController, student_no!!, sharedViewModel = sharedViewModel)
         }
 
         composable(
@@ -129,7 +123,7 @@ fun AppNavGraph(
                 }
             )) {
             val lecturer_id = it.arguments?.getString("lecturer_id")!!
-            LecturerPage(navController = navController,lecturer_id = lecturer_id)
+            LecturerPage(navController = navController,lecturer_id = lecturer_id, sharedViewModel = sharedViewModel)
         }
 
         composable(Screen.AdvertPage.route, arguments = listOf(
@@ -138,7 +132,7 @@ fun AppNavGraph(
             }
         )) {
             val advert_id = it.arguments?.getString("advert_id")!!
-            AdvertPage(navController = navController, advert_id = advert_id)
+            AdvertPage(navController = navController, advert_id = advert_id, sharedViewModel = sharedViewModel)
         }
 
         composable(Screen.ReportPage.route, arguments = listOf(
@@ -171,7 +165,7 @@ fun AppNavGraph(
             }
         )) {
             val student_no=it.arguments?.getString("student_no")!!
-            StudentInfoEditPage(navController = navController, student_no = student_no)
+            StudentInfoEditPage(navController = navController, student_no = student_no, sharedViewModel = sharedViewModel)
 
         }
 
@@ -182,7 +176,7 @@ fun AppNavGraph(
                 }
             )) {
             val lecturer_id=it.arguments?.getString("lecturer_id")!!
-            LecturerInfoEditPage(navController = navController, lecturer_id = lecturer_id)
+            LecturerInfoEditPage(navController = navController, lecturer_id = lecturer_id, sharedViewModel = sharedViewModel)
         }
 
         composable(
@@ -192,8 +186,9 @@ fun AppNavGraph(
                 }
             )) {
             val firm_id = it.arguments?.getString("firm_id")!!
-            FirmInfoEditPage(navController = navController, firm_id = firm_id)
+            FirmInfoEditPage(navController = navController, firm_id = firm_id, sharedViewModel = sharedViewModel)
         }
+
 
     }
 }

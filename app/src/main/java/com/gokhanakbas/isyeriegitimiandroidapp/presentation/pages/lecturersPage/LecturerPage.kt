@@ -35,38 +35,47 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import arrow.core.Const
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 
 @Composable
-fun LecturerPage(navController: NavController,lecturer_id : String,viewModel: LecturerPageViewModel= hiltViewModel()) {
+fun LecturerPage(
+    navController: NavController,
+    lecturer_id: String,
+    viewModel: LecturerPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getLecturerInformation(lecturer_id)
+    if (Constants.USER_TYPE != Constants.LECTURER) {
+        LaunchedEffect(key1 = viewModel) {
+            viewModel.getLecturerInformation(lecturer_id)
+        }
+    } else {
+        state.lecturer = sharedViewModel.lecturer!!
     }
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+
 
     LecturerPageContent(navController = navController, state = state)
 
 }
 
 @Composable
-fun LecturerPageContent(navController: NavController,state: LecturerPageState) {
+fun LecturerPageContent(navController: NavController, state: LecturerPageState) {
 
 
-    val lecturerObject=state.lecturer
+    val lecturerObject = state.lecturer
 
     LoadingDialog(isLoading = state.isLoading)
 
@@ -75,7 +84,7 @@ fun LecturerPageContent(navController: NavController,state: LecturerPageState) {
     val tf_lecturerFaculty = lecturerObject.lecturer_faculty
     val tf_lecturerDepartment = lecturerObject.lecturer_department
     val tf_lecturerDegree = lecturerObject.lecturer_degree
-    val tf_lecturerSpecificField =lecturerObject.lecturer_specificField
+    val tf_lecturerSpecificField = lecturerObject.lecturer_specificField
 
     Column(
         modifier = Modifier
@@ -154,16 +163,20 @@ fun LecturerPageContent(navController: NavController,state: LecturerPageState) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = tf_lecturerDegree+tf_lecturerName,
+                            text = tf_lecturerDegree + tf_lecturerName,
                             color = Color.White,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.weight(0.8f,fill = true),
+                            modifier = Modifier.weight(0.8f, fill = true),
                         )
-                        if (Constants.USER_TYPE==Constants.LECTURER){
+                        if (Constants.USER_TYPE == Constants.LECTURER) {
                             IconButton(onClick = {
                                 //Profil duzenleme sayfasina gidecek
-                                navController.navigate(Screen.LecturerInfoEditPage.passNavigate(lecturer_id = lecturerObject.lecturer_id))
+                                navController.navigate(
+                                    Screen.LecturerInfoEditPage.passNavigate(
+                                        lecturer_id = lecturerObject.lecturer_id
+                                    )
+                                )
                             }) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.pencil_icon),
@@ -199,17 +212,19 @@ fun LecturerPageContent(navController: NavController,state: LecturerPageState) {
                             horizontalArrangement = Arrangement.SpaceEvenly,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            OutlinedTextField(
-                                value = tf_lecturerID,
-                                onValueChange = {  },
-                                //singleLine = true,
-                                readOnly = true,
-                                label = { Text(text = stringResource(id = R.string.izleyici_no)) },
-                                textStyle = TextStyle.Default.copy(fontSize = 18.sp),
-                                modifier = Modifier
-                                    .weight(0.5f)
-                                    .padding(10.dp)
-                            )
+                            if (Constants.USER_TYPE == Constants.LECTURER) {
+                                OutlinedTextField(
+                                    value = tf_lecturerID,
+                                    onValueChange = { },
+                                    //singleLine = true,
+                                    readOnly = true,
+                                    label = { Text(text = stringResource(id = R.string.izleyici_no)) },
+                                    textStyle = TextStyle.Default.copy(fontSize = 18.sp),
+                                    modifier = Modifier
+                                        .weight(0.5f)
+                                        .padding(10.dp)
+                                )
+                            }
                             OutlinedTextField(
                                 value = tf_lecturerFaculty,
                                 onValueChange = { },
@@ -240,7 +255,7 @@ fun LecturerPageContent(navController: NavController,state: LecturerPageState) {
                             )
                             OutlinedTextField(
                                 value = tf_lecturerSpecificField,
-                                onValueChange = {  },
+                                onValueChange = { },
                                 //singleLine = true,
                                 readOnly = true,
                                 label = { Text(text = stringResource(id = R.string.bolum)) },

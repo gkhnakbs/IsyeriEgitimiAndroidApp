@@ -10,6 +10,26 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
 
     val connection = databaseconnection.connection
 
+    fun loginFirm(firm_id: String, firm_password: String): Firm {
+        val firmObject=Firm("","","","","","","","","")
+        val statement = connection.createStatement()
+        val result =
+            statement.executeQuery("select * from firma where firma_id='$firm_id' AND firma_parola='$firm_password'")
+        if (result.next()) {
+            firmObject.firm_id=firm_id
+            firmObject.firm_name = result.getString("firma_ad")
+            firmObject.firm_sector = result.getString("firma_sektor")
+            firmObject.firm_info = result.getString("firma_hakkinda")
+            firmObject.firm_logo = result.getString("firma_logo")
+            firmObject.firm_mail = result.getString("firma_eposta")
+            firmObject.firm_address = result.getString("firma_adres")
+            firmObject.firm_password= result.getString("firma_parola")
+            firmObject.firm_phone = ""
+        }
+        return firmObject
+    }
+
+
     fun getFirms(): List<Firm> {
 
         val firmList = arrayListOf<Firm>()

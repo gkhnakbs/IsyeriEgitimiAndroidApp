@@ -25,7 +25,6 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +49,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.AdvertsOfFirm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.WorkingStudentsPageForFirm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPageInfo.FirmMainPageInfo
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ExitQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LogOutQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ScaffoldComp
@@ -65,11 +65,16 @@ var lastPage = 1
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FirmMainPage (navController: NavController, firm_id: String,viewModel: FirmMainPageViewModel = hiltViewModel()) {
+fun FirmMainPage (
+    navController: NavController,
+    firm_id: String,
+    viewModel: FirmMainPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
+) {
 
-    LaunchedEffect(key1 = viewModel) {
+    /*LaunchedEffect(key1 = viewModel) {
         viewModel.getFirmInformation(firm_id)
-    }
+    }*/
 
     //Constants tanımlamaları
     Constants.USER_TYPE=Constants.FIRM
@@ -77,13 +82,14 @@ fun FirmMainPage (navController: NavController, firm_id: String,viewModel: FirmM
 
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+    state.firm_object=sharedViewModel.firm!!
 
-    FirmMainPageContent(navController = navController, state = state)
+    FirmMainPageContent(navController = navController, state = state, sharedViewModel = sharedViewModel)
 
 }
 
 @Composable
-fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
+private fun FirmMainPageContent(navController: NavController,state: FirmMainPageState,sharedViewModel: SharedViewModel) {
 
     val firmObject=state.firm_object
 
@@ -218,7 +224,7 @@ fun FirmMainPageContent(navController: NavController,state: FirmMainPageState) {
     ) {
         when (navDrawerSecilen.intValue) {
             1 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                FirmMainPageInfo(firm_id = firmObject.firm_id)
+                FirmMainPageInfo(firm_id = firmObject.firm_id, sharedViewModel = sharedViewModel)
             }
 
             2 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {

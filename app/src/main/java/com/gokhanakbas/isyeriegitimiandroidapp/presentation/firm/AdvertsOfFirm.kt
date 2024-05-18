@@ -274,8 +274,7 @@ fun AlertDialogOfInterviewerList(
                                     onClick = {
                                         //Ogrenciyi gosterecek
                                         alertDialogOfInterviewers.value = false
-                                        val student_no="21181616039"
-                                        navController.navigate(Screen.StudentPage.route)
+                                        navController.navigate(Screen.StudentPage.passNavigate(student_no = student.student_no))
                                     }, colors = ButtonDefaults.outlinedButtonColors(
                                         containerColor = Color.Green,
                                         contentColor = Color.White

@@ -46,6 +46,13 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @Composable
@@ -54,31 +61,29 @@ fun StudentEntryPage(
     viewModel: StudentEntryPageViewModel = hiltViewModel(),
     sharedViewModel: SharedViewModel
 ) {
-    val studentEntryPageState by viewModel.state.collectAsStateWithLifecycle()
-
     StudentEntryPageContent(
         navController = navController,
-        studentEntryPageState = studentEntryPageState,
-        sharedViewModel = sharedViewModel
+        viewModel=viewModel,
+        sharedViewModel=sharedViewModel
     )
 }
 
 @Composable
-fun StudentEntryPageContent(
+private fun StudentEntryPageContent(
     navController: NavController,
-    studentEntryPageState: StudentEntryPageState,
+    viewModel: StudentEntryPageViewModel,
     sharedViewModel: SharedViewModel
 ) {
+
+    val studentEntryPageState by viewModel.state.collectAsStateWithLifecycle()
 
     val focusRequester= remember {
         FocusRequester()
     }
     val focusManager= LocalFocusManager.current
 
-    LaunchedEffect(key1 = studentEntryPageState.isLoading) {
-        if(!studentEntryPageState.isLoading) {
-            focusRequester.requestFocus()
-        }
+    LaunchedEffect(key1 = navController) {
+        focusRequester.requestFocus()
     }
 
     val tf_studentNumber = remember { mutableStateOf("") }
@@ -208,34 +213,28 @@ fun StudentEntryPageContent(
                 }
                 OutlinedButton(
                     onClick = {
-                        var studentValided = ""
-                        var studentValid : Student?=null
+                      /*  var studentValided = ""
+                        var studentValid : Student?=null*/
                         if (tf_studentNumber.value.trim().isNotEmpty() || tf_studentPassword.value.trim().isNotEmpty()) {
                             if (!errorState.value && !errorState1.value) {
 
-                                if (studentEntryPageState.student_list!!.isNotEmpty()) {
+                                focusManager.clearFocus() //Herhangi bir hata alınırsa tekrar klavyeyi açmasın diye
 
-                                    studentEntryPageState.student_list!!.forEach { student ->
-                                        if (student.student_no == tf_studentNumber.value && student.student_password == tf_studentPassword.value) {
-                                            studentValided = student.student_no
-                                            studentValid=student
-                                        }
-                                    }
+                                CoroutineScope(Dispatchers.IO).launch {
 
-                                    if (studentValided != "") {
-                                        sharedViewModel.addStudent(studentValid)
-                                        navController.navigate(Screen.StudentMainPage.route) {
-                                            popUpTo(Screen.StudentEntryPage.route) {
-                                                inclusive = true
+                                    val job=async { viewModel.checkLoginCredentials(tf_studentNumber.value.trim(),tf_studentPassword.value.trim())}
+
+                                    if(job.await()){
+                                            withContext(Dispatchers.Main){
+                                                sharedViewModel.addStudent(studentEntryPageState.loginSuccesfullyStudent)
+                                                navController.navigate(Screen.StudentMainPage.route)
                                             }
-                                        }
-                                    } else {
-                                        println("Girilen bilgiler de hata var")
+                                    }else{
+                                        Event.Toast("Girilen Bilgiler Yanlış")
                                     }
-                                } else {
-                                    println("boş liste")
-                                    navController.popBackStack()
+
                                 }
+
                             }
                         } else {
                             errorState.value = true

@@ -42,10 +42,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LecturerEntryPage(
@@ -54,24 +61,22 @@ fun LecturerEntryPage(
     sharedViewModel: SharedViewModel
 ) {
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LecturerEntryPageContent(navController = navController, state = state)
+    LecturerEntryPageContent(navController = navController, viewModel= viewModel, sharedViewModel = sharedViewModel)
 
 }
 
 @Composable
-fun LecturerEntryPageContent(navController: NavController, state: LecturerEntryPageState) {
+fun LecturerEntryPageContent(navController: NavController, viewModel: LecturerEntryPageViewModel,sharedViewModel: SharedViewModel) {
 
     val focusRequester= remember {
         FocusRequester()
     }
     val focusManager= LocalFocusManager.current
 
-    LaunchedEffect(key1 = state.isLoading) {
-        if(!state.isLoading) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = navController) {
             focusRequester.requestFocus()
-        }
     }
 
     LoadingDialog(isLoading = state.isLoading)
@@ -145,7 +150,9 @@ fun LecturerEntryPageContent(navController: NavController, state: LecturerEntryP
                         focusedBorderColor = GaziKoyuMavi,
                         unfocusedBorderColor = GaziKoyuMavi
                     ),
-                    modifier = Modifier.requiredWidth(300.dp).focusRequester(focusRequester),
+                    modifier = Modifier
+                        .requiredWidth(300.dp)
+                        .focusRequester(focusRequester),
                     isError = errorState.value,
                     singleLine = true
                 )
@@ -200,30 +207,40 @@ fun LecturerEntryPageContent(navController: NavController, state: LecturerEntryP
                 OutlinedButton(
                     onClick = {
                         //Izleyici Anasayfasina yonlendirilecek
-                        var lecturerValided=""
-                        if (!errorState.value&&!errorState1.value) {
-                            if (state.lecturerList.isNotEmpty()){
-                                state.lecturerList.forEach {
-                                    if(tf_teacherStaffNo.value.trim()==it.lecturer_id&&tf_teacherStaffPassword.value.trim()==it.lecturer_password){
-                                        lecturerValided=tf_teacherStaffNo.value.trim()
+                        if (tf_teacherStaffNo.value.trim()
+                                .isNotEmpty() || tf_teacherStaffPassword.value.trim().isNotEmpty()
+                        ) {
+                            if (!errorState.value && !errorState1.value) {
+
+                                focusManager.clearFocus()
+
+                                CoroutineScope(Dispatchers.IO).launch {
+
+                                    val job = async {
+                                        viewModel.checkLoginCredentials(
+                                            tf_teacherStaffNo.value.trim(),
+                                            tf_teacherStaffPassword.value.trim()
+                                        )
                                     }
-                                }
-                                if (lecturerValided!=""){
-                                    navController.navigate(
-                                        Screen.LecturerMainPage.passNavigate(lecturerValided)
-                                    ){
-                                        popUpTo(Screen.LecturerEntryPage.route){
-                                            inclusive=true
+
+                                    if (job.await()) {
+                                        withContext(Dispatchers.Main) {
+                                            sharedViewModel.addLecturer(state.loginSuccesfullyLecturer)
+                                            navController.navigate(Screen.LecturerMainPage.route)
                                         }
+                                    } else {
+                                        Event.Toast("Girilen Bilgiler Yanlış")
                                     }
-                                }else{
-                                    println("Girilen Bilgilerde hata var")
+
                                 }
-                            }else{
-                                println("boş liste")
+
                             }
+                        } else {
+                            errorState.value=true
+                            errorState1.value=true
                         }
-                    },
+                    }
+                        ,
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier.size(110.dp, 45.dp),
                     border = BorderStroke(2.dp, GaziKoyuMavi)

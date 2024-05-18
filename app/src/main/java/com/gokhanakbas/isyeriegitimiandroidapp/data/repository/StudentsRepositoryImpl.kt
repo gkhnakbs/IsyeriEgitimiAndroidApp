@@ -28,9 +28,9 @@ class StudentsRepositoryImpl @Inject constructor(private val studentsApi: Studen
         }.mapLeft { it.toNetworkError() }
     }
 
-    override suspend fun login_student(student_no:String,student_password:String): Either<NetworkError, Boolean> {
+    override suspend fun login_student(student_no:String,student_password:String): Either<NetworkError, Student> {
         return Either.catch {
-            studentsApi.login_student(student_no,student_password)
+            studentsApi.loginStudent(student_no,student_password)
         }.mapLeft {
             it.toNetworkError()
         }

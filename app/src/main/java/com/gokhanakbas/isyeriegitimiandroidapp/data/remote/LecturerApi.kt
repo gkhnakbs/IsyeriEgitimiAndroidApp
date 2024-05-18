@@ -12,6 +12,25 @@ class LecturerApi @Inject constructor(private val databaseConnection: DatabaseCo
 
     val connection = databaseConnection.connection
 
+    fun loginLecturer(lecturer_id: String, lecturer_password: String): Lecturer {
+        val lecturer = Lecturer("","","","","","","","","")
+        val statement = connection.createStatement()
+        val result =
+            statement.executeQuery("select *  from izleyici where izleyici_id='$lecturer_id' AND izleyici_parola='$lecturer_password'")
+        if (result.next()) {
+            lecturer.lecturer_id=lecturer_id
+            lecturer.lecturer_name=result.getString("izleyici_ad")+" "+result.getString("izleyici_soyad")
+            lecturer.lecturer_faculty=result.getString("izleyici_fakulte")
+            lecturer.lecturer_department=result.getString("izleyici_bolum")
+            lecturer.lecturer_info=result.getString("izleyici_hakkinda")
+            lecturer.lecturer_password=result.getString("izleyici_parola")
+            lecturer.lecturer_mail=result.getString("izleyici_eposta")
+            lecturer.lecturer_specificField=""
+            lecturer.lecturer_degree=""
+        }
+        return lecturer
+    }
+
     fun getLecturersInformation(lecturer_id:String): Lecturer {
         val lecturer = Lecturer("", "", "", "", "", "", "", "", "")
         val statement = connection.createStatement()

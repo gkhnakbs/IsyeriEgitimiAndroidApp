@@ -30,6 +30,17 @@ class LecturersRepositoryImpl @Inject constructor(private val lecturerApi: Lectu
         }
     }
 
+    override suspend fun login_lecturer(
+        lecturer_id: String,
+        lecturer_password: String
+    ): Either<NetworkError, Lecturer> {
+        return Either.catch {
+            lecturerApi.loginLecturer(lecturer_id = lecturer_id,lecturer_password=lecturer_password)
+        }.mapLeft {
+            it.toNetworkError()
+        }
+    }
+
     override suspend fun getLecturersGroups(lecturer_id: String): Either<NetworkError, List<Group>> {
         return Either.catch {
             lecturerApi.getLecturerGroups(lecturer_id)

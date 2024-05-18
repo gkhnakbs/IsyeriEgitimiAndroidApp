@@ -13,7 +13,7 @@ interface StudentsRepository {
 
     suspend fun getStudentInformation(student_no:String): Either<NetworkError, Student>
 
-    suspend fun login_student(student_no:String,student_password:String): Either<NetworkError,Boolean>
+    suspend fun login_student(student_no:String,student_password:String): Either<NetworkError,Student>
 
     suspend fun getSkills(student_no:String) : Either<NetworkError, MutableList<Skill>>
 

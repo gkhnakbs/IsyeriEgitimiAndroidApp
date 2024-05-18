@@ -6,5 +6,6 @@ data class LecturerEntryPageState(
     var isLoading : Boolean =false,
     var lecturerValid : Boolean=true,
     var lecturerList : List<Lecturer> = emptyList() ,
+    var loginSuccesfullyLecturer : Lecturer= Lecturer("","","","","","","","",""),
     var error :String? = null
 )

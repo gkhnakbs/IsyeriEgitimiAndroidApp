@@ -88,20 +88,47 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                         "",
                         ""
                     )
-
-
             }
         return studentObject
     }
 
-    fun login_student(student_no: String, student_password: String): Boolean {
+    fun loginStudent(student_no: String, student_password: String): Student {
+        val studentObject =Student(
+            "", "", "", "", "", "", "", "", "", "", "", "",
+            Firm("", "", "", "", "", "", "", "",""),
+            "", mutableStateListOf()
+        )
         val statement = connection.createStatement()
         val result =
-            statement.executeQuery("select COUNT(*) from ogrenci where ogrenci_no='$student_no' AND ogrenci_parola='$student_password'")
+            statement.executeQuery("select * from ogrenci as o JOIN firma as f ON o.firma_id=f.firma_id where o.ogrenci_no='$student_no' AND o.ogrenci_parola='$student_password'")
         if (result.next()) {
-            return result.getInt(1) > 0
+            studentObject.student_no=student_no
+            studentObject.student_name =result.getString("ogrenci_ad") + " " + result.getString("ogrenci_soyad")
+            studentObject.student_age = result.getString("ogrenci_yas")
+            studentObject.student_faculty = result.getString("ogrenci_fakulte")
+            studentObject.student_department = result.getString("ogrenci_bolum")
+            studentObject.student_ID = result.getString("ogrenci_kimlik_no")
+            studentObject.student_classLevel = result.getString("ogrenci_sinif")
+            studentObject.student_AGNO = result.getString("ogrenci_agno")
+            studentObject.student_info = result.getString("ogrenci_hakkinda")
+            studentObject.student_address = result.getString("ogrenci_adres")
+            studentObject.student_phone = result.getString("ogrenci_tel_no")
+            studentObject.student_mail=result.getString("ogrenci_eposta")
+            studentObject.student_password=result.getString("ogrenci_parola")
+            studentObject.student_workPlace =
+                Firm(
+                    result.getBigDecimal("firma_id").toString(),
+                    result.getString("firma_ad"),
+                    result.getString("firma_sektor"),
+                    result.getString("firma_hakkinda"),
+                    result.getString("firma_logo"),
+                    result.getString("firma_eposta"),
+                    result.getString("firma_adres"),
+                    "",
+                    ""
+                )
         }
-        return false
+        return studentObject
     }
 
     fun getSkills(ogrenci_no:String) : MutableList<Skill>{

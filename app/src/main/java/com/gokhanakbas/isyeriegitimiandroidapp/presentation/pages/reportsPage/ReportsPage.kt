@@ -1,12 +1,10 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.reportsPage
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ReportSaveQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
@@ -64,7 +63,7 @@ fun ReportsPage(
 }
 
 @Composable
-fun ReportsPageContent(
+private fun ReportsPageContent(
     navController: NavController,
     state: ReportsPageState,
     viewModel: ReportsPageViewModel

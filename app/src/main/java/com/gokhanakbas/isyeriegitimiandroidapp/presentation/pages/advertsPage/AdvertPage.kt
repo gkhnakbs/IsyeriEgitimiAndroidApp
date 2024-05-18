@@ -1,6 +1,5 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.advertsPage
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ApplyQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
@@ -51,7 +51,8 @@ import kotlinx.coroutines.delay
 fun AdvertPage(
     navController: NavController,
     advert_id: String,
-    advertPageViewModel: AdvertPageViewModel = hiltViewModel()
+    advertPageViewModel: AdvertPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
 
     LaunchedEffect(key1 = advertPageViewModel) {
