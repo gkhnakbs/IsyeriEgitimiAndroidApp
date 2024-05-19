@@ -45,7 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.AdvertsOfFirm
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertsOfFirmPage.AdvertsOfFirmPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.WorkingStudentsPageForFirm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPageInfo.FirmMainPageInfo
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
@@ -67,7 +67,6 @@ var lastPage = 1
 @Composable
 fun FirmMainPage (
     navController: NavController,
-    firm_id: String,
     viewModel: FirmMainPageViewModel = hiltViewModel(),
     sharedViewModel: SharedViewModel
 ) {
@@ -78,7 +77,7 @@ fun FirmMainPage (
 
     //Constants tanımlamaları
     Constants.USER_TYPE=Constants.FIRM
-    Constants.FIRM_ID=firm_id
+    Constants.FIRM_ID=sharedViewModel.firm!!.firm_id
 
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -236,7 +235,7 @@ private fun FirmMainPageContent(navController: NavController,state: FirmMainPage
             }
 
             4 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                AdvertsOfFirm(paddingValues = it, navController = navController)
+                AdvertsOfFirmPage(paddingValues = it, navController = navController)
             }
 
             5 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {

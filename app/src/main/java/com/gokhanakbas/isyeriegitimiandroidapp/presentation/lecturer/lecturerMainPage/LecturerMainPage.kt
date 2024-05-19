@@ -75,18 +75,13 @@ var lastPage = 1
 @Composable
 fun LecturerMainPage(
     navController: NavController,
-    lecturer_id: String,
     viewModel: LecturerMainPageViewModel = hiltViewModel(),
     sharedViewModel: SharedViewModel
 ) {
 
-   /* LaunchedEffect(key1 = viewModel) {
-        viewModel.getLecturersInformation(lecturer_id)
-    }*/
-
     //Constants tanımlamaları
     Constants.USER_TYPE=Constants.LECTURER
-    Constants.LECTURER_ID=lecturer_id
+    Constants.LECTURER_ID=sharedViewModel.lecturer!!.lecturer_id
 
 
     val state by viewModel.state.collectAsStateWithLifecycle()

@@ -1,5 +1,6 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.repository
 
+import androidx.compose.runtime.MutableState
 import arrow.core.Either
 import com.gokhanakbas.isyeriegitimiandroidapp.data.mapper.toNetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.data.remote.AdvertsApi
@@ -18,7 +19,7 @@ class AdvertsRepositoryImpl @Inject constructor(private val advertsApi: AdvertsA
         }
     }
 
-    override suspend fun getFirmsAdverts(firm_id: String): Either<NetworkError, List<Advert>> {
+    override suspend fun getFirmsAdverts(firm_id: String): Either<NetworkError, MutableState<ArrayList<Advert>> > {
         return Either.catch {
             advertsApi.getFirmsAdverts(firm_id)
         }.mapLeft {

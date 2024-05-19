@@ -185,7 +185,7 @@ fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavC
                             }
                             OutlinedButton(
                                 onClick = {
-                                    //öğrencinin bilgilerini görümtüleyecek
+                                    //öğrencinin bilgilerini görüntüleyecek
                                     navController.navigate(Screen.StudentPage.passNavigate(student_no = student.student_no))
 
                                 },

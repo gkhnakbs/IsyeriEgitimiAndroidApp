@@ -1,5 +1,9 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import javax.inject.Inject
@@ -76,6 +80,10 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
         return firmObject
     }
 
+    fun getFirmsWorkingStudents(): List<Student> {
+        val connection = databaseconnection.connection
+        return emptyList<Student>()
+    }
 
     fun saveFirmInformation(firm:Firm) : Boolean {
         val statement = connection.createStatement()
@@ -89,8 +97,5 @@ class FirmsApi @Inject constructor(private val databaseconnection: DatabaseConne
         return result>0
     }
 
-    fun getFirmsWorkingStudents(): List<Student> {
-        val connection = databaseconnection.connection
-        return emptyList<Student>()
-    }
+
 }

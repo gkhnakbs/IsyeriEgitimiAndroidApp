@@ -38,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Interviewer
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
@@ -242,7 +243,11 @@ fun AdvertCreatingPageContent(
                             advert_post_title = tf_advert_post_title.value.trim(),
                             advert_startDate = tf_advert_startDate.value,
                             advert_endDate = tf_advert_endDate.value,
-                            advert_interviewers = emptyList()
+                            advert_interviewers = mutableStateOf(arrayListOf()),
+                            advert_firm = null,
+                            advert_firm_id = Constants.FIRM_ID,
+                            advert_firm_name = "",
+                            advert_id = ""
                         )
                         viewModel.createAdvert(firm_id = Constants.FIRM_ID, advert =advert)
 

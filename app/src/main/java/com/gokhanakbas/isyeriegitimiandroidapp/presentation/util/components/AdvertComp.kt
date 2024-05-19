@@ -42,6 +42,7 @@ fun AdvertComp(
     viewModel: AppliedAdvertsListPageViewModel = hiltViewModel()
 ) {
 
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val deleteChoiceQuestion = remember {
@@ -80,7 +81,7 @@ fun AdvertComp(
                     .background(Color.LightGray)
             )
 
-            Text(text = advert.advert_firm.firm_name, style = MaterialTheme.typography.titleMedium)
+            Text(text = advert.advert_firm_name, style = MaterialTheme.typography.titleMedium)
 
             Spacer(
                 modifier = Modifier

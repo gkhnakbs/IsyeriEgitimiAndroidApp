@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertsOfFirmPage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,7 +26,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,22 +41,42 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
-import com.google.gson.Gson
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 
 @Composable
-fun AdvertsOfFirm(paddingValues: PaddingValues,navController: NavController) {
-    val studentListOf = emptyList<Student>()
+fun AdvertsOfFirmPage(paddingValues: PaddingValues, navController: NavController,viewModel : AdvertsOfFirmPageViewModel = hiltViewModel()) {
 
-    val advertList = emptyList<Advert>()
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.getFirmAdverts(Constants.FIRM_ID)
+    }
 
+    AdvertsOfFirmPageContent(
+        paddingValues = paddingValues,
+        navController = navController,
+        viewModel=viewModel
+    )
+
+}
+
+@Composable
+private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navController: NavController ,viewModel: AdvertsOfFirmPageViewModel ){
+
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LoadingDialog(isLoading = state.isLoading)
+
+    val advertList = state.advertList
 
     val indexOfAdvert= remember {
         mutableIntStateOf(0)
@@ -75,10 +97,10 @@ fun AdvertsOfFirm(paddingValues: PaddingValues,navController: NavController) {
                 .padding(paddingValues)
         ) {
             items(
-                count = advertList.count(),
-                key = { advertList[it].id }
+                count = advertList.value.count(),
+                key = { advertList.value[it].id }
             ) { index ->
-                val advert = advertList[index]
+                val advert = advertList.value[index]
 
                 Card(
                     modifier = Modifier
@@ -128,7 +150,7 @@ fun AdvertsOfFirm(paddingValues: PaddingValues,navController: NavController) {
                         ) {
                             OutlinedButton(
                                 onClick = {
-                                    //Ilani silme islemi gerceklesecek
+                                    //Ilani duzenleme islemi gerceklesecek
 
                                 }, colors = ButtonDefaults.outlinedButtonColors(
                                     containerColor = Color.White,
@@ -172,17 +194,20 @@ fun AdvertsOfFirm(paddingValues: PaddingValues,navController: NavController) {
                 navController.navigate(Screen.AdvertCreatingPage.route)
 
             }, colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color.Green,
+                containerColor = GaziKoyuMavi,
                 contentColor = Color.White
             ), modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(15.dp), shape = RoundedCornerShape(0.dp,10.dp,0.dp,10.dp),
+                .padding(15.dp), shape = RoundedCornerShape(20.dp),
         ) {
             Text(text = stringResource(id = R.string.ilan_olustur))
         }
 
         if(alertDialogOfInterViewers.value){
-            AlertDialogOfInterviewerList(advert = advertList[indexOfAdvert.intValue], alertDialogOfInterviewers = alertDialogOfInterViewers, navController = navController)
+            AlertDialogOfInterviewerList(
+                advert = advertList.value[indexOfAdvert.intValue],
+                alertDialogOfInterviewers = alertDialogOfInterViewers,
+                navController = navController)
         }
     }
 }
@@ -234,10 +259,10 @@ fun AlertDialogOfInterviewerList(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(
-                    count = advert.advert_interviewers .size,
-                    key = { advert.advert_interviewers[it].id }
+                    count = advert.advert_interviewers.value.size,
+                    key = { advert.advert_interviewers.value[it].id }
                 ) {
-                    val student = advert.advert_interviewers[it]
+                    val interviewer = advert.advert_interviewers.value[it]
                     Card(
                         modifier = Modifier
                             .padding(5.dp)
@@ -264,21 +289,22 @@ fun AlertDialogOfInterviewerList(
                                     contentDescription = "Student Image in Interviewer List"
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
-                                Text(text = student.student_name, fontWeight = FontWeight.Bold)
+                                Text(text = interviewer.interviewer_student_name, fontWeight = FontWeight.Bold)
                             }
                             Row(
+                                modifier=Modifier.weight(0.2f),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
+                                horizontalArrangement = Arrangement.End
                             ) {
                                 OutlinedButton(
                                     onClick = {
                                         //Ogrenciyi gosterecek
                                         alertDialogOfInterviewers.value = false
-                                        navController.navigate(Screen.StudentPage.passNavigate(student_no = student.student_no))
+                                        navController.navigate(Screen.StudentPage.passNavigate(student_no = interviewer.interviewer_student_id))
                                     }, colors = ButtonDefaults.outlinedButtonColors(
                                         containerColor = Color.Green,
                                         contentColor = Color.White
-                                    )
+                                    ), shape = RoundedCornerShape(20.dp)
                                 ) {
                                     Text(text = stringResource(id = R.string.ogrenciyi_goruntule))
                                 }

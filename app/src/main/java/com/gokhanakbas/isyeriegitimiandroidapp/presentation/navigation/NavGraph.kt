@@ -18,7 +18,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage.Fi
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerInfoEditPage.LecturerInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerMainPage.LecturerMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.lecturersPage.LecturerPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.SurveyPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.surveysPage.SurveyPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.advertsPage.AdvertPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.firmsPage.FirmPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.formsPage.FormPage
@@ -62,25 +62,12 @@ fun AppNavGraph(
 
         }
 
-        composable(Screen.FirmMainPage.route,
-            arguments = listOf(
-                navArgument("firm_id") {
-                    type = NavType.StringType
-                }
-            )) {
-            val firm_id = it.arguments?.getString("firm_id")
-            FirmMainPage(navController = navController, firm_id = firm_id!!, sharedViewModel = sharedViewModel)
+        composable(Screen.FirmMainPage.route) {
+            FirmMainPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
-        composable(
-            Screen.LecturerMainPage.route, arguments = listOf(
-                navArgument("lecturer_id") {
-                    type = NavType.StringType
-                }
-            )
-        ) {
-            val lecturer_id = it.arguments?.getString("lecturer_id")!!
-            LecturerMainPage(navController = navController, lecturer_id, sharedViewModel = sharedViewModel)
+        composable(Screen.LecturerMainPage.route) {
+            LecturerMainPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
         composable(

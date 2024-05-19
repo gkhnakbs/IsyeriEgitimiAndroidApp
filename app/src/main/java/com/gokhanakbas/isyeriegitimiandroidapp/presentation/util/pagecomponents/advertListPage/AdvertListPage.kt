@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -167,6 +168,9 @@ fun AdvertCardContent(navController: NavController, advert_object: Advert) {
         modifier = Modifier
             .padding(top = 5.dp, bottom = 5.dp)
             .heightIn(80.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
     ) {
         Row(modifier = Modifier
             .fillMaxSize()
@@ -189,10 +193,11 @@ fun AdvertCardContent(navController: NavController, advert_object: Advert) {
                     Spacer(
                         modifier = Modifier
                             .height(0.5.dp)
+                            .fillMaxWidth()
                             .background(Color.LightGray)
                     )
                     Text(
-                        text = advert_object.advert_firm.firm_name,
+                        text = advert_object.advert_firm_name,
                         fontSize = 18.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

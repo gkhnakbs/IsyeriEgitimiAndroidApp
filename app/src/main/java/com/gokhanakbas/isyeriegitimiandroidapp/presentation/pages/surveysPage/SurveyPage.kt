@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.surveysPage
 
 import androidx.compose.runtime.Composable
 

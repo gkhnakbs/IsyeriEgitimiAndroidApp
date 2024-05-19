@@ -1,5 +1,6 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.domain.repository
 
+import androidx.compose.runtime.MutableState
 import arrow.core.Either
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
@@ -8,7 +9,7 @@ interface AdvertsRepository {
 
     suspend fun getAdverts(): Either<NetworkError, List<Advert>>  // Burada öğrenci , izleyici ve komisyon firma ilanlarını çekilecek
 
-    suspend fun getFirmsAdverts(firm_id:String): Either<NetworkError, List<Advert>>  // Burada firma kendi ilanlarını çekilecek
+    suspend fun getFirmsAdverts(firm_id:String): Either<NetworkError, MutableState<ArrayList<Advert>>>  // Burada firma kendi ilanlarını çekilecek
 
     suspend fun getAdvertsInformation(advert_id : String) : Either<NetworkError,Advert>
 
