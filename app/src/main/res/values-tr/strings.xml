@@ -98,14 +98,20 @@
     <string name="ilan_baslik">İlan Başlık</string>
     <string name="ilan_aciklama">İlan Açıklama</string>
     <string name="ilan_bolum">İlan Bölüm</string>
+    <string name="ilan_post_baslik">İlan Post Başlık</string>
     <string name="ilan_baslangic_tarihi">İlan Başlangıç Tarihi</string>
     <string name="ilan_bitis_tarihi">İlan Bitiş Tarihi</string>
+    <string name="ilani_post_olarak_paylas">İlanı Gönderi Olarak Paylaş</string>
 
     <string name="ilani_yayinla">İlanı Yayınla</string>
+    <string name="ilani_guncelle">İlanı Güncelle</string>
     <string name="ilan_basariyla_yayinlandi">İlan Başarıyla Yayınlandı</string>
+    <string name="ilan_basariyla_guncellendi">İlan Başarıyla Güncellendi</string>
     <string name="basvuru_basariyla_tamamlandi">Başvuru Başarıyla Tamamlandı</string>
     <string name="islem_gerceklestirilemedi">İşlem Gerçekleştirilemedi</string>
     <string name="basvuru_zaten_bulunmaktadır">Başvuru Zaten Bulunmaktadır</string>
+
+    <string name="bir_hata_olustu">Bir Hata Oluştu</string>
 
     <string name="gun_ay_yil">GG/AA/YYYY</string>
 
@@ -120,6 +126,8 @@
     <string name="basvuruyu_sil">Başvuruyu Sil</string>
     <string name="basvuruyu_silmek_istedigine_emin_misin">Başvuruyu silmek istediğinize emin misiniz?</string>
     <string name="basvurmak_istedigine_emin_misin">Başvurmak istediğine emin misin?</string>
+
+    <string name="ilani_silmek_istedigine_emin_misin">İlanı silmek istediğinize emin misiniz?</string>
 
     <string name="goster">Göster</string>
     <string name="doldur">Doldur</string>

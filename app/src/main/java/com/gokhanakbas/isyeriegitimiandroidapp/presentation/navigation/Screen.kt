@@ -71,7 +71,7 @@ sealed class Screen(var route: String) {
         }
     }
 
-    data object AdvertCreatingPage : Screen("advertCreatingPage")
+    data object AdvertCreateOrEditPage : Screen("advertCreateOrEditPage")
 
     data object FormPage : Screen("formPage/{form_id}") {
         fun passNavigate(form_id: String): String {

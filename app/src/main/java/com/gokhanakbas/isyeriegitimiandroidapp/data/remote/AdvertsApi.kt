@@ -20,7 +20,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
         val advertList = arrayListOf<Advert>()
         val statement = connection.createStatement()
         val result =
-            statement.executeQuery("select * from ilan as i join firma as f on f.firma_id=i.firma_id")
+            statement.executeQuery("select * from ilan as i JOIN firma as f ON f.firma_id=i.firma_id where i.baslangic_tarihi < CURRENT_TIMESTAMP AND i.bitis_tarihi > CURRENT_TIMESTAMP")
         while (result.next()) {
             advertList.add(
                 Advert(
@@ -89,7 +89,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
         lateinit var advert: Advert
         val statement = connection.createStatement()
         val result =
-            statement.executeQuery("select * from ilan as i join firma as f on f.firma_id=i.firma_id where i.ilan_id=${advert_id.toBigDecimal()}")
+            statement.executeQuery("select * from ilan as i JOIN firma as f ON f.firma_id=i.firma_id where i.ilan_id='$advert_id'")
         while (result.next()) {
             advert = Advert(
                 result.getBigDecimal("ilan_id").toString(),
@@ -186,5 +186,17 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
         return result > 0
     }
 
+
+    fun updateAdvert(advert: Advert) : Boolean{
+        val statement=connection.createStatement()
+        val result=statement.executeUpdate("update ilan set baslik='${advert.advert_title}' , aciklama='${advert.advert_details}' ,post_baslik='${advert.advert_post_title}' , baslangic_tarihi='${advert.advert_startDate}' , bitis_tarihi='${advert.advert_endDate}' where ilan_id=${advert.advert_id.toBigDecimal()} ")
+        return result>0
+    }
+
+    fun deleteAdvert(advert_id :String) : Boolean{
+        val statement=connection.createStatement()
+        val result=statement.executeUpdate("delete from ilan where ilan_id= '$advert_id' ")
+        return result>0
+    }
 
 }

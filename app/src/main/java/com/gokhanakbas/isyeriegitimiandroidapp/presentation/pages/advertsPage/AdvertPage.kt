@@ -89,10 +89,10 @@ fun AdvertPageContent(
     val context= LocalContext.current
 
     //Burada firm un bilgileri advertten gelen id ye gore cekilir.
-    val advert_title = advertPageState.advert.advert_title
-    val advert_description = advertPageState.advert.advert_details
-    val advert_firmName = advertPageState.advert.advert_firm!!.firm_name
-    val advert_firmInfo = advertPageState.advert.advert_firm!!.firm_info
+    val advert_title = advertPageState.advert.advert_title ?:""
+    val advert_description = advertPageState.advert.advert_details ?: ""
+    val advert_firmName = advertPageState.advert.advert_firm?.firm_name ?: ""
+    val advert_firmInfo = advertPageState.advert.advert_firm?.firm_info ?: ""
 
     val scrollState = rememberScrollState()
 

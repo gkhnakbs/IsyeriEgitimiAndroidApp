@@ -8,6 +8,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.FirmsRepository
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.sendEvent
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,6 +56,45 @@ class AdvertsOfFirmPageViewModel @Inject constructor(private val advertsReposito
         }
 
         return resultState.await()
+    }
+
+
+    suspend fun deleteAdvert(advert_id:String) : Deferred<Boolean>{
+        val resultState = viewModelScope.async {
+            _state.update {
+                it.copy(isLoading = true)
+            }
+            delay(1500)
+            val result=advertsRepository.deleteAdvert(advert_id=advert_id)
+            _state.update {
+                it.copy(isLoading = false)
+            }
+            when(result){
+                is Either.Right ->{
+                    if(result.value){
+                        _state.update {
+                            it.copy(successfullyDeleted = true)
+                        }
+                        true
+                    }else{
+                        _state.update {
+                            it.copy(successfullyDeleted = false)
+                        }
+                        false
+                    }
+                }
+                is Either.Left ->{
+                    _state.update {
+                        it.copy(error = result.value.error.message)
+                    }
+                    sendEvent(Event.Toast(result.value.error.message))
+                    false
+                }
+            }
+
+        }
+
+        return resultState
     }
 
 

@@ -54,9 +54,9 @@ class StudentEntryPageViewModel @Inject constructor(private val studentsReposito
                     }else{
                         false
                     }
-
                 }
             }
+
         }
         return resultState.await()
     }

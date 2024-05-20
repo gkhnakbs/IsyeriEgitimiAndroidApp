@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission.commissionMainPage.lastPage
 
 @Composable
 fun LogOutQuestionComp(
@@ -30,7 +29,7 @@ fun LogOutQuestionComp(
                     onClick = {
                         //ayni zamanda burada beni hatirla ozelligi sayesinde kaydetmis oldugumuz bilgileri telefonun veritabanindan silinecek
                         log_out_choice.value = false
-                        lastPage =1
+                        com.gokhanakbas.isyeriegitimiandroidapp.presentation.commission.commissionMainPage.lastPage =1
                         com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainPage.lastPage =1
                         com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage.lastPage =1
                         com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerMainPage.lastPage =1

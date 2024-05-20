@@ -21,4 +21,8 @@ interface AdvertsRepository {
 
     suspend fun createAdvert(firm_id:String,advert:Advert) : Either<NetworkError,Boolean>
 
+    suspend fun updateAdvert(advert:Advert) : Either<NetworkError,Boolean>
+
+    suspend fun deleteAdvert(advert_id: String) : Either<NetworkError,Boolean>
+
 }

@@ -26,7 +26,7 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
     }
 
     fun getReportsInformation(report_id: String): Report {
-        var report_object = Report("", "", "","")
+        val report_object = Report("", "", "","")
         val statement = connection.createStatement()
         val result =
             statement.executeQuery("select * from haftalik_rapor where rapor_id=$report_id")

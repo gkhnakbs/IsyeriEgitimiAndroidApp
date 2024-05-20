@@ -235,7 +235,7 @@ private fun FirmMainPageContent(navController: NavController,state: FirmMainPage
             }
 
             4 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
-                AdvertsOfFirmPage(paddingValues = it, navController = navController)
+                AdvertsOfFirmPage(paddingValues = it, navController = navController, sharedViewModel = sharedViewModel)
             }
 
             5 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {

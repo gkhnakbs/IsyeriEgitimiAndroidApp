@@ -47,14 +47,20 @@ import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.AdvertDeleteQuestşionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.sendEvent
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun AdvertsOfFirmPage(paddingValues: PaddingValues, navController: NavController,viewModel : AdvertsOfFirmPageViewModel = hiltViewModel()) {
+fun AdvertsOfFirmPage(paddingValues: PaddingValues, navController: NavController,viewModel : AdvertsOfFirmPageViewModel = hiltViewModel(),sharedViewModel: SharedViewModel) {
 
     LaunchedEffect(key1 = viewModel) {
         viewModel.getFirmAdverts(Constants.FIRM_ID)
@@ -63,13 +69,14 @@ fun AdvertsOfFirmPage(paddingValues: PaddingValues, navController: NavController
     AdvertsOfFirmPageContent(
         paddingValues = paddingValues,
         navController = navController,
-        viewModel=viewModel
+        viewModel=viewModel,
+        sharedViewModel = sharedViewModel
     )
 
 }
 
 @Composable
-private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navController: NavController ,viewModel: AdvertsOfFirmPageViewModel ){
+private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navController: NavController ,viewModel: AdvertsOfFirmPageViewModel, sharedViewModel: SharedViewModel ){
 
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -81,6 +88,18 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
     val indexOfAdvert= remember {
         mutableIntStateOf(0)
     }
+
+    val deleteQuestionState= remember {
+        mutableStateOf(false)
+    }
+    val deleteQuestionResultState= remember {
+        mutableStateOf(false)
+    }
+
+    val willDeleteAdvert = remember {
+        mutableStateOf<Advert?>(null)
+    }
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)) {
@@ -107,6 +126,8 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                         .padding(5.dp)
                         .fillMaxWidth(), elevation = CardDefaults.cardElevation(
                         defaultElevation = 15.dp
+                    ), colors = CardDefaults.cardColors(
+                        containerColor = Color.White
                     )
                 ) {
                     Column(modifier = Modifier.fillMaxSize()) {
@@ -151,6 +172,8 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                             OutlinedButton(
                                 onClick = {
                                     //Ilani duzenleme islemi gerceklesecek
+                                    sharedViewModel.addAdvert(advert)
+                                    navController.navigate(Screen.AdvertCreateOrEditPage.route)
 
                                 }, colors = ButtonDefaults.outlinedButtonColors(
                                     containerColor = Color.White,
@@ -163,6 +186,9 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                             OutlinedButton(
                                 onClick = {
                                     //Ilani silme islemi gerceklesecek
+
+                                    deleteQuestionState.value=true
+                                    willDeleteAdvert.value=advert
 
                                 }, colors = ButtonDefaults.buttonColors(
                                     containerColor = Color.Red,
@@ -191,7 +217,8 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
         OutlinedButton(
             onClick = {
                 //Burada yeni ilan olusturma islemi gerceklesecek
-                navController.navigate(Screen.AdvertCreatingPage.route)
+                sharedViewModel.addAdvert(null)
+                navController.navigate(Screen.AdvertCreateOrEditPage.route)
 
             }, colors = ButtonDefaults.outlinedButtonColors(
                 containerColor = GaziKoyuMavi,
@@ -208,6 +235,21 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                 advert = advertList.value[indexOfAdvert.intValue],
                 alertDialogOfInterviewers = alertDialogOfInterViewers,
                 navController = navController)
+        }
+
+        AdvertDeleteQuestşionComp(deleteQuestion = deleteQuestionState, result = deleteQuestionResultState )
+
+        LaunchedEffect(key1 = deleteQuestionState.value) {
+            if (deleteQuestionResultState.value){
+                CoroutineScope(Dispatchers.IO).launch {
+                    val job=viewModel.deleteAdvert(advert_id = willDeleteAdvert.value!!.advert_id)
+                    if (job.await()){
+                        advertList.value.remove(willDeleteAdvert.value)
+                        willDeleteAdvert.value=null
+                    }
+                }
+            }
+
         }
     }
 }

@@ -12,7 +12,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.commissionEntr
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.firmEntryPage.FirmEntryPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.lecturerEntryPage.LecturerEntryPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.entry.studentEntryPage.StudentEntryPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertCreatingPage.AdvertCreatingPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertCreatingPage.AdvertCreateOrEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmInfoEditPage.FirmInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage.FirmMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerInfoEditPage.LecturerInfoEditPage
@@ -142,8 +142,8 @@ fun AppNavGraph(
             SurveyPage(navController = navController)
         }
 
-        composable(Screen.AdvertCreatingPage.route) {
-            AdvertCreatingPage(navController = navController)
+        composable(Screen.AdvertCreateOrEditPage.route) {
+            AdvertCreateOrEditPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
         composable(Screen.StudentInfoEditPage.route, arguments = listOf(

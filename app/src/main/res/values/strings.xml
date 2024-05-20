@@ -81,14 +81,20 @@
     <string name="ilan_baslik">Advert Title</string>
     <string name="ilan_aciklama">Advert Description</string>
     <string name="ilan_bolum">Advert Department</string>
+    <string name="ilan_post_baslik">Advert Post Title</string>
     <string name="ilan_baslangic_tarihi">Advert Start Date</string>
     <string name="ilan_bitis_tarihi">Advert End Date</string>
+    <string name="ilani_post_olarak_paylas">Share Advert as Post</string>
 
     <string name="ilani_yayinla">Publish Advert</string>
+    <string name="ilani_guncelle">Update Advert</string>
     <string name="ilan_basariyla_yayinlandi">Advert is published successfully</string>
+    <string name="ilan_basariyla_guncellendi">Advert is updated successfully</string>
     <string name="basvuru_basariyla_tamamlandi">Application Successfully Completed</string>
     <string name="islem_gerceklestirilemedi">Failed to Process</string>
     <string name="basvuru_zaten_bulunmaktadır">Application Already Available</string>
+
+    <string name="bir_hata_olustu">Something went wrong</string>
 
     <string name="gun_ay_yil">DD/MM/YYYY</string>
 
@@ -104,6 +110,8 @@
     <string name="basvuruyu_sil">Remove Applying</string>
     <string name="basvuruyu_silmek_istedigine_emin_misin">Are you sure to delete Applied?</string>
     <string name="basvurmak_istedigine_emin_misin">Are you sure to Apply?</string>
+
+    <string name="ilani_silmek_istedigine_emin_misin">Are you sure to delete Advert?</string>
 
     <string name="zorunlu_yazisi_tf">*Required</string>
     <string name="kayit_ol">Sign Up</string>
