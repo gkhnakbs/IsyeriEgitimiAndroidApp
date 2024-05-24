@@ -66,7 +66,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun StudentInfoEditPage(
     navController: NavController,
-    student_no: String,
     viewModel: StudentInfoEditPageViewModel = hiltViewModel(),
     sharedViewModel: SharedViewModel
 ) {

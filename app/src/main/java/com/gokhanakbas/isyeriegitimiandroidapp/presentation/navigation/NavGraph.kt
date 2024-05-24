@@ -17,13 +17,13 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmInfoEditPag
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage.FirmMainPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerInfoEditPage.LecturerInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.lecturer.lecturerMainPage.LecturerMainPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.lecturersPage.LecturerPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.surveysPage.SurveyPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.advertsPage.AdvertPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.firmsPage.FirmPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.formsPage.FormPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.lecturersPage.LecturerPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.reportsPage.ReportsPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.studentsPage.StudentPage
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.surveysPage.SurveyPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentInfoEditPage.StudentInfoEditPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainPage.StudentMainPage
 
@@ -131,6 +131,7 @@ fun AppNavGraph(
         )) {
             val report_id = it.arguments?.getString("report_id")!!
             val editable = it.arguments?.getBoolean("editable")!!
+
             ReportsPage(navController = navController, report_id = report_id, editable = editable)
         }
 
@@ -146,34 +147,19 @@ fun AppNavGraph(
             AdvertCreateOrEditPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
-        composable(Screen.StudentInfoEditPage.route, arguments = listOf(
-            navArgument("student_no"){
-                type= NavType.StringType
-            }
-        )) {
-            val student_no=it.arguments?.getString("student_no")!!
-            StudentInfoEditPage(navController = navController, student_no = student_no, sharedViewModel = sharedViewModel)
+        composable(Screen.StudentInfoEditPage.route) {
+            StudentInfoEditPage(navController = navController, sharedViewModel = sharedViewModel)
 
         }
 
         composable(
-            Screen.LecturerInfoEditPage.route, arguments = listOf(
-                navArgument("lecturer_id") {
-                    type = NavType.StringType
-                }
-            )) {
-            val lecturer_id=it.arguments?.getString("lecturer_id")!!
-            LecturerInfoEditPage(navController = navController, lecturer_id = lecturer_id, sharedViewModel = sharedViewModel)
+            Screen.LecturerInfoEditPage.route) {
+            LecturerInfoEditPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
         composable(
-            Screen.FirmInfoEditPage.route, arguments = listOf(
-                navArgument("firm_id") {
-                    type = NavType.StringType
-                }
-            )) {
-            val firm_id = it.arguments?.getString("firm_id")!!
-            FirmInfoEditPage(navController = navController, firm_id = firm_id, sharedViewModel = sharedViewModel)
+            Screen.FirmInfoEditPage.route) {
+            FirmInfoEditPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
 

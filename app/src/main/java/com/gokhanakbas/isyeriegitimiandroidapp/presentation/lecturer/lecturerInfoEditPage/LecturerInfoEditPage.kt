@@ -59,7 +59,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun LecturerInfoEditPage(
     navController: NavController,
-    lecturer_id: String,
     viewModel: LecturerInfoEditPageViewModel = hiltViewModel(),
     sharedViewModel: SharedViewModel
 ) {

@@ -61,7 +61,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun FirmInfoEditPage(
     navController: NavController,
-    firm_id: String,
     viewModel: FirmInfoEditPageViewModel = hiltViewModel(),
     sharedViewModel: SharedViewModel
 ) {

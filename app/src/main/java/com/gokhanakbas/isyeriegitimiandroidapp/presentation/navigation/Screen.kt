@@ -1,5 +1,7 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation
 
+import com.google.gson.Gson
+
 sealed class Screen(var route: String) {
 
     data object EntryPage : Screen("entryPageSelection")
