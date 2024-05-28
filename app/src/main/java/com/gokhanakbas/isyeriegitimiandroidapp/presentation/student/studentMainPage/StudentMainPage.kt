@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -105,48 +106,48 @@ private fun StudentMainPageContent(
     val exit_choice = remember { mutableStateOf(false) }
 
 
-    val liste = immutableListOf(
-            NavItem(
-                1,
-                stringResource(id = R.string.ana_sayfa),
-                painterResource(id = R.drawable.home_icon)
-            ),
-            NavItem(
-                2,
-                stringResource(id = R.string.ilanlar),
-                painterResource(id = R.drawable.advertisement_icon)
-            ),
-            NavItem(
-                3,
-                stringResource(id = R.string.firma),
-                painterResource(id = R.drawable.workplace_icon)
-            ),
-            NavItem(
-                4,
-                stringResource(id = R.string.basvurulmus_ilanlar),
-                painterResource(id = R.drawable.apply_icon)
-            ),
-            NavItem(
-                5,
-                stringResource(id = R.string.form),
-                painterResource(id = R.drawable.form_icon)
-            ),
-            NavItem(
-                6,
-                stringResource(id = R.string.anket),
-                painterResource(id = R.drawable.document_icon)
-            ),
-            NavItem(
-                7,
-                stringResource(id = R.string.haftalik_rapor),
-                painterResource(id = R.drawable.report_icon)
-            ),
-            NavItem(
-                8,
-                stringResource(id = R.string.favori_ilanlar),
-                painterResource(id = R.drawable.bookmark_icon)
+    val liste =immutableListOf(
+                NavItem(
+                    1,
+                    stringResource(id = R.string.ana_sayfa),
+                    painterResource(id = R.drawable.home_icon)
+                ),
+                NavItem(
+                    2,
+                    stringResource(id = R.string.ilanlar),
+                    painterResource(id = R.drawable.advertisement_icon)
+                ),
+                NavItem(
+                    3,
+                    stringResource(id = R.string.firma),
+                    painterResource(id = R.drawable.workplace_icon)
+                ),
+                NavItem(
+                    4,
+                    stringResource(id = R.string.basvurulmus_ilanlar),
+                    painterResource(id = R.drawable.apply_icon)
+                ),
+                NavItem(
+                    5,
+                    stringResource(id = R.string.form),
+                    painterResource(id = R.drawable.form_icon)
+                ),
+                NavItem(
+                    6,
+                    stringResource(id = R.string.anket),
+                    painterResource(id = R.drawable.document_icon)
+                ),
+                NavItem(
+                    7,
+                    stringResource(id = R.string.haftalik_rapor),
+                    painterResource(id = R.drawable.report_icon)
+                ),
+                NavItem(
+                    8,
+                    stringResource(id = R.string.favori_ilanlar),
+                    painterResource(id = R.drawable.bookmark_icon)
+                )
             )
-        )
 
     ModalNavigationDrawer(
         drawerContent = {

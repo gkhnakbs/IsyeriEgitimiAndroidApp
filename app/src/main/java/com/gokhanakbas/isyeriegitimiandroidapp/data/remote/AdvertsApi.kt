@@ -189,7 +189,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
     fun updateAdvert(advert: Advert) : Boolean{
         val statement=connection.createStatement()
-        val result=statement.executeUpdate("update ilan set baslik='${advert.advert_title}' , aciklama='${advert.advert_details}' ,post_baslik='${advert.advert_post_title}' , baslangic_tarihi='${advert.advert_startDate}' , bitis_tarihi='${advert.advert_endDate}' where ilan_id=${advert.advert_id.toBigDecimal()} ")
+        val result=statement.executeUpdate("update ilan set baslik='${advert.advert_title}' , aciklama='${advert.advert_details}' ,post_baslik='${advert.advert_post_title}' , baslangic_tarihi='${advert.advert_startDate}' , bitis_tarihi='${advert.advert_endDate}' where ilan_id='${advert.advert_id}' ")
         return result>0
     }
 
