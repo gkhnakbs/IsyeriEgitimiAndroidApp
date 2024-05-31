@@ -15,33 +15,33 @@ import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 
 @Composable
-fun ReportSaveQuestionComp(
-    saveQuestionState: MutableState<Boolean>,
-    saveQuestionResult: MutableState<Boolean>
+fun ReportUpdateQuestionComp(
+    updateQuestionState: MutableState<Boolean>,
+    updateQuestionResult: MutableState<Boolean>
 ) {
 
     AlertDialog(
-        onDismissRequest = { saveQuestionState.value = false },
+        onDismissRequest = { updateQuestionState.value = false },
         confirmButton = {
             OutlinedButton(
                 onClick = {
-                    saveQuestionResult.value = true
-                    saveQuestionState.value = false
+                    updateQuestionResult.value = true
+                    updateQuestionState.value = false
                 }, border = BorderStroke(0.5.dp, GaziKoyuMavi), shape = RoundedCornerShape(20.dp)
-            ) { Text(text = stringResource(id = R.string.kaydet)) }
+            ) { Text(text = stringResource(id = R.string.guncelle)) }
         },
         dismissButton = {
             OutlinedButton(
                 onClick = {
-                    saveQuestionResult.value = false
-                    saveQuestionState.value = false
+                    updateQuestionResult.value = false
+                    updateQuestionState.value = false
                 }, border = BorderStroke(0.5.dp, Color.Red),
                 shape = RoundedCornerShape(20.dp)
             ) { Text(text = stringResource(id = R.string.iptal_et)) }
         },
         title = {
             Text(
-                text = stringResource(id = R.string.raporu_kaydetmek_istedigine_emin_misin),
+                text = stringResource(id = R.string.raporu_guncellemek_istedigine_emin_misin),
                 fontSize = 24.sp
             )
         }

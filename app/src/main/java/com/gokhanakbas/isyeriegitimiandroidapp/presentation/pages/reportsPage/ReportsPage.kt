@@ -30,9 +30,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ReportSaveQuestionComp
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ReportUpdateQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 import kotlinx.coroutines.CoroutineScope
@@ -40,34 +40,42 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReportsPage(
     navController: NavController,
     report_id: String,
-    editable: Boolean,
+    reason: String,
     viewModel: ReportsPageViewModel = hiltViewModel()
 ) {
 
+
     LaunchedEffect(key1 = viewModel) {
-        if (!editable) {
+        if (reason == "updateReport") {
             viewModel.getReportsInformation(report_id)
+        } else if (reason == "showReport") {
+            viewModel.getReportsInformation(report_id)
+        } else if (reason == "newReport") {
+            //Yeni eklemek için veri çekmeyecek
         }
     }
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    state.editable = editable
 
-    ReportsPageContent(navController = navController, state = state, viewModel = viewModel)
+
+    ReportsPageContent(navController = navController, reason = reason, viewModel = viewModel)
 
 }
 
 @Composable
 private fun ReportsPageContent(
     navController: NavController,
-    state: ReportsPageState,
+    reason: String,
     viewModel: ReportsPageViewModel
 ) {
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -75,6 +83,13 @@ private fun ReportsPageContent(
         mutableStateOf(false)
     }
     val saveQuestionResult = remember {
+        mutableStateOf(false)
+    }
+
+    val updateQuestionState = remember {
+        mutableStateOf(false)
+    }
+    val updateQuestionResult = remember {
         mutableStateOf(false)
     }
 
@@ -87,10 +102,13 @@ private fun ReportsPageContent(
     }
 
     LoadingDialog(isLoading = state.isLoading)
-    
-    LaunchedEffect(key1 = state.report) {
-        tf_report_description.value = state.report.report_description
-        tf_report_date.value = state.report.report_date
+
+    if (reason != "newReport") {
+        LaunchedEffect(key1 = state.report) {
+            tf_report_description.value = state.report.report_description
+            tf_report_date.value = state.report.report_date
+        }
+
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -103,7 +121,7 @@ private fun ReportsPageContent(
             OutlinedTextField(
                 value = tf_report_description.value,
                 onValueChange = { tf_report_description.value = it },
-                readOnly = !state.editable,
+                readOnly = reason == "showReport",
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.8f),
@@ -114,12 +132,27 @@ private fun ReportsPageContent(
                 label = { Text(text = stringResource(id = R.string.haftalik_rapor)) }
             )
 
-            if (state.editable) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().weight(0.2f),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
-                ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.2f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (reason == "updateReport") {
+                    OutlinedButton(
+                        onClick = {
+                            //Raporu kaydetme işlemi gerçekleşecek ancak kaydetmeden önce bir dialog ile emin misin sorusu sorulacak.
+                            if (tf_report_description.value.trim().isNotEmpty()) {
+                                updateQuestionState.value = true
+                            }
+                        }, colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = Color.White
+                        ), border = BorderStroke(0.5.dp, GaziKoyuMavi)
+                    ) {
+                        Text(text = stringResource(id = R.string.guncelle), fontSize = 20.sp)
+                    }
+                } else {
                     OutlinedButton(
                         onClick = {
                             //Raporu kaydetme işlemi gerçekleşecek ancak kaydetmeden önce bir dialog ile emin misin sorusu sorulacak.
@@ -134,23 +167,59 @@ private fun ReportsPageContent(
                     }
                 }
             }
+
         }
     }
 
-    if (saveQuestionState.value) ReportSaveQuestionComp(
-        saveQuestionState = saveQuestionState,
-        saveQuestionResult = saveQuestionResult
-    )
+    if (saveQuestionState.value) {
+        ReportSaveQuestionComp(
+            saveQuestionState = saveQuestionState,
+            saveQuestionResult = saveQuestionResult
+        )
+    }
+
+    if (updateQuestionState.value) {
+        ReportUpdateQuestionComp(
+            updateQuestionState = updateQuestionState,
+            updateQuestionResult = updateQuestionResult
+        )
+    }
+
 
 
     LaunchedEffect(key1 = saveQuestionState.value) {
         if (!saveQuestionState.value) {
             if (saveQuestionResult.value) {
-                
-                val report = Report("", tf_report_description.value.trim(),"", "")
+
+                val report = Report("", tf_report_description.value.trim(), "", "")
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    val job1 = async { viewModel.addWeeklyReports(context, report, Constants.STUDENT_NO) }
+                    val job1 =
+                        async { viewModel.addWeeklyReports(context, report, Constants.STUDENT_NO) }
+                    if (job1.await()) {
+                        withContext(Dispatchers.Main) {
+                            navController.popBackStack()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = updateQuestionState.value) {
+        if (!updateQuestionState.value) {
+            if (updateQuestionResult.value) {
+                val todayDate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)!!
+
+                val report1 = Report(
+                    state.report.report_id,
+                    tf_report_description.value.trim(),
+                    todayDate,
+                    state.report.report_studentNo
+                )
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val job1 = viewModel.updateWeeklyReport(report1)
                     if (job1.await()) {
                         withContext(Dispatchers.Main) {
                             navController.popBackStack()

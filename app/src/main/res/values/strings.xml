@@ -31,6 +31,8 @@
     <string name="ekle">Add</string>
     <string name="yetenek_ekle">Skill Add</string>
     <string name="raporu_goruntule">Show Report</string>
+    <string name="raporu_duzenle">Edit Report</string>
+    <string name="raporu_sil">Delete Report</string>
     <string name="rapor_basariyla_kaydedildi">Report Was Saved Successfully</string>
 
 
@@ -44,10 +46,14 @@
     <string name="grup_bilgileri">Groups Information</string>
 
     <string name="iptal_et">Cancel</string>
+    <string name="tamam">Ok</string>
+    <string name="guncelle">Update</string>
 
     <string name="cikis_soru">Are you sure you want to make an Log out?</string>
     <string name="kapat_soru">Are you sure you want to make an Exit?</string>
     <string name="raporu_kaydetmek_istedigine_emin_misin">Are you sure you want to Save Report?</string>
+    <string name="raporu_guncellemek_istedigine_emin_misin">Are you sure you want to Update Report?</string>
+    <string name="raporu_silmek_istedigine_emin_misin">Are you sure you want delete Report?</string>
     <string name="eger_kaydedersen_tekrar_degistiremeyecek_veya_silemeyeceksin">If You Save , You cannot update or delete this</string>
 
     <string name="suan_icin_bos_gozukuyor">It looks like empty</string>
@@ -97,10 +103,12 @@
     <string name="bir_hata_olustu">Something went wrong</string>
 
     <string name="gun_ay_yil">DD/MM/YYYY</string>
+    <string name="yil_ay_gun">YYYY/MM/DD</string>
 
     <string name="hakkimda">About Me</string>
 
     <string name="email">Email</string>
+
 
     <string name="senden_beklenenler">What Is Expected Of You</string>
 

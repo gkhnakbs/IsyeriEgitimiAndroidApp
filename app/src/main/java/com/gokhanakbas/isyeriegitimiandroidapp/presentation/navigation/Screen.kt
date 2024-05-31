@@ -89,9 +89,9 @@ sealed class Screen(var route: String) {
         }
     }
 
-    data object ReportPage : Screen("reportPage/{report_id}/{editable}") {
-        fun passNavigate(report_id: String,editable : Boolean): String {
-            route = "reportPage/$report_id/$editable"
+    data object ReportPage : Screen("reportPage/{report_id}/{reason}") {
+        fun passNavigate(report_id: String,reason : String): String {
+            route = "reportPage/$report_id/$reason"
             return route
         }
     }

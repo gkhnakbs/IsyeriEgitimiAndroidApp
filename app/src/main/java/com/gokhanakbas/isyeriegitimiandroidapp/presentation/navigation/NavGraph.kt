@@ -125,14 +125,13 @@ fun AppNavGraph(
         composable(Screen.ReportPage.route, arguments = listOf(
             navArgument("report_id") {
                 type = NavType.StringType
-            }, navArgument("editable"){
-                type= NavType.BoolType
+            }, navArgument("reason"){
+                type= NavType.StringType
             }
         )) {
             val report_id = it.arguments?.getString("report_id")!!
-            val editable = it.arguments?.getBoolean("editable")!!
-
-            ReportsPage(navController = navController, report_id = report_id, editable = editable)
+            val reason = it.arguments?.getString("reason")!!
+            ReportsPage(navController = navController, report_id = report_id, reason=reason)
         }
 
         composable(Screen.FormPage.route) {

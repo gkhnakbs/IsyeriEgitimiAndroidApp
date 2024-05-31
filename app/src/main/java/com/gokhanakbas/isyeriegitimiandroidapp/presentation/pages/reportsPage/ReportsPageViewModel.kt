@@ -1,6 +1,8 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.reportsPage
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
@@ -10,6 +12,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.ReportsReposito
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.sendEvent
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -83,5 +86,43 @@ class ReportsPageViewModel @Inject constructor(private val reportsRepository: Re
             }
         }
         return result.await()
+    }
+
+
+    suspend fun updateWeeklyReport(report: Report) : Deferred<Boolean>{
+        val resultState = viewModelScope.async {
+            _state.update {
+                it.copy(isLoading = true)
+            }
+            val result = reportsRepository.updateWeeklyReport(report)
+            _state.update {
+                it.copy(isLoading = false)
+            }
+            when (result) {
+                is Either.Right -> {
+                    if(result.value){
+                        _state.update {
+                            it.copy(savedSuccessfully = true)
+                        }
+                        true
+                    }else{
+                        _state.update {
+                            it.copy(savedSuccessfully = false)
+                        }
+                        false
+                    }
+                }
+
+                is Either.Left -> {
+                    _state.update {
+                        it.copy(savedSuccessfully = false)
+                    }
+                    sendEvent(Event.Toast(result.value.error.message))
+                    false
+                }
+            }
+        }
+        return resultState
+
     }
 }

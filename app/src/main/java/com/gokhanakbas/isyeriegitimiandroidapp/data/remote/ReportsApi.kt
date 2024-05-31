@@ -1,6 +1,7 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
+import java.sql.Date
 import javax.inject.Inject
 
 class ReportsApi @Inject constructor(private val databaseConnection: DatabaseConnection) {
@@ -26,7 +27,7 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
     }
 
     fun getReportsInformation(report_id: String): Report {
-        val report_object = Report("", "", "","")
+        val report_object = Report(report_id, "", "","")
         val statement = connection.createStatement()
         val result =
             statement.executeQuery("select * from haftalik_rapor where rapor_id=$report_id")
@@ -45,5 +46,16 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
         return result > 0
     }
 
+    fun updateWeeklyReport(report: Report): Boolean {
+        val statement = connection.prepareStatement("Update haftalik_rapor set rapor_aciklama='${report.report_description}' , rapor_tarih='${report.report_date}' where rapor_id='${report.report_id}'")
+        val result=statement.executeUpdate()
+        return result > 0
+    }
+
+    fun deleteWeeklyReport(report_id: String): Boolean {
+        val statement = connection.createStatement()
+        val result = statement.executeUpdate("delete haftalik_rapor where rapor_id='$report_id'")
+        return result > 0
+    }
 
 }

@@ -34,4 +34,20 @@ class ReportsRepositoryImpl @Inject constructor(private val reportsApi: ReportsA
             it.toNetworkError()
         }
     }
+
+    override suspend fun deleteWeeklyReport(report_id: String): Either<NetworkError, Boolean> {
+        return Either.catch {
+            reportsApi.deleteWeeklyReport(report_id)
+        }.mapLeft {
+            it.toNetworkError()
+        }
+    }
+
+    override suspend fun updateWeeklyReport(report: Report): Either<NetworkError, Boolean> {
+        return Either.catch {
+            reportsApi.updateWeeklyReport(report)
+        }.mapLeft {
+            it.toNetworkError()
+        }
+    }
 }

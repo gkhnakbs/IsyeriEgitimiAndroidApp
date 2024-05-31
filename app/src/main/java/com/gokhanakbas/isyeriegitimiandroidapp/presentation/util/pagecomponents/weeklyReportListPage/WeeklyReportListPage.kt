@@ -29,7 +29,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,9 +48,15 @@ import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.DeleteReportComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun WeeklyReportListPage(
@@ -60,12 +69,10 @@ fun WeeklyReportListPage(
         viewModel.getReports(Constants.STUDENT_NO)
     }
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
     WeeklyReportListPageContent(
         navController = navController,
         paddingValues = paddingValues,
-        state = state
+        viewModel = viewModel
     )
 
 }
@@ -75,12 +82,15 @@ fun WeeklyReportListPage(
 fun WeeklyReportListPageContent(
     navController: NavController,
     paddingValues: PaddingValues,
-    state: WeeklyReportListPageState
+    viewModel: WeeklyReportListPageViewModel
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LoadingDialog(isLoading = state.isLoading)
 
     val report_list = state.report_list
+
+
 
     Box(
         modifier = Modifier
@@ -103,7 +113,8 @@ fun WeeklyReportListPageContent(
                     val report_object = report_list[it]
                     WeeklyReportCardContent(
                         navController = navController,
-                        report = report_object
+                        report = report_object,
+                        viewModel = viewModel
                     )
                 }
             )
@@ -112,22 +123,43 @@ fun WeeklyReportListPageContent(
         FloatingActionButton(
             onClick = {
                 //Burada yeni bir rapor oluşturmak için rapor sayfasına yönlendiriyoruz.
-                navController.navigate(Screen.ReportPage.passNavigate("0",true))
+                navController.navigate(Screen.ReportPage.passNavigate("0", reason="newReport"))
             },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom=50.dp,end=30.dp),
+                .padding(bottom = 50.dp, end = 30.dp),
             shape = CircleShape,
             containerColor = Color.White
-            ) {
-                Icon(imageVector = Icons.Rounded.Add, contentDescription = "", tint = Color.Black)
+        ) {
+            Icon(imageVector = Icons.Rounded.Add, contentDescription = "", tint = Color.Black)
         }
     }
 }
 
 
 @Composable
-fun WeeklyReportCardContent(navController: NavController, report: Report) {
+fun WeeklyReportCardContent(
+    navController: NavController,
+    report: Report,
+    viewModel: WeeklyReportListPageViewModel
+) {
+
+    val deleteReportState = remember {
+        mutableStateOf(false)
+    }
+
+    val deleteReportChoice = remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = deleteReportChoice.value) {
+        if (deleteReportChoice.value) {
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.deleteWeeklyReport(report.report_id)
+            }
+        }
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -141,15 +173,9 @@ fun WeeklyReportCardContent(navController: NavController, report: Report) {
             containerColor = Color.White
         )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp), verticalAlignment = Alignment.CenterVertically
-        ) {
             Column(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(0.7f),
+                    .fillMaxWidth().padding(15.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.Start
             ) {
@@ -185,32 +211,65 @@ fun WeeklyReportCardContent(navController: NavController, report: Report) {
 
                     Text(text = report.report_date, fontSize = 17.sp)
                 }
-
-            }
-            Row(
-                modifier = Modifier.weight(0.3f),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedButton(
-                    onClick = {
-                        //Rapor ekranına gidecek ama düzenleyemecek ve silemeyecek , sadece görüntüleyecek
-                        navController.navigate(
-                            Screen.ReportPage.passNavigate(
-                                report_id = report.report_id,
-                                editable = false
-                            )
-                        )
-                    }, colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color.White,
-                        contentColor = Color.Black
-                    ), border = BorderStroke(0.5.dp, GaziKoyuMavi)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = stringResource(id = R.string.raporu_goruntule), fontSize = 18.sp)
+                    OutlinedButton(
+                        onClick = {
+                            //Raporu silecek
+                            deleteReportState.value=true
+                        }, colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = Color.White,
+                            contentColor = Color.Black
+                        ), border = BorderStroke(0.5.dp, GaziKoyuMavi)
+                    ) {
+                        Text(text = stringResource(id = R.string.raporu_sil), fontSize = 18.sp)
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            //Rapor ekranına gidecek ama düzenleyemecek ve silemeyecek , sadece görüntüleyecek
+                            navController.navigate(
+                                Screen.ReportPage.passNavigate(
+                                    report_id = report.report_id,
+                                    reason = "updateReport"
+                                )
+                            )
+                        }, colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = Color.White,
+                            contentColor = Color.Black
+                        ), border = BorderStroke(0.5.dp, GaziKoyuMavi)
+                    ) {
+                        Text(text = stringResource(id = R.string.raporu_duzenle), fontSize = 18.sp)
+                    }
                 }
+                //Card gorunumunde sıkıntı çıkıyordu o yüzden altta gözüksün diye row un dışına çıkardım
+                OutlinedButton(
+                        onClick = {
+                            //Rapor ekranına gidecek ama düzenleyemecek ve silemeyecek , sadece görüntüleyecek
+                            navController.navigate(
+                                Screen.ReportPage.passNavigate(
+                                    report_id = report.report_id,
+                                    reason = "showReport"
+                                )
+                            )
+                        }, colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = Color.White,
+                contentColor = Color.Black
+                ), border = BorderStroke(0.5.dp, GaziKoyuMavi), modifier = Modifier.align(Alignment.End)
+                ) {
+                Text(text = stringResource(id = R.string.raporu_goruntule), fontSize = 18.sp)
             }
+            }
+    }
 
-        }
+    if (deleteReportState.value) {
+        DeleteReportComp(
+            deleteReportState = deleteReportState,
+            deleteReportChoice = deleteReportChoice
+        )
     }
 
 }
+

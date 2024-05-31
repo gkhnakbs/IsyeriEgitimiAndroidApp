@@ -12,4 +12,7 @@ interface ReportsRepository {
 
     suspend fun getReportsInformation(report_id : String) : Either<NetworkError,Report>
 
+    suspend fun deleteWeeklyReport(report_id : String) : Either<NetworkError,Boolean>
+
+    suspend fun updateWeeklyReport(report: Report) : Either<NetworkError,Boolean>
 }

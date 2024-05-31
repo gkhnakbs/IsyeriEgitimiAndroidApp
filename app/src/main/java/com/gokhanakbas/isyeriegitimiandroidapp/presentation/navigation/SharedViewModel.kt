@@ -17,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Singleton
 
 
+
 class SharedViewModel : ViewModel() {
 
     var student by mutableStateOf<Student?>(null)

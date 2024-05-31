@@ -31,6 +31,8 @@
     <string name="ekle">Ekle</string>
     <string name="yetenek_ekle">Yetenek Ekle</string>
     <string name="raporu_goruntule">Raporu Görüntüle</string>
+    <string name="raporu_duzenle">Raporu Düzenle</string>
+    <string name="raporu_sil">Raporu Sil</string>
     <string name="rapor_basariyla_kaydedildi">Rapor Başarıyla Kaydedildi</string>
 
 
@@ -44,6 +46,8 @@
     <string name="grup_bilgileri">Grup Bilgileri</string>
 
     <string name="iptal_et">İptal Et</string>
+    <string name="tamam">Tamam</string>
+    <string name="guncelle">Güncelle</string>
 
     <string name="zorunlu_yazisi_tf">*Zorunlu</string>
     <string name="kayit_ol">Kayıt Ol</string>
@@ -67,6 +71,8 @@
     <string name="cikis_soru">Hesaptan çıkış yapmak istediğine emin misin?</string>
     <string name="kapat_soru">Uygulamadan çıkış yapmak istediğine emin misin?</string>
     <string name="raporu_kaydetmek_istedigine_emin_misin">Raporu kaydetmek istediğine emin misin?</string>
+    <string name="raporu_guncellemek_istedigine_emin_misin">Raporu güncellemek istediğine emin misin?</string>
+    <string name="raporu_silmek_istedigine_emin_misin">Raporu silmek istediğine emin misin?</string>
     <string name="eger_kaydedersen_tekrar_degistiremeyecek_veya_silemeyeceksin">Eğer kaydedersen tekrar değiştiremeyecek veya silemeyeceksin</string>
 
     <string name="basvuru_soru">Başvurmak istediğine emin misin?</string>
@@ -114,6 +120,7 @@
     <string name="bir_hata_olustu">Bir Hata Oluştu</string>
 
     <string name="gun_ay_yil">GG/AA/YYYY</string>
+    <string name="yil_ay_gun">YYYY/AA/GG</string>
 
     <string name="hakkimda">Hakkımda</string>
     <string name="email">Email</string>
