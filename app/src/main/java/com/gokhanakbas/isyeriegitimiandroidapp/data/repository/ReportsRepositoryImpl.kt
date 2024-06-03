@@ -1,5 +1,6 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.repository
 
+import androidx.compose.runtime.MutableState
 import arrow.core.Either
 import com.gokhanakbas.isyeriegitimiandroidapp.data.mapper.toNetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.data.remote.ReportsApi
@@ -11,7 +12,7 @@ import javax.inject.Inject
 class ReportsRepositoryImpl @Inject constructor(private val reportsApi: ReportsApi) :
     ReportsRepository {
 
-    override suspend fun getReports(student_no: String): Either<NetworkError, List<Report>> {
+    override suspend fun getReports(student_no: String): Either<NetworkError, MutableState<ArrayList<Report>>> {
         return Either.catch {
             reportsApi.getReports(student_no)
         }.mapLeft {

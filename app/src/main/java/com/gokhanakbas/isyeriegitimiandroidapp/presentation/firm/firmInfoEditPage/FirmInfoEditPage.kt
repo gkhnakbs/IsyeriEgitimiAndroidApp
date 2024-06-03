@@ -197,7 +197,7 @@ private fun FirmInfoEditPageContent(
                     unfocusedBorderColor = GaziKoyuMavi,
                     focusedBorderColor = GaziKoyuMavi,
                 ), minLines = 5,
-                label = { Text(text = stringResource(id = R.string.hakkimda)) }
+                label = { Text(text = stringResource(id = R.string.firma_hakkinda)) }
             )
 
             OutlinedTextField(

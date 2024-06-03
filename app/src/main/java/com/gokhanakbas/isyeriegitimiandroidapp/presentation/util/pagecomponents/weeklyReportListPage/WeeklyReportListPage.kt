@@ -53,6 +53,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.Dele
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -91,7 +92,6 @@ fun WeeklyReportListPageContent(
     val report_list = state.report_list
 
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -105,15 +105,16 @@ fun WeeklyReportListPageContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(
-                count = report_list.count(),
+                count = report_list.value.count(),
                 key = {
-                    report_list[it].id
+                    report_list.value[it].id
                 },
                 itemContent = {
-                    val report_object = report_list[it]
+                    val report_object = report_list.value[it]
                     WeeklyReportCardContent(
                         navController = navController,
                         report = report_object,
+                        report_list = report_list,
                         viewModel = viewModel
                     )
                 }
@@ -141,6 +142,7 @@ fun WeeklyReportListPageContent(
 fun WeeklyReportCardContent(
     navController: NavController,
     report: Report,
+    report_list : MutableState<ArrayList<Report>>,
     viewModel: WeeklyReportListPageViewModel
 ) {
 
@@ -155,7 +157,13 @@ fun WeeklyReportCardContent(
     LaunchedEffect(key1 = deleteReportChoice.value) {
         if (deleteReportChoice.value) {
             CoroutineScope(Dispatchers.IO).launch {
-                viewModel.deleteWeeklyReport(report.report_id)
+                deleteReportChoice.value=false
+                val job=viewModel.deleteWeeklyReport(report.report_id)
+                if(job.await()){
+                    report_list.value.remove(report)
+                }else{
+                    Event.Toast("Failed")
+                }
             }
         }
     }

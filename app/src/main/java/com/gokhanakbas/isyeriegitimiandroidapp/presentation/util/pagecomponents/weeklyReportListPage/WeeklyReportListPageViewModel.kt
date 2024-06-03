@@ -54,6 +54,7 @@ class WeeklyReportListPageViewModel @Inject constructor(private val reportsRepos
             _state.update {
                 it.copy(isLoading = true)
             }
+            delay(2000)
             val result=reportsRepository.deleteWeeklyReport(report_id)
             _state.update {
                 it.copy(isLoading = false)
@@ -69,7 +70,7 @@ class WeeklyReportListPageViewModel @Inject constructor(private val reportsRepos
                 is Either.Right ->{
                     if (result.value){
                         _state.update {
-                            it.copy(deletedSuccesfully = false)
+                            it.copy(deletedSuccesfully = true)
                         }
                         true
                     }

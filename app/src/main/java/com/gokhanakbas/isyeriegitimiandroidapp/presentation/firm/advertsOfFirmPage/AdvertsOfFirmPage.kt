@@ -242,6 +242,7 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
         LaunchedEffect(key1 = deleteQuestionState.value) {
             if (deleteQuestionResultState.value){
                 CoroutineScope(Dispatchers.IO).launch {
+                    deleteQuestionResultState.value=false
                     val job=viewModel.deleteAdvert(advert_id = willDeleteAdvert.value!!.advert_id)
                     if (job.await()){
                         advertList.value.remove(willDeleteAdvert.value)

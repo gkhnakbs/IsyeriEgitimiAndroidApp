@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -62,7 +63,11 @@ import com.google.gson.Gson
 var studentIdForTask = 1
 
 @Composable
-fun LecturerGroupsPage(paddingValues: PaddingValues, navController: NavController,viewModel: LecturerGroupsPageViewModel = hiltViewModel()) {
+fun LecturerGroupsPage(
+    paddingValues: PaddingValues,
+    navController: NavController,
+    viewModel: LecturerGroupsPageViewModel = hiltViewModel()
+) {
 
     LaunchedEffect(Unit) {
         viewModel.getGroups("1")
@@ -79,7 +84,11 @@ fun LecturerGroupsPage(paddingValues: PaddingValues, navController: NavControlle
 }
 
 @Composable
-fun LecturerGroupsPageContent(navController: NavController, paddingValues: PaddingValues,state: LecturerGroupsPageState) {
+fun LecturerGroupsPageContent(
+    navController: NavController,
+    paddingValues: PaddingValues,
+    state: LecturerGroupsPageState
+) {
 
     val studentListOf = emptyList<Student>()
 
@@ -88,7 +97,7 @@ fun LecturerGroupsPageContent(navController: NavController, paddingValues: Paddi
     LoadingDialog(isLoading = state.isLoading)
 
     val alertDialogOfStudentList = remember { mutableStateOf(false) }
-    val studentTaskTrackingPageState = remember { mutableStateOf(false) }
+
 
     var index = 0
 
@@ -161,30 +170,10 @@ fun LecturerGroupsPageContent(navController: NavController, paddingValues: Paddi
             AlertDialogOfStudentList(
                 group = groupList[index],
                 alertDialogOfStudentList = alertDialogOfStudentList,
-                studentTaskTrackingPageState = studentTaskTrackingPageState,
                 navController = navController
             )
         }
-        if (studentTaskTrackingPageState.value) {
-            StudentTaskTracking(
-                student = studentListOf[1],
-                studentTrackingState = studentTaskTrackingPageState
-            )
-        }
 
-        OutlinedButton(
-            onClick = {
-                //Grup olusturma
-
-            }, colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Green,
-                contentColor = Color.White
-            ), shape = RoundedCornerShape(10.dp), modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(15.dp)
-        ) {
-            Text(text = stringResource(id = R.string.grub_olustur), fontSize = 20.sp)
-        }
     }
 
 }
@@ -195,9 +184,13 @@ fun LecturerGroupsPageContent(navController: NavController, paddingValues: Paddi
 fun AlertDialogOfStudentList(
     group: Group,
     alertDialogOfStudentList: MutableState<Boolean>,
-    studentTaskTrackingPageState: MutableState<Boolean>,
     navController: NavController
 ) {
+    /*val studentTaskTrackingPageState = remember { mutableStateOf(false) }
+    val clickedStudent = remember {
+        mutableIntStateOf(0)
+    }*/
+
     BasicAlertDialog(
         onDismissRequest = { alertDialogOfStudentList.value = false }, modifier = Modifier.clip(
             RoundedCornerShape(20.dp)
@@ -238,8 +231,8 @@ fun AlertDialogOfStudentList(
                 items(
                     count = group.studentList.size,
                     key = { group.studentList[it].id }
-                ) {
-                    val student = group.studentList[it]
+                ) { index ->
+                    val student = group.studentList[index]
                     Card(
                         modifier = Modifier
                             .padding(5.dp)
@@ -274,13 +267,17 @@ fun AlertDialogOfStudentList(
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
+                                horizontalArrangement = Arrangement.End
                             ) {
                                 OutlinedButton(
                                     onClick = {
                                         //Ogrenciyi gosterecek
                                         alertDialogOfStudentList.value = false
-                                        navController.navigate(Screen.StudentPage.passNavigate(student.student_no))
+                                        navController.navigate(
+                                            Screen.StudentPage.passNavigate(
+                                                student.student_no
+                                            )
+                                        )
                                     }, colors = ButtonDefaults.outlinedButtonColors(
                                         containerColor = Color.Green,
                                         contentColor = Color.White
@@ -288,20 +285,21 @@ fun AlertDialogOfStudentList(
                                 ) {
                                     Text(text = stringResource(id = R.string.ogrenciyi_goruntule))
                                 }
-                                OutlinedButton(
+                                /*OutlinedButton(
                                     onClick = {
                                         //Ogrenciyi gorevlerini gosterecek onun için burada global değişken olan studentIdForTask değerini değiştirecek
                                         studentTaskTrackingPageState.value = true
-
+                                        clickedStudent.value = index
                                     }, colors = ButtonDefaults.outlinedButtonColors(
                                         containerColor = GaziAcikMavi,
                                         contentColor = Color.White
                                     )
                                 ) {
                                     Text(text = stringResource(id = R.string.ogrencinin_gorevlerini_goruntule))
-                                }
+                                }*/
 
                             }
+                            Spacer(modifier = Modifier.height(5.dp))
                         }
 
 
@@ -311,22 +309,31 @@ fun AlertDialogOfStudentList(
             }
         }
     }
+    /*
+    if (studentTaskTrackingPageState.value) {
+        StudentTaskTracking(
+            student = group.studentList[clickedStudent.value],
+            studentTrackingState = studentTaskTrackingPageState
+        )
+    }*/
 }
 
-
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentTaskTracking(student: Student, studentTrackingState: MutableState<Boolean>) {
     BasicAlertDialog(
-        onDismissRequest = { },
+        onDismissRequest = { studentTrackingState.value = false },
         modifier = Modifier
             .size(500.dp, 600.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(Color.White)
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -334,7 +341,7 @@ fun StudentTaskTracking(student: Student, studentTrackingState: MutableState<Boo
             ) {
                 Row(modifier = Modifier.weight(0.7f)) {
                     Text(
-                        text = "${student.student_name} adlı kişinin ${student.student_workPlace} adlı işyerindeki görevleri",
+                        text = "${student.student_name} adlı kişinin ${student.student_workPlace.firm_name} adlı işyerindeki görevleri",
                         fontSize = 20.sp
                     )
                 }
@@ -433,9 +440,4 @@ fun StudentTaskTracking(student: Student, studentTrackingState: MutableState<Boo
         }
     }
 }
-
-        
-        
-        
-        
-        
+*/

@@ -169,7 +169,7 @@ fun CommissionEntryPageContent(
                     value = tf_commissionPassword.value,
                     onValueChange = {
                         tf_commissionPassword.value = it
-                        errorState1.value = it.trim().length >= 5
+                        errorState1.value = it.trim().length < 5
                     },
                     label = { Text(text = stringResource(id = R.string.komisyon_parola)) },
                     supportingText = { Text(text = stringResource(id = R.string.zorunlu_yazisi_tf)) },
@@ -231,6 +231,7 @@ fun CommissionEntryPageContent(
                                         }
                                     } else {
                                         Event.Toast("Girilen Bilgiler Yanlış")
+                                        println("Girilen Bilgiler Yanlış")
                                     }
 
                                 }

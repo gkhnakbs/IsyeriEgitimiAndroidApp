@@ -1,5 +1,7 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.data.remote
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
 import java.sql.Date
 import javax.inject.Inject
@@ -8,13 +10,13 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
     val connection = databaseConnection.connection
 
-    fun getReports(student_no: String): List<Report> {
-        val report_list = arrayListOf<Report>()
+    fun getReports(student_no: String): MutableState<ArrayList<Report>> {
+        val report_list = mutableStateOf(arrayListOf<Report>())
         val statement = connection.createStatement()
         val result =
             statement.executeQuery("select * from haftalik_rapor where ogrenci_no=$student_no")
         while (result.next()) {
-            report_list.add(
+            report_list.value.add(
                 Report(
                     report_id = result.getBigDecimal("rapor_id").toString(),
                     report_description = result.getString("rapor_aciklama"),
@@ -54,7 +56,7 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
     fun deleteWeeklyReport(report_id: String): Boolean {
         val statement = connection.createStatement()
-        val result = statement.executeUpdate("delete haftalik_rapor where rapor_id='$report_id'")
+        val result = statement.executeUpdate("delete from haftalik_rapor where rapor_id='$report_id'")
         return result > 0
     }
 

@@ -71,8 +71,6 @@ fun CommissionPageContent(navController: NavController,state: CommissionPageStat
     val tf_commissionName = commissinObject.commission_name
     val tf_commissionFaculty = commissinObject.commission_faculty
     val tf_commissionDepartment = commissinObject.commission_department
-    val tf_commissionDegree = commissinObject.commission_degree
-    val tf_commissionSpecificField =commissinObject.commission_specificField
 
     Column(
         modifier = Modifier
@@ -151,7 +149,7 @@ fun CommissionPageContent(navController: NavController,state: CommissionPageStat
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = tf_commissionDegree+tf_commissionName,
+                            text = tf_commissionName,
                             color = Color.White,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
@@ -231,38 +229,8 @@ fun CommissionPageContent(navController: NavController,state: CommissionPageStat
                                     .weight(0.5f)
                                     .padding(10.dp)
                             )
-                            OutlinedTextField(
-                                value = tf_commissionSpecificField,
-                                onValueChange = {  },
-                                //singleLine = true,
-                                readOnly = true,
-                                label = { Text(text = stringResource(id = R.string.bolum)) },
-                                textStyle = TextStyle.Default.copy(fontSize = 18.sp),
-                                modifier = Modifier
-                                    .weight(0.5f)
-                                    .padding(10.dp)
-                            )
                         }
                     }
-
-
-                }
-                Text(
-                    text = stringResource(id = R.string.bilgilerim),
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(10.dp),
-                    textDecoration = TextDecoration.Underline
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                ) {
-                    Text(
-                        text = commissinObject.commission_info,
-                        fontSize = 18.sp
-                    )
                 }
             }
         }

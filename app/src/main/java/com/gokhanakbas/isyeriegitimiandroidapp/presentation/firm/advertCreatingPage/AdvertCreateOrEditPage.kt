@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -53,6 +55,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -248,7 +252,10 @@ private fun AdvertCreateOrEditPageContent(
                 .padding(15.dp)
                 , verticalAlignment = Alignment.CenterVertically , horizontalArrangement = Arrangement.Start
             ) {
-                IconButton(onClick = { datePickerOpeningState.value = true }) {
+                IconButton(onClick = {
+                    focusManager.clearFocus()
+                    datePickerOpeningState.value = true
+                }) {
                     Icon(imageVector = Icons.Default.DateRange, contentDescription = "",modifier=Modifier.size(32.dp).align(Alignment.CenterVertically))
                 }
                 Spacer(modifier = Modifier.width(10.dp))
@@ -279,7 +286,10 @@ private fun AdvertCreateOrEditPageContent(
                 .fillMaxWidth()
                 .padding(15.dp), verticalAlignment = Alignment.CenterVertically , horizontalArrangement = Arrangement.Start
                 ) {
-                IconButton(onClick = { datePickerOpeningState1.value = true }) {
+                IconButton(onClick = {
+                    focusManager.clearFocus()
+                    datePickerOpeningState1.value = true
+                }) {
                     Icon(imageVector = Icons.Default.DateRange, contentDescription = "",modifier=Modifier.size(32.dp).align(Alignment.CenterVertically))
                 }
                 Spacer(modifier = Modifier.width(10.dp))
@@ -351,6 +361,8 @@ private fun AdvertCreateOrEditPageContent(
                         unfocusedBorderColor = GaziKoyuMavi,
                         focusedBorderColor = GaziKoyuMavi,
                     ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Text),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     label = { Text(text = stringResource(id = R.string.ilan_post_baslik)) },
                     isError = postTitleError.value,
                     supportingText = { Text(text = stringResource(id = R.string.zorunlu_yazisi_tf)) }

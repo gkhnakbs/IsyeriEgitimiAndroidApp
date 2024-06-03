@@ -1,12 +1,13 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.domain.repository
 
+import androidx.compose.runtime.MutableState
 import arrow.core.Either
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
 
 interface ReportsRepository {
 
-    suspend fun getReports(student_no : String) : Either<NetworkError,List<Report>>
+    suspend fun getReports(student_no : String) : Either<NetworkError,MutableState<ArrayList<Report>>>
 
     suspend fun addWeeklyReports(report: Report,student_no: String) : Either<NetworkError,Boolean>
 
