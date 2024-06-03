@@ -27,12 +27,11 @@ class StudentEntryPageViewModel @Inject constructor(private val studentsReposito
     private val _state = MutableStateFlow(StudentEntryPageState())
     val state = _state.asStateFlow()
 
-    suspend fun checkLoginCredentials(student_no:String,student_password : String) : Boolean {
+    suspend fun checkLoginCredentials(student_no:String,student_password : String) : Deferred<Boolean> {
         val resultState : Deferred<Boolean> =viewModelScope.async {
             _state.update {
                 it.copy(isLoading = true)
             }
-            delay(2000)
             val result=studentsRepository.login_student(student_no = student_no, student_password = student_password)
             _state.update {
                 it.copy(isLoading = false)
@@ -58,6 +57,6 @@ class StudentEntryPageViewModel @Inject constructor(private val studentsReposito
             }
 
         }
-        return resultState.await()
+        return resultState
     }
 }

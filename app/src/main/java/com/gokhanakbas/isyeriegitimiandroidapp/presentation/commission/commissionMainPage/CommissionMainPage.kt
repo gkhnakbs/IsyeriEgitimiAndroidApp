@@ -68,21 +68,18 @@ var lastPage = 1
 @Composable
 fun CommissionMainPage(
     navController: NavController,
-    commission_id: String,
     viewModel: CommissionMainPageViewModel = hiltViewModel(),
     sharedViewModel: SharedViewModel
 ) {
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getCommissionInformation(commission_id)
-    }
+    val commission=sharedViewModel.commission!!
 
     //Constants tanımlamaları
     Constants.USER_TYPE=Constants.COMMISSION
-    Constants.COMMISION_ID = commission_id
-
+    Constants.COMMISION_ID = commission.commission_id
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     state.commission=sharedViewModel.commission!!
+
     CommissionPageContent(navController = navController, state = state)
 
 
@@ -182,7 +179,7 @@ fun CommissionPageContent(navController: NavController, state: CommissionMainPag
                         )
                         Spacer(modifier = Modifier.size(5.dp, 0.dp))
                         Text(
-                            text = commissionObject.commission_degree + commissionObject.commission_name,
+                            text = commissionObject.commission_name,
                             fontSize = 18.sp,
                             color = Color.White
                         )
@@ -271,19 +268,19 @@ fun CommissionPageContent(navController: NavController, state: CommissionMainPag
 
             4 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
                 Column {
-
+                    //Grup oluşturma silme işlemlerini yapması için gereken sayfayı buraya ekle
                 }
             }
 
             5 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
                 Column {
-
+                    //Form işlemleri için bu sayfayı kullan
                 }
             }
 
             6 -> ScaffoldComp(onMenuIconClick = { navScope.launch { navDrawerState.open() } }) {
                 Column {
-
+                    //Anket işlemleri için bu sayfayı kullan
                 }
             }
 

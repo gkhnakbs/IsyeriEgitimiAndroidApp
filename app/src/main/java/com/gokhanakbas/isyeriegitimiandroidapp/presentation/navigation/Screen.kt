@@ -17,12 +17,7 @@ sealed class Screen(var route: String) {
     data object LecturerMainPage : Screen("lecturerMainPage")
 
     //Aşağıdaki komisyonun passNavigate fonksiyonu komisyona gelince düzeltilecek
-    data object CommissionMainPage : Screen("commissionMainPage/{commission_id}") {
-        fun passNavigate(commission_id: String): String {
-            route = "commissionMainPage/$commission_id"
-            return route
-        }
-    }
+    data object CommissionMainPage : Screen("commissionMainPage")
 
     data object FirmPage : Screen("firmPage/{firm_id}") {
         fun passNavigate(firm_id: String): String {

@@ -4,6 +4,6 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Commission
 
 data class CommissionEntryPageState(
     var isLoading: Boolean = false,
-    var commissionList : List<Commission> = emptyList(),
+    var loginSuccessfullyCommission : Commission? = null,
     var error : String? =null
 )

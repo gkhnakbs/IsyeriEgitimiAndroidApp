@@ -70,16 +70,8 @@ fun AppNavGraph(
             LecturerMainPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
-        composable(
-            Screen.CommissionMainPage.route,
-            arguments = listOf(
-                navArgument("commission_id") {
-                    type = NavType.StringType
-                }
-            )
-        ) {
-            val commission_id = it.arguments?.getString("commission_id")!!
-            CommissionMainPage(navController = navController, commission_id, sharedViewModel = sharedViewModel)
+        composable(Screen.CommissionMainPage.route) {
+            CommissionMainPage(navController = navController, sharedViewModel = sharedViewModel)
         }
 
         composable(

@@ -213,16 +213,14 @@ private fun StudentEntryPageContent(
                 }
                 OutlinedButton(
                     onClick = {
-                      /*  var studentValided = ""
-                        var studentValid : Student?=null*/
                         if (tf_studentNumber.value.trim().isNotEmpty() || tf_studentPassword.value.trim().isNotEmpty()) {
                             if (!errorState.value && !errorState1.value) {
 
-                                focusManager.clearFocus() //Herhangi bir hata alınırsa tekrar klavyeyi açmasın diye
+                                focusManager.clearFocus() //Herhangi bir hata alınırsa tekrar klavyeyi açmasın diye baştan kapattık.
 
                                 CoroutineScope(Dispatchers.IO).launch {
 
-                                    val job=async { viewModel.checkLoginCredentials(tf_studentNumber.value.trim(),tf_studentPassword.value.trim())}
+                                    val job=viewModel.checkLoginCredentials(tf_studentNumber.value.trim(),tf_studentPassword.value.trim())
 
                                     if(job.await()){
                                             withContext(Dispatchers.Main){

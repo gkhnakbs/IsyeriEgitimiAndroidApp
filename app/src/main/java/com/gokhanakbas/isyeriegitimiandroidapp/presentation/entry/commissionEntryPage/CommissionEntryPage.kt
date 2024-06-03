@@ -45,6 +45,11 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun CommissionEntryPage(
@@ -53,18 +58,22 @@ fun CommissionEntryPage(
     sharedViewModel: SharedViewModel
 ) {
 
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.getCommissions()
-    }
-
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    CommissionEntryPageContent(navController = navController, state = state,sharedViewModel = sharedViewModel )
+    CommissionEntryPageContent(
+        navController = navController,
+        viewModel = viewModel,
+        sharedViewModel = sharedViewModel
+    )
 
 }
 
 @Composable
-fun CommissionEntryPageContent(navController: NavController, state: CommissionEntryPageState,sharedViewModel: SharedViewModel) {
+fun CommissionEntryPageContent(
+    navController: NavController,
+    viewModel: CommissionEntryPageViewModel,
+    sharedViewModel: SharedViewModel
+) {
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val focusRequester = remember {
         FocusRequester()
@@ -83,7 +92,7 @@ fun CommissionEntryPageContent(navController: NavController, state: CommissionEn
     val tf_commissionNo = remember { mutableStateOf("") }
     val tf_commissionPassword = remember { mutableStateOf("") }
     val errorState = remember { mutableStateOf(false) }
-
+    val errorState1 = remember { mutableStateOf(false) }
 
     Column {
         Spacer(modifier = Modifier.height(10.dp))
@@ -158,7 +167,10 @@ fun CommissionEntryPageContent(navController: NavController, state: CommissionEn
                 )
                 OutlinedTextField(
                     value = tf_commissionPassword.value,
-                    onValueChange = { tf_commissionPassword.value = it },
+                    onValueChange = {
+                        tf_commissionPassword.value = it
+                        errorState1.value = it.trim().length >= 5
+                    },
                     label = { Text(text = stringResource(id = R.string.komisyon_parola)) },
                     supportingText = { Text(text = stringResource(id = R.string.zorunlu_yazisi_tf)) },
                     prefix = {
@@ -174,6 +186,7 @@ fun CommissionEntryPageContent(navController: NavController, state: CommissionEn
                         focusedBorderColor = GaziKoyuMavi,
                         unfocusedBorderColor = GaziKoyuMavi
                     ),
+                    isError = errorState1.value,
                     modifier = Modifier.requiredWidth(300.dp),
                     singleLine = true
                 )
@@ -197,10 +210,36 @@ fun CommissionEntryPageContent(navController: NavController, state: CommissionEn
                 OutlinedButton(
                     onClick = {
                         //Komisyon Anasayfasina yonlendirilecek
-                        val commission_id = ""
+                        if (tf_commissionNo.value.trim()
+                                .isNotEmpty() || tf_commissionPassword.value.trim().isNotEmpty()
+                        ) {
+                            if (!errorState.value && !errorState1.value) {
 
-                        //sharedViewModel.addCommission()   bu işlemi yeri gelince yapacaksın şuan giriş kontrolü yok.
-                        navController.navigate(Screen.CommissionMainPage.passNavigate(commission_id))
+                                focusManager.clearFocus() //Herhangi bir hata alınırsa tekrar klavyeyi açmasın diye baştan kapattık.
+
+                                CoroutineScope(Dispatchers.IO).launch {
+
+                                    val job = viewModel.checkLoginCredentials(
+                                        tf_commissionNo.value.trim(),
+                                        tf_commissionPassword.value.trim()
+                                    )
+
+                                    if (job.await()) {
+                                        withContext(Dispatchers.Main) {
+                                            sharedViewModel.addCommission(state.loginSuccessfullyCommission)
+                                            navController.navigate(Screen.CommissionMainPage.route)
+                                        }
+                                    } else {
+                                        Event.Toast("Girilen Bilgiler Yanlış")
+                                    }
+
+                                }
+
+                            }
+                        } else {
+                            errorState.value = true
+                            errorState1.value = true
+                        }
                     },
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier.size(110.dp, 45.dp),
