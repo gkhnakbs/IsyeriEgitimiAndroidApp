@@ -12,9 +12,9 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
     fun getReports(student_no: String): MutableState<ArrayList<Report>> {
         val report_list = mutableStateOf(arrayListOf<Report>())
-        val statement = connection.createStatement()
-        val result =
-            statement.executeQuery("select * from haftalik_rapor where ogrenci_no=$student_no")
+        val statement = connection.prepareStatement("select * from haftalik_rapor where ogrenci_no= ? ")
+        statement.setBigDecimal(1,student_no.toBigDecimal())
+        val result = statement.executeQuery()
         while (result.next()) {
             report_list.value.add(
                 Report(
@@ -30,9 +30,9 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
     fun getReportsInformation(report_id: String): Report {
         val report_object = Report(report_id, "", "","")
-        val statement = connection.createStatement()
-        val result =
-            statement.executeQuery("select * from haftalik_rapor where rapor_id=$report_id")
+        val statement = connection.prepareStatement("select * from haftalik_rapor where rapor_id= ? ")
+        statement.setBigDecimal(1,report_id.toBigDecimal())
+        val result =statement.executeQuery()
         while (result.next()) {
             report_object.report_description = result.getString("rapor_aciklama")
             report_object.report_date = result.getString("rapor_tarih")
@@ -43,20 +43,26 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
 
     fun addWeeklyReport(report: Report, student_no: String): Boolean {
-        val statement = connection.createStatement()
-        val result = statement.executeUpdate("Insert into haftalik_rapor(rapor_aciklama,ogrenci_no) VALUES('${report.report_description}',$student_no)")
+        val statement = connection.prepareStatement("Insert into haftalik_rapor(rapor_aciklama,ogrenci_no) VALUES(?,?)")
+        statement.setString(1,report.report_description)
+        statement.setBigDecimal(2,student_no.toBigDecimal())
+        val result = statement.executeUpdate()
         return result > 0
     }
 
     fun updateWeeklyReport(report: Report): Boolean {
-        val statement = connection.prepareStatement("Update haftalik_rapor set rapor_aciklama='${report.report_description}' , rapor_tarih='${report.report_date}' where rapor_id='${report.report_id}'")
+        val statement = connection.prepareStatement("Update haftalik_rapor set rapor_aciklama= ? , rapor_tarih= ? where rapor_id= ? ")
+        statement.setString(1,report.report_description)
+        statement.setString(2,report.report_date)
+        statement.setBigDecimal(3,report.report_id.toBigDecimal())
         val result=statement.executeUpdate()
         return result > 0
     }
 
     fun deleteWeeklyReport(report_id: String): Boolean {
-        val statement = connection.createStatement()
-        val result = statement.executeUpdate("delete from haftalik_rapor where rapor_id='$report_id'")
+        val statement = connection.prepareStatement("delete from haftalik_rapor where rapor_id= ? ")
+        statement.setBigDecimal(1,report_id.toBigDecimal())
+        val result = statement.executeUpdate()
         return result > 0
     }
 

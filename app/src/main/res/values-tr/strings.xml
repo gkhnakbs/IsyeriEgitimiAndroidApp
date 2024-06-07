@@ -124,6 +124,8 @@
 
     <string name="hakkimda">Hakkımda</string>
     <string name="email">Email</string>
+    <string name="telefon_no">Telefon No</string>
+    <string name="adres">Adres</string>
 
     <string name="senden_beklenenler">Senden Beklenenler</string>
 

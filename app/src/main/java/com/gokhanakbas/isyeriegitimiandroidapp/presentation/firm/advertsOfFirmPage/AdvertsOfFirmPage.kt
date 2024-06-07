@@ -1,5 +1,6 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertsOfFirmPage
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +40,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -204,7 +207,7 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                                     indexOfAdvert.intValue=index
                                 }, colors = ButtonDefaults.buttonColors(
                                     containerColor = GaziAcikMavi,
-                                    contentColor = Color.White
+                                    contentColor = Color.Black
                                 ), shape = RoundedCornerShape(10.dp)
                             ) {
                                 Text(text = stringResource(id = R.string.basvuranlari_Goster))
@@ -323,7 +326,7 @@ fun AlertDialogOfInterviewerList(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(
-                                modifier = Modifier.weight(0.8f),
+                                modifier = Modifier.weight(0.6f),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Start
                             ) {
@@ -332,10 +335,10 @@ fun AlertDialogOfInterviewerList(
                                     contentDescription = "Student Image in Interviewer List"
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
-                                Text(text = interviewer.interviewer_student_name, fontWeight = FontWeight.Bold)
+                                Text(text = interviewer.interviewer_student_name, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis)
                             }
                             Row(
-                                modifier=Modifier.weight(0.2f),
+                                modifier=Modifier.weight(0.4f),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.End
                             ) {
@@ -344,12 +347,12 @@ fun AlertDialogOfInterviewerList(
                                         //Ogrenciyi gosterecek
                                         alertDialogOfInterviewers.value = false
                                         navController.navigate(Screen.StudentPage.passNavigate(student_no = interviewer.interviewer_student_id))
+
                                     }, colors = ButtonDefaults.outlinedButtonColors(
-                                        containerColor = Color.Green,
-                                        contentColor = Color.White
-                                    ), shape = RoundedCornerShape(20.dp)
+                                        contentColor = Color.Black
+                                    ), border = BorderStroke(0.5.dp,Color.Green),
                                 ) {
-                                    Text(text = stringResource(id = R.string.ogrenciyi_goruntule))
+                                    Text(text = stringResource(id = R.string.ogrenciyi_goruntule), overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
                                 }
                             }
                         }

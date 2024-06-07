@@ -125,9 +125,9 @@
     <string name="yil_ay_gun">YYYY/MM/DD</string>
 
     <string name="hakkimda">About Me</string>
-
-
     <string name="email">Email</string>
+    <string name="telefon_no">Phone Number</string>
+    <string name="adres">Address</string>
 
     <string name="senden_beklenenler">What Is Expected Of You</string>
 

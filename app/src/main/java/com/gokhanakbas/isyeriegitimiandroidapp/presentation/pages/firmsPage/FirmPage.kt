@@ -1,8 +1,11 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.firmsPage
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,9 +20,14 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,15 +42,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPage.lastPage
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -56,12 +67,16 @@ fun FirmPage(
 
     val state by firmPageViewModel.state.collectAsState()
 
-    if(Constants.USER_TYPE!=Constants.FIRM){
+    if (Constants.USER_TYPE != Constants.FIRM) {
         LaunchedEffect(key1 = firmPageViewModel) {
             firmPageViewModel.getFirmInformation(firm_id)
+            firmPageViewModel.getFirmAdverts(firm_id)
         }
-    }else{
-        state.firm=sharedViewModel.firm!!
+    } else {
+        LaunchedEffect(key1 = firmPageViewModel) {
+            firmPageViewModel.getFirmAdverts(firm_id)
+        }
+        state.firm = sharedViewModel.firm!!
     }
 
     FirmPageContent(navController = navController, firmPageState = state)
@@ -79,7 +94,8 @@ fun FirmPageContent(navController: NavController, firmPageState: FirmPageState) 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .verticalScroll(scrollState)
+            .background(GaziAcikMavi)
     ) {
         Column(
             modifier = Modifier
@@ -95,7 +111,6 @@ fun FirmPageContent(navController: NavController, firmPageState: FirmPageState) 
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(scrollState)
                         .clip(RoundedCornerShape(20.dp))
                         .background(Color.White)
                         .padding(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 20.dp)
@@ -125,6 +140,62 @@ fun FirmPageContent(navController: NavController, firmPageState: FirmPageState) 
                         Text(
                             text = firmObject.firm_info
                         )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.ilanlar),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    firmPageState.firmAdverts.value.forEach { advert ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp)
+                                .clickable {
+                                    if (Constants.USER_TYPE == Constants.FIRM) {
+                                        lastPage = 4
+                                        navController.navigate(Screen.FirmMainPage.route)
+                                    } else {
+                                        navController.navigate(
+                                            Screen.AdvertPage.passNavigate(
+                                                advert.advert_id
+                                            )
+                                        )
+                                    }
+                                },
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.White,
+                                contentColor = Color.Black
+                            ),
+                            border = BorderStroke(0.5.dp, GaziKoyuMavi),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = advert.advert_title,
+                                    modifier = Modifier.weight(0.8f),
+                                    overflow = TextOverflow.Ellipsis,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = "",
+                                )
+                            }
+                        }
                     }
                 }
             }

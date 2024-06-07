@@ -6,9 +6,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import arrow.core.prependTo
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.AppliedAdvert
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Firm
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Interviewer
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
+import java.sql.Date
 import javax.inject.Inject
 
 class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseConnection) {
@@ -43,9 +45,9 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
     @SuppressLint("MutableCollectionMutableState")
     fun getFirmsAdverts(firm_id: String): MutableState<ArrayList<Advert>> {
         val advertList = mutableStateOf(arrayListOf<Advert>())
-        val statement = connection.createStatement()
-        val result =
-            statement.executeQuery("select i.*,f.* from ilan as i JOIN firma as f ON f.firma_id=i.firma_id where f.firma_id='$firm_id'")
+        val statement = connection.prepareStatement("select i.*,f.* from ilan as i JOIN firma as f ON f.firma_id=i.firma_id where f.firma_id=  ? ")
+        statement.setBigDecimal(1,firm_id.toBigDecimal())
+        val result = statement.executeQuery()
         while (result.next()) {
             advertList.value.add(
                 Advert(
@@ -67,8 +69,9 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
     private fun getFirmAdvertsInterviewers(advert_id: String) : MutableState<ArrayList<Interviewer>>{
         val interviewerList= mutableStateOf(arrayListOf<Interviewer>())
-        val statement = connection.createStatement()
-        val result=statement.executeQuery("select * from ogrenci as o JOIN basvuru as b ON b.ogrenci_no=o.ogrenci_no where b.ilan_id='$advert_id'")
+        val statement = connection.prepareStatement("select * from ogrenci as o JOIN basvuru as b ON b.ogrenci_no=o.ogrenci_no where b.ilan_id= ? ")
+        statement.setBigDecimal(1,advert_id.toBigDecimal())
+        val result=statement.executeQuery()
         while (result.next()){
             interviewerList.value.add(
                 Interviewer(
@@ -87,9 +90,9 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
     @SuppressLint("MutableCollectionMutableState")
     fun getAdvertsInformation(advert_id: String): Advert {
         lateinit var advert: Advert
-        val statement = connection.createStatement()
-        val result =
-            statement.executeQuery("select * from ilan as i JOIN firma as f ON f.firma_id=i.firma_id where i.ilan_id='$advert_id'")
+        val statement = connection.prepareStatement("select * from ilan as i JOIN firma as f ON f.firma_id=i.firma_id where i.ilan_id= ? ")
+        statement.setBigDecimal(1,advert_id.toBigDecimal())
+        val result = statement.executeQuery()
         while (result.next()) {
             advert = Advert(
                 result.getBigDecimal("ilan_id").toString(),
@@ -103,10 +106,10 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
                     result.getBigDecimal("firma_id").toString(),
                     result.getString("firma_ad"),
                     result.getString("firma_sektor"),
-                    result.getString("firma_hakkinda"),
-                    "",
-                    result.getString("firma_eposta"),
-                    result.getString("firma_adres"),
+                    result.getString("firma_hakkinda") ?: "",
+                    result.getString("firma_logo") ?: "",
+                    result.getString("firma_eposta") ?: "",
+                    result.getString("firma_adres") ?: "",
                     "",
                     ""
                 ),
@@ -119,14 +122,14 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
     }
 
     @SuppressLint("MutableCollectionMutableState")
-    fun getAppliedAdverts(student_no: String): List<Advert> {
-        val advertList = arrayListOf<Advert>()
-        val statement = connection.createStatement()
-        val result =
-            statement.executeQuery("select i.*,f.* from basvuru as b join ilan as i on b.ilan_id=i.ilan_id join firma as f on i.firma_id=f.firma_id where b.ogrenci_no='$student_no'")
+    fun getAppliedAdverts(student_no: String): List<AppliedAdvert> {
+        val advertList = arrayListOf<AppliedAdvert>()
+        val statement = connection.prepareStatement("select i.*,f.* from basvuru as b join ilan as i on b.ilan_id=i.ilan_id join firma as f on i.firma_id=f.firma_id where b.ogrenci_no= ? ")
+        statement.setBigDecimal(1,student_no.toBigDecimal())
+        val result = statement.executeQuery()
         while (result.next()) {
             advertList.add(
-                Advert(
+                AppliedAdvert(
                     result.getBigDecimal("ilan_id").toString(),
                     result.getString("baslik"),
                     result.getString("aciklama"),
@@ -136,7 +139,8 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
                     result.getString("firma_ad"),
                     null,
                     mutableStateOf(arrayListOf()),
-                    result.getString("post_baslik")
+                    result.getString("post_baslik") ?: "",
+                    result.getString("basvuru_tarihi")
                 )
             )
         }
@@ -144,25 +148,28 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
     }
 
     fun deleteFromAppliedAdvert(advert_id: String, student_no: String): Boolean {
-        val statement = connection.createStatement()
-        val result =
-            statement.executeUpdate("delete from basvuru where ogrenci_no='$student_no' AND ilan_id='$advert_id'")
-
+        val statement = connection.prepareStatement("delete from basvuru where ogrenci_no= ? AND ilan_id= ? ")
+        statement.setBigDecimal(1,student_no.toBigDecimal())
+        statement.setBigDecimal(2,advert_id.toBigDecimal())
+        val result = statement.executeUpdate()
         return result > 0
     }
 
     fun applyToAdvert(advert_id: String, student_no: String): String {
-        val statement = connection.createStatement()
+        val statement = connection.prepareStatement("select count(*) from basvuru where ogrenci_no= ?  AND ilan_id= ? ")
         var sonuc =""
+        statement.setBigDecimal(1,student_no.toBigDecimal())
+        statement.setBigDecimal(2,advert_id.toBigDecimal())
         try {
 
-            val result1 = statement.executeQuery("select count(*) from basvuru where ogrenci_no=$student_no AND ilan_id=$advert_id")
+            val result1 = statement.executeQuery()
 
             while (result1.next()){
                 sonuc = if (result1.getInt(1) == 0) {
-                    val result =
-                        statement.executeUpdate("Insert into basvuru (ilan_id,ogrenci_no) VALUES($advert_id,$student_no)")
-
+                    val statement1 = connection.prepareStatement("Insert into basvuru (ilan_id,ogrenci_no) VALUES(?,?)")
+                    statement1.setBigDecimal(1,advert_id.toBigDecimal())
+                    statement1.setBigDecimal(2,student_no.toBigDecimal())
+                    val result = statement.executeUpdate()
                     if (result > 0) "Success" else "Failed"
                 } else {
                     "Already Applied"
@@ -178,24 +185,34 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
     }
 
     fun createAdvert(firm_id: String, advert: Advert): Boolean {
-        val statement = connection.createStatement()
-        val result = statement.executeUpdate(
-            "Insert into ilan (baslik,aciklama,baslangic_tarihi,bitis_tarihi,post_baslik,firma_id) " +
-                    " VALUES('${advert.advert_title}','${advert.advert_details}','${advert.advert_startDate}','${advert.advert_endDate}','${advert.advert_post_title}','$firm_id')"
-        )
+        val statement = connection.prepareStatement("Insert into ilan (baslik,aciklama,baslangic_tarihi,bitis_tarihi,post_baslik,firma_id) VALUES(?,?,?,?,?,?)")
+        statement.setString(1,advert.advert_title)
+        statement.setString(2,advert.advert_details)
+        statement.setDate(3,Date.valueOf(advert.advert_startDate))
+        statement.setDate(4,Date.valueOf(advert.advert_endDate))
+        statement.setString(5,advert.advert_post_title)
+        statement.setBigDecimal(6,firm_id.toBigDecimal())
+        val result = statement.executeUpdate()
         return result > 0
     }
 
 
     fun updateAdvert(advert: Advert) : Boolean{
-        val statement=connection.createStatement()
-        val result=statement.executeUpdate("update ilan set baslik='${advert.advert_title}' , aciklama='${advert.advert_details}' ,post_baslik='${advert.advert_post_title}' , baslangic_tarihi='${advert.advert_startDate}' , bitis_tarihi='${advert.advert_endDate}' where ilan_id='${advert.advert_id}' ")
+        val statement=connection.prepareStatement("update ilan set baslik= ? , aciklama= ?  ,post_baslik= ? , baslangic_tarihi= ? , bitis_tarihi= ? where ilan_id= ? ")
+        statement.setString(1,advert.advert_title)
+        statement.setString(2,advert.advert_details)
+        statement.setString(3,advert.advert_post_title)
+        statement.setDate(4,Date.valueOf(advert.advert_startDate))
+        statement.setDate(5,Date.valueOf(advert.advert_endDate))
+        statement.setBigDecimal(6,advert.advert_id.toBigDecimal())
+        val result=statement.executeUpdate()
         return result>0
     }
 
     fun deleteAdvert(advert_id :String) : Boolean{
-        val statement=connection.createStatement()
-        val result=statement.executeUpdate("delete from ilan where ilan_id= '$advert_id' ")
+        val statement=connection.prepareStatement("delete from ilan where ilan_id= ? ")
+        statement.setBigDecimal(1,advert_id.toBigDecimal())
+        val result=statement.executeUpdate()
         return result>0
     }
 

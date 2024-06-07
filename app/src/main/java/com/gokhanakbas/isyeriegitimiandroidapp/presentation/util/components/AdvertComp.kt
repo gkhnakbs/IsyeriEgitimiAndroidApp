@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.AppliedAdvert
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.appliedAdvertsListPage.AppliedAdvertsListPageViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
@@ -38,7 +39,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 @Composable
 fun AdvertComp(
     navController: NavController,
-    advert: Advert,
+    appliedAdvert: AppliedAdvert,
     viewModel: AppliedAdvertsListPageViewModel = hiltViewModel()
 ) {
 
@@ -67,7 +68,7 @@ fun AdvertComp(
         ) {
 
             Text(
-                text = advert.advert_title,
+                text = appliedAdvert.appliedAdvert_title,
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -81,7 +82,7 @@ fun AdvertComp(
                     .background(Color.LightGray)
             )
 
-            Text(text = advert.advert_firm_name, style = MaterialTheme.typography.titleMedium)
+            Text(text = appliedAdvert.appliedAdvert_firm_name, style = MaterialTheme.typography.titleMedium)
 
             Spacer(
                 modifier = Modifier
@@ -92,9 +93,9 @@ fun AdvertComp(
             )
 
             Text(
-                text = advert.advert_startDate + " - " + advert.advert_endDate,
+                text = appliedAdvert.appliedAdvert_applyDate,
                 style = MaterialTheme.typography.labelMedium.copy(
-                    Color.LightGray
+                    Color.Gray
                 )
             )
             Row(
@@ -102,24 +103,11 @@ fun AdvertComp(
                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End)
             ) {
                 OutlinedButton(onClick = {
-                    navController.navigate(Screen.AdvertPage.passNavigate(advert.advert_id))
+                    navController.navigate(Screen.AdvertPage.passNavigate(appliedAdvert.appliedAdvert_id))
                 }) {
                     Text(text = stringResource(id = R.string.ilana_git))
                 }
-
-                /*OutlinedButton(onClick = {
-                    deleteChoiceQuestion.value = true
-                }) {
-                    Text(text = stringResource(id = R.string.basvuruyu_sil))
-
-                }*/
             }
         }
     }
-
-
-   //DeleteFromAppliedQuestionComp(deleteChoiceQuestion = deleteChoiceQuestion,advert_id = advert.advert_id)
-
-
-
 }

@@ -90,14 +90,15 @@ fun StudentMainPage(
     val state by viewModel.state.collectAsStateWithLifecycle()
     state.student = sharedViewModel.student!!
 
-    StudentMainPageContent(navController = navController, studentObject =  sharedViewModel.student!!)
+    StudentMainPageContent(navController = navController, studentObject =  sharedViewModel.student!!,sharedViewModel=sharedViewModel)
 
 }
 
 @Composable
 private fun StudentMainPageContent(
     navController: NavController,
-    studentObject : Student
+    studentObject : Student,
+    sharedViewModel: SharedViewModel
 ) {
     val navDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navScope = rememberCoroutineScope()

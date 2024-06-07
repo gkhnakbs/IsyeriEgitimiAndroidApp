@@ -98,8 +98,10 @@ fun LecturerGroupsPageContent(
 
     val alertDialogOfStudentList = remember { mutableStateOf(false) }
 
+    val index= remember {
+        mutableStateOf(0)
+    }
 
-    var index = 0
 
     Box(
         modifier = Modifier
@@ -115,7 +117,7 @@ fun LecturerGroupsPageContent(
                 count = groupList.size,
                 key = { groupList[it].id },
             ) {
-                index = it
+                index.value = it
                 val groupObject = groupList[it]
                 Card(
                     modifier = Modifier
@@ -168,7 +170,7 @@ fun LecturerGroupsPageContent(
         }
         if (alertDialogOfStudentList.value) {
             AlertDialogOfStudentList(
-                group = groupList[index],
+                group = groupList[index.value],
                 alertDialogOfStudentList = alertDialogOfStudentList,
                 navController = navController
             )

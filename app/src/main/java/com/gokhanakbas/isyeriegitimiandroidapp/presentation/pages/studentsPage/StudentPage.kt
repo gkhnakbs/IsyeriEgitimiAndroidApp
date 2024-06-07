@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -113,6 +114,8 @@ fun StudentPageContent(
     val tf_studentWorkPlace = studentObject.student_workPlace.firm_name
     val tf_studentNo = studentObject.student_no
     val tf_studentMail = studentObject.student_mail
+    val tf_studentPhone = studentObject.student_phone
+    val tf_studentAddress = studentObject.student_address
 
     val scrollState = rememberScrollState()
     val scrollState1 = rememberScrollState()
@@ -294,6 +297,34 @@ fun StudentPageContent(
                                     onValueChange = { },
                                     readOnly = true,
                                     label = { Text(text = stringResource(id = R.string.email)) },
+                                    textStyle = TextStyle.Default.copy(fontSize = 18.sp),
+                                    modifier = Modifier
+                                        .weight(0.5f)
+                                        .fillMaxWidth()
+                                        .padding(10.dp)
+                                    , singleLine = true
+                                )
+                            }
+                            Row {
+                                OutlinedTextField(
+                                    value = tf_studentPhone,
+                                    onValueChange = { },
+                                    readOnly = true,
+                                    label = { Text(text = stringResource(id = R.string.telefon_no)) },
+                                    textStyle = TextStyle.Default.copy(fontSize = 18.sp),
+                                    modifier = Modifier
+                                        .weight(0.5f)
+                                        .fillMaxWidth()
+                                        .padding(10.dp),
+                                    singleLine = true
+                                )
+                            }
+                            Row {
+                                OutlinedTextField(
+                                    value = tf_studentAddress,
+                                    onValueChange = { },
+                                    readOnly = true,
+                                    label = { Text(text = stringResource(id = R.string.adres)) },
                                     textStyle = TextStyle.Default.copy(fontSize = 18.sp),
                                     modifier = Modifier
                                         .weight(0.5f)

@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -94,6 +95,8 @@ private fun StudentInfoEditPageContent(
 
     val tf_studentInfo = remember { mutableStateOf("") }
     val tf_studentEmail = remember { mutableStateOf("") }
+    val tf_studentAddress = remember { mutableStateOf("") }
+    val tf_studentPhone = remember { mutableStateOf("") }
 
     val tf_studentCurrentPassword = remember { mutableStateOf("") }
     val tf_studentNewPassword = remember { mutableStateOf("") }
@@ -127,6 +130,10 @@ private fun StudentInfoEditPageContent(
 
     LaunchedEffect(key1 = sharedViewModel) {
         tf_studentSkillList.addAll(sharedViewModel.student!!.student_skillList)
+        tf_studentAddress.value=sharedViewModel.student!!.student_address
+        tf_studentInfo.value=sharedViewModel.student!!.student_info
+        tf_studentPhone.value=sharedViewModel.student!!.student_phone
+        tf_studentEmail.value=sharedViewModel.student!!.student_mail
     }
 
     val skillEntryState = remember {
@@ -282,6 +289,39 @@ private fun StudentInfoEditPageContent(
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 label = { Text(text = stringResource(id = R.string.email)) }
+            )
+            OutlinedTextField(
+                value = tf_studentPhone.value,
+                onValueChange = { tf_studentPhone.value = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 15.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    unfocusedBorderColor = GaziKoyuMavi,
+                    focusedBorderColor = GaziKoyuMavi,
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done),
+                label = { Text(text = stringResource(id = R.string.telefon_no)) }
+            )
+            OutlinedTextField(
+                value = tf_studentAddress.value,
+                onValueChange = { tf_studentAddress.value = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 15.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    unfocusedBorderColor = GaziKoyuMavi,
+                    focusedBorderColor = GaziKoyuMavi,
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text , imeAction = ImeAction.Done),
+                label = { Text(text = stringResource(id = R.string.adres)) }
             )
 
             Row(
@@ -547,25 +587,25 @@ private fun StudentInfoEditPageContent(
                         // Ogrenci Bilgilerini kaydetme islemleri gerceklesecek
                         CoroutineScope(Dispatchers.Main).launch {
 
-                            if (tf_studentInfo.value.trim() != student.student_info || tf_studentEmail.value.trim() != student.student_mail) {
-                                println("test1")
-
+                            if (tf_studentInfo.value.trim() != student.student_info || tf_studentEmail.value.trim() != student.student_mail || tf_studentPhone.value.trim() != student.student_phone || tf_studentAddress.value.trim() != student.student_address ) {
                                 calisanFunc.intValue += 1
 
                                 student.student_mail = tf_studentEmail.value.trim()
                                 student.student_info = tf_studentInfo.value.trim()
+                                student.student_phone = tf_studentPhone.value.trim()
+                                student.student_address = tf_studentAddress.value.trim()
 
                                 val job1 =
                                     async { viewModel.saveStudentInformation(student = student) }
                                 if (job1.await()) {
                                     calismisFunc.intValue += 1
-                                    sharedViewModel.addStudent(sharedViewModel.student!!.copy(student_mail = student.student_mail, student_info = student.student_info))
+                                    sharedViewModel.addStudent(sharedViewModel.student!!.copy(student_mail = student.student_mail, student_info = student.student_info, student_address = student.student_address, student_phone = student.student_phone))
                                 } else {
                                     calisanFunc.intValue -= 1
                                 }
                             }
                             if (tf_studentSkillList.toList() != student.student_skillList.toList()) {
-                                println("test2")
+
                                 calisanFunc.intValue += 1
                                 val job2 = async {
                                     viewModel.saveStudentSkills(
@@ -583,7 +623,7 @@ private fun StudentInfoEditPageContent(
                             if (tf_studentCurrentPassword.value != "" && tf_studentNewPassword.value != "" && !newPasswordValidErrorState.value) {
 
                                 if (tf_studentCurrentPassword.value == student.student_password) {
-                                    println("test3")
+
                                     calisanFunc.intValue += 1
                                     student.student_password = tf_studentNewPasswordValid.value
                                     val job3 = async { viewModel.saveStudentPassword(student) }

@@ -41,10 +41,14 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.PostsRepository
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.google.gson.Gson
+import dagger.hilt.android.internal.lifecycle.HiltViewModelAssistedMap
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.internal.DaggerGenerated
 import javax.inject.Inject
 
+
 @Composable
-fun PostComponent(navController: NavController, post: Post) {
+fun PostComponent (navController: NavController, post: Post) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -124,7 +128,7 @@ fun PostComponent(navController: NavController, post: Post) {
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.postornekfotograf),
+                                painter = painterResource(id = R.drawable.havelsan),
                                 contentDescription = "",
                                 contentScale = ContentScale.Fit,
                                 alignment = Alignment.Center,

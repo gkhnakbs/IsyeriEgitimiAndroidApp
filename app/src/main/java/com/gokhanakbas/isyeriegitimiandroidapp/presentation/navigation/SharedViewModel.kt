@@ -13,12 +13,13 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Group
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.StudentsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import javax.inject.Singleton
 
 
-
-class SharedViewModel : ViewModel() {
+class SharedViewModel  : ViewModel() {
 
     var student by mutableStateOf<Student?>(null)
         private set

@@ -51,17 +51,13 @@ fun ReportsPage(
     viewModel: ReportsPageViewModel = hiltViewModel()
 ) {
 
-
     LaunchedEffect(key1 = viewModel) {
         if (reason == "updateReport") {
             viewModel.getReportsInformation(report_id)
         } else if (reason == "showReport") {
             viewModel.getReportsInformation(report_id)
-        } else if (reason == "newReport") {
-            //Yeni eklemek için veri çekmeyecek
         }
     }
-
 
 
     ReportsPageContent(navController = navController, reason = reason, viewModel = viewModel)
@@ -103,12 +99,10 @@ private fun ReportsPageContent(
 
     LoadingDialog(isLoading = state.isLoading)
 
-    if (reason != "newReport") {
-        LaunchedEffect(key1 = state.report) {
-            tf_report_description.value = state.report.report_description
-            tf_report_date.value = state.report.report_date
-        }
 
+    LaunchedEffect(key1 = state.report) {
+        tf_report_description.value = state.report.report_description
+        tf_report_date.value = state.report.report_date
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -152,7 +146,7 @@ private fun ReportsPageContent(
                     ) {
                         Text(text = stringResource(id = R.string.guncelle), fontSize = 20.sp)
                     }
-                } else {
+                } else if(reason=="newReport"){
                     OutlinedButton(
                         onClick = {
                             //Raporu kaydetme işlemi gerçekleşecek ancak kaydetmeden önce bir dialog ile emin misin sorusu sorulacak.

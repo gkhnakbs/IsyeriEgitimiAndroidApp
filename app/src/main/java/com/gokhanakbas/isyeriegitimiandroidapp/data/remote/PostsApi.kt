@@ -24,11 +24,11 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
                     Firm(
                         result.getBigDecimal("firma_id").toString(),
                         result.getString("firma_ad"),
-                        result.getString("firma_sektor"),
-                        result.getString("firma_hakkinda"),
-                        "",
-                        result.getString("firma_eposta"),
-                        result.getString("firma_adres"),
+                        result.getString("firma_sektor") ?: "",
+                        result.getString("firma_hakkinda") ?: "",
+                        result.getString("firma_logo") ?: "",
+                        result.getString("firma_eposta") ?: "",
+                        result.getString("firma_adres") ?: "",
                         "",
                         ""
                     ),
@@ -42,9 +42,9 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
     fun getFavouritePosts(student_no: String): List<Post> {
         val postList = arrayListOf<Post>()
 
-        val statement = connection.createStatement()
-
-        val result = statement.executeQuery("select i.*,f.* from favori_ilan as fi JOIN ilan as i ON fi.ilan_id=i.ilan_id JOIN firma as f ON f.firma_id=i.firma_id where fi.ogrenci_no=${student_no.toBigDecimal()}")
+        val statement = connection.prepareStatement("select i.*,f.* from favori_ilan as fi JOIN ilan as i ON fi.ilan_id=i.ilan_id JOIN firma as f ON f.firma_id=i.firma_id where fi.ogrenci_no= ? ")
+        statement.setBigDecimal(1,student_no.toBigDecimal())
+        val result = statement.executeQuery()
 
         while (result.next()) {
             postList.add(
@@ -57,11 +57,11 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
                     post_firm =  Firm(
                         result.getBigDecimal("firma_id").toString(),
                         result.getString("firma_ad"),
-                        result.getString("firma_sektor"),
-                        result.getString("firma_hakkinda"),
-                        "",
-                        result.getString("firma_eposta"),
-                        result.getString("firma_adres"),
+                        result.getString("firma_sektor") ?: "",
+                        result.getString("firma_hakkinda") ?: "",
+                        result.getString("firma_logo") ?: "",
+                        result.getString("firma_eposta") ?: "",
+                        result.getString("firma_adres") ?: "",
                         "",
                         ""
                     ),

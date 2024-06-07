@@ -378,25 +378,17 @@ private fun AdvertCreateOrEditPageContent(
                 if (advert == null) {
                     OutlinedButton(
                         onClick = {
-                            if(tf_advert_startDate.value.isEmpty()){
-                                dateError.value=true
-                            }else{ dateError.value=false }
-                            if(tf_advert_endDate.value.isEmpty()){
-                                dateError2.value=true
-                            }else{ dateError2.value=false }
-                            if(tf_advert_title.value.isEmpty()){
-                                titleError.value=true
-                            }else{ titleError.value=false }
-                            if(tf_advert_description.value.isEmpty()){
-                                descriptionError.value=true
-                            }else{ descriptionError.value=false }
+                            dateError.value = tf_advert_startDate.value.isEmpty()
+                            dateError2.value = tf_advert_endDate.value.isEmpty()
+                            titleError.value = tf_advert_title.value.isEmpty()
+                            descriptionError.value = tf_advert_description.value.isEmpty()
                             //Ilan yayinlama islemleri gerceklestirilecek
                             if (postCheck.value) {
-                                if(tf_advert_post_title.value.isEmpty()){
-                                    postTitleError.value=true
-                                }else{ postTitleError.value=false }
+
+                                postTitleError.value = tf_advert_post_title.value.isEmpty()
+
                                 if (!titleError.value && !descriptionError.value && !dateError.value && !dateError2.value && !postTitleError.value) {
-                                    val advert = Advert(
+                                    val advert1 = Advert(
                                         advert_title = tf_advert_title.value.trim(),
                                         advert_details = tf_advert_description.value.trim(),
                                         advert_post_title = tf_advert_post_title.value.trim(),
@@ -413,7 +405,7 @@ private fun AdvertCreateOrEditPageContent(
                                         val job = async {
                                             viewModel.createAdvert(
                                                 firm_id = Constants.FIRM_ID,
-                                                advert = advert
+                                                advert = advert1
                                             )
                                         }
                                         if (job.await()) {

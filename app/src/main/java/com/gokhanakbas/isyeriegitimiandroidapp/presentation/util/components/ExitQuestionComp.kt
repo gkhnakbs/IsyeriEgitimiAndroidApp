@@ -26,7 +26,7 @@ fun ExitQuestionComp(exit_choice_question: MutableState<Boolean>) {
                     exit_choice_question.value = false
                     activity.finish()
                 }, colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.Red,
+                    contentColor = Color.Black,
                     containerColor = Color.White
                 ),
                 border = BorderStroke(0.5.dp,Color.Red)
@@ -39,7 +39,7 @@ fun ExitQuestionComp(exit_choice_question: MutableState<Boolean>) {
                 onClick = {
                     exit_choice_question.value = false
                 }, colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.Green,
+                    contentColor = Color.Black,
                     containerColor = Color.White
                 ), border = BorderStroke(0.5.dp,Color.Green)
             ) {

@@ -1,6 +1,7 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -32,6 +33,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.presentation.student.studentMainP
 fun AppNavGraph(
     navController: NavHostController
 ) {
+
     val sharedViewModel=SharedViewModel()
 
     NavHost(navController = navController, startDestination = Screen.EntryPage.route) {

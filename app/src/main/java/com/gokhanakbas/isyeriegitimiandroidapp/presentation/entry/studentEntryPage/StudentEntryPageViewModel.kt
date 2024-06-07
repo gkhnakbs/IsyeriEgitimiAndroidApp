@@ -21,8 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class StudentEntryPageViewModel @Inject constructor(private val studentsRepository: StudentsRepository) :
-    ViewModel() {
+class StudentEntryPageViewModel @Inject constructor(private val studentsRepository: StudentsRepository) : ViewModel() {
 
     private val _state = MutableStateFlow(StudentEntryPageState())
     val state = _state.asStateFlow()

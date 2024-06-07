@@ -214,21 +214,24 @@ fun AdvertPageContent(
 
         }
 
-        OutlinedButton(
-            onClick = {
-                //Basvurma işlemi gerçekleşecek ve database e eklenecek
-                applyQuestion.value = true
-            },
-            modifier = Modifier.align(Alignment.BottomCenter),
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color.White
-            )
-        ) {
-            Text(
-                text = stringResource(id = textOfApplyButton.value),
-                style = MaterialTheme.typography.headlineSmall
-            )
+        if(Constants.USER_TYPE==Constants.STUDENT){
+            OutlinedButton(
+                onClick = {
+                    //Basvurma işlemi gerçekleşecek ve database e eklenecek
+                    applyQuestion.value = true
+                },
+                modifier = Modifier.align(Alignment.BottomCenter),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.White
+                )
+            ) {
+                Text(
+                    text = stringResource(id = textOfApplyButton.value),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
         }
+
     }
 
     val result = remember {
