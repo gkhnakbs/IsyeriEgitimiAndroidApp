@@ -5,6 +5,7 @@ import arrow.core.Either
 import com.gokhanakbas.isyeriegitimiandroidapp.data.mapper.toNetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.data.remote.AdvertsApi
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.AppliedAdvert
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.AdvertsRepository
 import javax.inject.Inject
@@ -35,7 +36,7 @@ class AdvertsRepositoryImpl @Inject constructor(private val advertsApi: AdvertsA
         }
     }
 
-    override suspend fun getAppliedAdverts(student_no: String): Either<NetworkError, List<Advert>> {
+    override suspend fun getAppliedAdverts(student_no: String): Either<NetworkError, List<AppliedAdvert>> {
         return Either.catch {
             advertsApi.getAppliedAdverts(student_no)
         }.mapLeft {

@@ -61,7 +61,7 @@ fun AppliedAdvertsListPageContent(
             key = { appliedAdvertsListPageState.advert_list[it].id }) { index ->
             AdvertComp(
                 navController = navController,
-                advert = appliedAdvertsListPageState.advert_list[index]
+                appliedAdvert = appliedAdvertsListPageState.advert_list[index]
             )
         }
     }

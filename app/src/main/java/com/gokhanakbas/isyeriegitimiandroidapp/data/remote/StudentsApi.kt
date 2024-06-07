@@ -166,7 +166,8 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
         statement.setString(1,student.student_info)
         statement.setString(2,student.student_mail)
         statement.setString(3,student.student_phone)
-        statement.setBigDecimal(4,student.student_no.toBigDecimal())
+        statement.setString(4,student.student_address)
+        statement.setBigDecimal(5,student.student_no.toBigDecimal())
         val result=statement.executeUpdate()
         return result>0
     }

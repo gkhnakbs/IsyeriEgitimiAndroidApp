@@ -51,7 +51,6 @@ import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
-import com.google.gson.Gson
 
 @Composable
 fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavController) {

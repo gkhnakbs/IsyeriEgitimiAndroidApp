@@ -3,6 +3,7 @@ package com.gokhanakbas.isyeriegitimiandroidapp.domain.repository
 import androidx.compose.runtime.MutableState
 import arrow.core.Either
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
+import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.AppliedAdvert
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NetworkError
 
 interface AdvertsRepository {
@@ -13,7 +14,7 @@ interface AdvertsRepository {
 
     suspend fun getAdvertsInformation(advert_id : String) : Either<NetworkError,Advert>
 
-    suspend fun getAppliedAdverts(student_no:String) : Either<NetworkError,List<Advert>>
+    suspend fun getAppliedAdverts(student_no:String) : Either<NetworkError,List<AppliedAdvert>>
 
     suspend fun deleteFromAppliedAdvert(advert_id:String,student_no:String) : Either<NetworkError,Boolean>
 

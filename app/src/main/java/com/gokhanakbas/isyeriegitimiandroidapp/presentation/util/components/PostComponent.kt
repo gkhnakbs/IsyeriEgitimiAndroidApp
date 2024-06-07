@@ -35,16 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
-import com.gokhanakbas.isyeriegitimiandroidapp.data.remote.PostsApi
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Post
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.repository.PostsRepository
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
-import com.google.gson.Gson
-import dagger.hilt.android.internal.lifecycle.HiltViewModelAssistedMap
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.internal.DaggerGenerated
-import javax.inject.Inject
 
 
 @Composable
