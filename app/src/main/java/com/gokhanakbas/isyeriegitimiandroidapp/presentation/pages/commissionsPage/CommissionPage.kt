@@ -25,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,6 +69,11 @@ fun CommissionPageContent(navController: NavController,state: CommissionPageStat
 
     LoadingDialog(isLoading = state.isLoading)
 
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
+
     var tf_commissionID = commissinObject.commission_id
     val tf_commissionName = commissinObject.commission_name
     val tf_commissionFaculty = commissinObject.commission_faculty
@@ -95,7 +102,10 @@ fun CommissionPageContent(navController: NavController,state: CommissionPageStat
             )
             OutlinedButton(
                 onClick = {
-                    navController.navigateUp()
+                    if(!goBack.value){
+                        goBack.value=true
+                        navController.popBackStack()
+                    }
                 }, colors = ButtonDefaults.buttonColors(
                     containerColor = GaziAcikMavi,
                     contentColor = Color.Black

@@ -18,6 +18,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,10 +34,17 @@ import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 @Composable
 fun SurveyPage(navController: NavController) {
 
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
     Column(modifier = Modifier.fillMaxSize().background(GaziAcikMavi)){
         OutlinedButton(
             onClick = {
-                navController.navigateUp()
+                if(!goBack.value){
+                    goBack.value=true
+                    navController.popBackStack()
+                }
             }, colors = ButtonDefaults.buttonColors(
                 containerColor = GaziAcikMavi,
                 contentColor = Color.Black

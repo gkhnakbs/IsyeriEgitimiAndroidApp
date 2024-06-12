@@ -82,6 +82,11 @@ fun AdvertPageContent(
 
     LoadingDialog(isLoading = advertPageState.isLoading)
 
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
+
     val textOfApplyButton = remember {
         mutableIntStateOf(R.string.basvur)
     }
@@ -119,7 +124,10 @@ fun AdvertPageContent(
             ) {
                 Row {
                     IconButton(onClick = {
-                        navController.navigateUp()
+                        if(!goBack.value){
+                            goBack.value=true
+                            navController.popBackStack()
+                        }
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.arrow_back_icon),

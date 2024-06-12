@@ -94,6 +94,11 @@ private fun StudentInfoEditPageContent(
 
     LoadingDialog(isLoading = state.isLoading)
 
+
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
     val student = state.student
 
     val tf_studentInfo = remember { mutableStateOf("") }
@@ -659,7 +664,10 @@ private fun StudentInfoEditPageContent(
 
         OutlinedButton(
             onClick = {
-                navController.navigateUp()
+                if(!goBack.value){
+                    goBack.value=true
+                    navController.popBackStack()
+                }
             },
             modifier = Modifier
                 .padding(10.dp),

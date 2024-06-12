@@ -34,6 +34,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -86,6 +88,11 @@ fun FirmPage(
 fun FirmPageContent(navController: NavController, firmPageState: FirmPageState) {
 
     LoadingDialog(isLoading = firmPageState.isLoading)
+
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
 
     val firmObject = firmPageState.firm
 
@@ -264,7 +271,10 @@ fun FirmPageContent(navController: NavController, firmPageState: FirmPageState) 
 
         OutlinedButton(
             onClick = {
-                navController.navigateUp()
+                if(!goBack.value){
+                    goBack.value=true
+                    navController.popBackStack()
+                }
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = GaziAcikMavi,

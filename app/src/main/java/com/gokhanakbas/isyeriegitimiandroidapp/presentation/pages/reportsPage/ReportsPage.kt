@@ -73,6 +73,11 @@ private fun ReportsPageContent(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
+
     val context = LocalContext.current
 
     val saveQuestionState = remember {
@@ -165,8 +170,10 @@ private fun ReportsPageContent(
         }
         OutlinedButton(
             onClick = {
-                //Raporu kaydetme işlemi gerçekleşecek ancak kaydetmeden önce bir dialog ile emin misin sorusu sorulacak.
-                navController.navigateUp()
+                if(!goBack.value){
+                    goBack.value=true
+                    navController.popBackStack()
+                }
             }, colors = ButtonDefaults.outlinedButtonColors(
                 containerColor = Color.White
             ), border = BorderStroke(0.5.dp, GaziKoyuMavi), modifier = Modifier.align(Alignment.TopStart)

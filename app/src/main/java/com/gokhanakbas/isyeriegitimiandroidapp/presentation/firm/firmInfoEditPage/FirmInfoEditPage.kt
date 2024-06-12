@@ -87,6 +87,11 @@ private fun FirmInfoEditPageContent(
 
     LoadingDialog(isLoading = firmInfoEditPageState.isLoading)
 
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
+
     val scrollState = rememberScrollState()
 
     val firm = firmInfoEditPageState.firm
@@ -494,7 +499,10 @@ private fun FirmInfoEditPageContent(
         }
         OutlinedButton(
             onClick = {
-                navController.navigateUp()
+                if(!goBack.value){
+                    goBack.value=true
+                    navController.popBackStack()
+                }
             },
             modifier = Modifier
                 .padding(10.dp),

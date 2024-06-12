@@ -91,6 +91,11 @@ fun LecturerInfoEditPageContent(
 
     LoadingDialog(isLoading = state.isLoading)
 
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
+
     var lecturer = state.lecturer
 
     val scrollState = rememberScrollState()
@@ -491,7 +496,10 @@ fun LecturerInfoEditPageContent(
         }
         OutlinedButton(
             onClick = {
-                navController.navigateUp()
+                if(!goBack.value){
+                    goBack.value=true
+                    navController.popBackStack()
+                }
             },
             modifier = Modifier
                 .padding(10.dp),

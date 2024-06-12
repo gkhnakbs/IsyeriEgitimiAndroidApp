@@ -28,6 +28,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -88,8 +90,7 @@ fun StudentPage(
 
     StudentPageContent(
         navController = navController,
-        studentPageState = state,
-        sharedViewModel = sharedViewModel
+        studentPageState = state
     )
 
 }
@@ -99,10 +100,18 @@ fun StudentPage(
 fun StudentPageContent(
     navController: NavController,
     studentPageState: StudentPageState,
-    sharedViewModel: SharedViewModel
 ) {
 
     LoadingDialog(isLoading = studentPageState.isLoading)
+
+    val goBack = remember {
+        mutableStateOf(false)
+    } //Birden fazla geri tuşuna tıklamayı önlemek için
+
+    if(!goBack.value){
+        goBack.value=true
+        navController.popBackStack()
+    }
 
     val studentObject = studentPageState.student
 
@@ -444,7 +453,11 @@ fun StudentPageContent(
         }
         OutlinedButton(
             onClick = {
-                navController.navigateUp()
+                if(!goBack.value){
+                    goBack.value=true
+                    navController.popBackStack()
+                }
+
             }, colors = ButtonDefaults.buttonColors(
                 containerColor = GaziAcikMavi,
                 contentColor = Color.Black
