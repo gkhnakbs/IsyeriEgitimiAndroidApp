@@ -86,6 +86,7 @@ fun LecturerMainPage(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     state.lecturer=sharedViewModel.lecturer!!
+    
     LecturerMainPageContent(navController = navController, lecturerMainPageState = state)
 
 }
