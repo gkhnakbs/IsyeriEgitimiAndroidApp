@@ -124,7 +124,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
     @SuppressLint("MutableCollectionMutableState")
     fun getAppliedAdverts(student_no: String): List<AppliedAdvert> {
         val advertList = arrayListOf<AppliedAdvert>()
-        val statement = connection.prepareStatement("select i.*,f.* from basvuru as b join ilan as i on b.ilan_id=i.ilan_id join firma as f on i.firma_id=f.firma_id where b.ogrenci_no= ? ")
+        val statement = connection.prepareStatement("select i.*,f.*,b.* from basvuru as b join ilan as i on b.ilan_id=i.ilan_id join firma as f on i.firma_id=f.firma_id where b.ogrenci_no= ? ")
         statement.setBigDecimal(1,student_no.toBigDecimal())
         val result = statement.executeQuery()
         while (result.next()) {
