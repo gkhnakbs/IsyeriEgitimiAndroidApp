@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -195,6 +198,7 @@ private fun StudentEntryPageContent(
                     modifier = Modifier.requiredWidth(300.dp),
                     singleLine = true
                 )
+
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -248,6 +252,8 @@ private fun StudentEntryPageContent(
                 }
             }
 
+
         }
     }
+    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
 }

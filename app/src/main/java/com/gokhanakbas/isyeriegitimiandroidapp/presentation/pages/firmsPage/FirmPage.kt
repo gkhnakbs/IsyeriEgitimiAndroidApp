@@ -264,7 +264,7 @@ fun FirmPageContent(navController: NavController, firmPageState: FirmPageState) 
 
         OutlinedButton(
             onClick = {
-                navController.popBackStack()
+                navController.navigateUp()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = GaziAcikMavi,

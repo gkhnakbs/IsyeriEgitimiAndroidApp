@@ -1,6 +1,7 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.pages.advertsPage
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,11 +37,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.ApplyQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
@@ -79,17 +83,17 @@ fun AdvertPageContent(
     LoadingDialog(isLoading = advertPageState.isLoading)
 
     val textOfApplyButton = remember {
-        mutableStateOf(R.string.basvur)
+        mutableIntStateOf(R.string.basvur)
     }
 
     val applyQuestion = remember {
         mutableStateOf(false)
     }
 
-    val context= LocalContext.current
+    val context = LocalContext.current
 
     //Burada firm un bilgileri advertten gelen id ye gore cekilir.
-    val advert_title = advertPageState.advert.advert_title ?:""
+    val advert_title = advertPageState.advert.advert_title ?: ""
     val advert_description = advertPageState.advert.advert_details ?: ""
     val advert_firmName = advertPageState.advert.advert_firm?.firm_name ?: ""
     val advert_firmInfo = advertPageState.advert.advert_firm?.firm_info ?: ""
@@ -115,7 +119,7 @@ fun AdvertPageContent(
             ) {
                 Row {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.arrow_back_icon),
@@ -144,7 +148,12 @@ fun AdvertPageContent(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    Text(text = advert_firmName, style = MaterialTheme.typography.headlineLarge)
+                    Text(
+                        text = advert_firmName,
+                        style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.clickable {
+                            navController.navigate(Screen.FirmPage.passNavigate(advertPageState.advert.advert_firm_id))
+                        }, textDecoration = TextDecoration.Underline)
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -214,7 +223,7 @@ fun AdvertPageContent(
 
         }
 
-        if(Constants.USER_TYPE==Constants.STUDENT){
+        if (Constants.USER_TYPE == Constants.STUDENT) {
             OutlinedButton(
                 onClick = {
                     //Basvurma işlemi gerçekleşecek ve database e eklenecek
@@ -226,7 +235,7 @@ fun AdvertPageContent(
                 )
             ) {
                 Text(
-                    text = stringResource(id = textOfApplyButton.value),
+                    text = stringResource(id = textOfApplyButton.intValue),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }
@@ -242,20 +251,18 @@ fun AdvertPageContent(
 
     LaunchedEffect(key1 = result.value) {
         if (result.value) {
-            viewModel.applyToAdvert(context,advertPageState.advert.advert_id, Constants.STUDENT_NO)
-            result.value=false
+            viewModel.applyToAdvert(context, advertPageState.advert.advert_id, Constants.STUDENT_NO)
+            result.value = false
         }
         println("Çalıştı result")
     }
 
     LaunchedEffect(key1 = advertPageState.applyResult) {
-        if (advertPageState.applyResult=="Success") {
+        if (advertPageState.applyResult == "Success") {
             delay(800)
             navController.popBackStack()
         }
     }
-
-
 
 
 }

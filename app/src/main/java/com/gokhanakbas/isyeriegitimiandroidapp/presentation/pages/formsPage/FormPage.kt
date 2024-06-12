@@ -35,7 +35,7 @@ fun FormPage(navController: NavController) {
         Column(modifier = Modifier.fillMaxSize().background(GaziAcikMavi)){
             OutlinedButton(
                 onClick = {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }, colors = ButtonDefaults.buttonColors(
                     containerColor = GaziAcikMavi,
                     contentColor = Color.Black

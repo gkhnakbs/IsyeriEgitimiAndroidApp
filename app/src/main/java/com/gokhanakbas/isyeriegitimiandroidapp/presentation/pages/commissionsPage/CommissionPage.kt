@@ -95,7 +95,7 @@ fun CommissionPageContent(navController: NavController,state: CommissionPageStat
             )
             OutlinedButton(
                 onClick = {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }, colors = ButtonDefaults.buttonColors(
                     containerColor = GaziAcikMavi,
                     contentColor = Color.Black

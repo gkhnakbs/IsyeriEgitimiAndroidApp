@@ -109,7 +109,7 @@ private fun ReportsPageContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(15.dp)
+                .padding(top=40.dp, start = 15.dp, end = 15.dp, bottom = 15.dp)
         ) {
 
             OutlinedTextField(
@@ -162,6 +162,16 @@ private fun ReportsPageContent(
                 }
             }
 
+        }
+        OutlinedButton(
+            onClick = {
+                //Raporu kaydetme işlemi gerçekleşecek ancak kaydetmeden önce bir dialog ile emin misin sorusu sorulacak.
+                navController.navigateUp()
+            }, colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = Color.White
+            ), border = BorderStroke(0.5.dp, GaziKoyuMavi), modifier = Modifier.align(Alignment.TopStart)
+        ) {
+            Text(text = stringResource(id = R.string.geri_don), fontSize = 20.sp)
         }
     }
 

@@ -109,7 +109,7 @@ fun LecturerPageContent(navController: NavController, state: LecturerPageState) 
             )
             OutlinedButton(
                 onClick = {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }, colors = ButtonDefaults.buttonColors(
                     containerColor = GaziAcikMavi,
                     contentColor = Color.Black
