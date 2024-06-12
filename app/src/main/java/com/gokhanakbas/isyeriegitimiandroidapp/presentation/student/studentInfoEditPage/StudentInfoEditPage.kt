@@ -659,7 +659,7 @@ private fun StudentInfoEditPageContent(
 
         OutlinedButton(
             onClick = {
-                navController.popBackStack()
+                navController.navigateUp()
             },
             modifier = Modifier
                 .padding(10.dp),
