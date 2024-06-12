@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,6 +38,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -134,6 +136,7 @@ fun AdvertListPageContent(
                     unfocusedContainerColor = Color.White,
                     focusedContainerColor = Color.White
                 ),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 18.sp),
