@@ -9,7 +9,7 @@ data class FirmPageState(
 
     val isLoading :Boolean=false,
     var firm : Firm =Firm("0","","","","","","","",""),
-    var firmAdverts : MutableState<ArrayList<Advert>> = mutableStateOf(arrayListOf()),
+    var firmAdverts : MutableList<Advert> = mutableListOf(),
     val error : String? = null
 
 )

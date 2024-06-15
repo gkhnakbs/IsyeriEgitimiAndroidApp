@@ -12,11 +12,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,8 +41,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -206,7 +213,40 @@ fun AdvertPageContent(
 
                     Spacer(
                         modifier = Modifier
+                            .height(5.dp)
+                    )
+
+                    Text(
+                        text = stringResource(id = R.string.ilan_kriteri),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(Color.LightGray)
                             .padding(5.dp)
+                    )
+                    
+                    advertPageState.advert.advert_criteriaList.forEach {
+                         Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Text(text="\u2022", fontWeight = FontWeight.Bold)
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(text = it, modifier = Modifier.padding(10.dp), style = MaterialTheme.typography.bodyLarge)
+                            }
+                        
+                    }
+
+                    Spacer(
+                        modifier = Modifier
+                            .height(5.dp)
                     )
 
                     Text(
@@ -228,7 +268,7 @@ fun AdvertPageContent(
                     )
                 }
             }
-
+            Spacer(modifier = Modifier.height(30.dp))
         }
 
         if (Constants.USER_TYPE == Constants.STUDENT) {

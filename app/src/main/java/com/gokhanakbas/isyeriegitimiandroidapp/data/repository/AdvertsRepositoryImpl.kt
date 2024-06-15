@@ -20,7 +20,7 @@ class AdvertsRepositoryImpl @Inject constructor(private val advertsApi: AdvertsA
         }
     }
 
-    override suspend fun getFirmsAdverts(firm_id: String): Either<NetworkError, MutableState<ArrayList<Advert>>> {
+    override suspend fun getFirmsAdverts(firm_id: String): Either<NetworkError, MutableList<Advert>> {
         return Either.catch {
             advertsApi.getFirmsAdverts(firm_id)
         }.mapLeft {

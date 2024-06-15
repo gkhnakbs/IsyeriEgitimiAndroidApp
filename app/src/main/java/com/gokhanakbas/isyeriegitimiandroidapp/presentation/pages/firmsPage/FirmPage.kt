@@ -160,7 +160,7 @@ fun FirmPageContent(navController: NavController, firmPageState: FirmPageState) 
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    firmPageState.firmAdverts.value.forEach { advert ->
+                    firmPageState.firmAdverts.forEach { advert ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()

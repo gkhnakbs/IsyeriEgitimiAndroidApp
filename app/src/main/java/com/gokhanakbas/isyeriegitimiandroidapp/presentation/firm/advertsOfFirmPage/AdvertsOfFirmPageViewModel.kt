@@ -35,7 +35,7 @@ class AdvertsOfFirmPageViewModel @Inject constructor(private val advertsReposito
             }
             when(result){
                 is Either.Right ->{
-                    if(result.value.component1().isNotEmpty()){
+                    if(result.value.isNotEmpty()){
                         _state.update {
                             it.copy(advertList = result.value)
                         }

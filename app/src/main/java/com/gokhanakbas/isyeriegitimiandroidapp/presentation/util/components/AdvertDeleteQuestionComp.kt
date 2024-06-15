@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 
 @Composable
-fun AdvertDeleteQuestşionComp(deleteQuestion: MutableState<Boolean>,result : MutableState<Boolean>) {
+fun AdvertDeleteQuestionComp(deleteQuestion: MutableState<Boolean>, result : MutableState<Boolean>) {
     val activity = (LocalContext.current) as Activity
     if (deleteQuestion.value) {
         AlertDialog(onDismissRequest = { deleteQuestion.value = false }, confirmButton = {

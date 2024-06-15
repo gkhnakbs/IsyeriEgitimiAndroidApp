@@ -10,7 +10,7 @@ interface AdvertsRepository {
 
     suspend fun getAdverts(): Either<NetworkError, List<Advert>>  // Burada öğrenci , izleyici ve komisyon firma ilanlarını çekilecek
 
-    suspend fun getFirmsAdverts(firm_id:String): Either<NetworkError, MutableState<ArrayList<Advert>>>  // Burada firma kendi ilanlarını çekilecek
+    suspend fun getFirmsAdverts(firm_id:String): Either<NetworkError, MutableList<Advert>>  // Burada firma kendi ilanlarını çekilecek
 
     suspend fun getAdvertsInformation(advert_id : String) : Either<NetworkError,Advert>
 

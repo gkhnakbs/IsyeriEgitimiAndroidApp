@@ -7,6 +7,7 @@ data class Advert(
     var advert_id: String,
     var advert_title: String,
     var advert_details: String,
+    var advert_criteriaList : MutableList<String>,
     var advert_startDate : String,
     var advert_endDate : String,
     var advert_firm_id: String,                     // İlan detayına gerek duymadığımız ve tıklandığında ilan detay sayfasında detayların çekilmesi için kullanıyoruz.

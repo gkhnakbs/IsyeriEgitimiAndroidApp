@@ -80,7 +80,7 @@ fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavC
                     Icon(
                         painter = painterResource(id = R.drawable.search_icon),
                         contentDescription = "Search Icon Working Students For Firm",
-                        Modifier.size(18.dp)
+                        modifier=Modifier.size(18.dp)
                     )
                 },
                 trailingIcon = {

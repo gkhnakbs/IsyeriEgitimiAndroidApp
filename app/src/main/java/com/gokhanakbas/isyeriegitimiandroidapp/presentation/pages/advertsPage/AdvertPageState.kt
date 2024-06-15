@@ -11,7 +11,10 @@ data class AdvertPageState(
      var advert: Advert = Advert(
         "",
         "",
-        "","","",
+        "",
+         mutableListOf(),
+         "",
+         "",
         "",
         "",
         null,

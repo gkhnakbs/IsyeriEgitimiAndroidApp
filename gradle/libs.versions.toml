@@ -1,12 +1,12 @@
 [versions]
-androidApplication= "8.4.2"
+androidApplication= "8.5.0"
 kotlinAndroid="2.0.0"
 daggerHiltAndroid="2.51.1"
 activityCompose = "1.9.0"
 arrowCore = "1.2.4"
 arrowFxCoroutines = "1.2.4"
 coilCompose = "2.6.0"
-composeBom = "2024.05.00"
+composeBom = "2024.06.00"
 coreKtx = "1.13.1"
 coreSplashscreen = "1.0.1"
 datastoreCore = "1.1.1"
@@ -16,12 +16,12 @@ hiltAndroidCompiler = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
-lifecycleRuntimeCompose = "2.8.1"
+lifecycleRuntimeCompose = "2.8.2"
 material3 = "1.2.1"
-navigationCompose = "2.8.0-beta02"
+navigationCompose = "2.8.0-beta03"
 serialization = "1.6.3"
 postgresql = "42.2.9"
-uiTestManifest = "1.7.0-beta02"
+uiTestManifest = "1.7.0-beta03"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -58,6 +58,6 @@ postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" 
 androidApplication= { id = "com.android.application" , version.ref= "androidApplication"}
 kotlinJetbrains= { id = "org.jetbrains.kotlin.android" , version.ref= "kotlinAndroid"}
 daggerHiltAndroid= { id = "com.google.dagger.hilt.android" , version.ref= "daggerHiltAndroid"}
-daggerHiltAndroid2= { id = "dagger.hilt.android.plugin" , version.ref= "daggerHiltAndroid"}
+daggerHiltAndroid2= { id = "dagger.hilt.android.plugin" , version.ref= "daggerHiltAndroid"} # fazlalık olduğu düşüncesiyle devre dışı bıraktım.
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref="kotlinAndroid" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinAndroid" }

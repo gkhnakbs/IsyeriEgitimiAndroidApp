@@ -8,7 +8,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
 @SuppressLint("MutableCollectionMutableState")
 data class AdvertsOfFirmPageState (
     var isLoading : Boolean = false,
-    var advertList : MutableState<ArrayList<Advert>> =  mutableStateOf(arrayListOf()),
+    var advertList : MutableList<Advert> =  mutableListOf(),
     var successfullyDeleted : Boolean=false,
     var error : String?=null
     )

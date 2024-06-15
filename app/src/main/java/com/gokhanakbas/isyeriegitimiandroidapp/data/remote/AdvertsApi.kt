@@ -29,6 +29,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
                     result.getBigDecimal("ilan_id").toString(),
                     result.getString("baslik"),
                     result.getString("aciklama"),
+                    mutableListOf(),
                     result.getString("baslangic_tarihi"),
                     result.getString("bitis_tarihi"),
                     result.getString("firma_id"),
@@ -43,17 +44,18 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
     }
 
     @SuppressLint("MutableCollectionMutableState")
-    fun getFirmsAdverts(firm_id: String): MutableState<ArrayList<Advert>> {
-        val advertList = mutableStateOf(arrayListOf<Advert>())
+    fun getFirmsAdverts(firm_id: String): MutableList<Advert> {
+        val advertList = mutableListOf<Advert>()
         val statement = connection.prepareStatement("select i.*,f.* from ilan as i JOIN firma as f ON f.firma_id=i.firma_id where f.firma_id=  ? ")
         statement.setBigDecimal(1,firm_id.toBigDecimal())
         val result = statement.executeQuery()
         while (result.next()) {
-            advertList.value.add(
+            advertList.add(
                 Advert(
                     result.getBigDecimal("ilan_id").toString(),
                     result.getString("baslik"),
                     result.getString("aciklama"),
+                    getAdvertCriteria(result.getBigDecimal("ilan_id").toString()),
                     result.getString("baslangic_tarihi"),
                     result.getString("bitis_tarihi"),
                     result.getString("firma_id"),
@@ -67,6 +69,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
         return advertList
     }
 
+    @SuppressLint("MutableCollectionMutableState")
     private fun getFirmAdvertsInterviewers(advert_id: String) : MutableState<ArrayList<Interviewer>>{
         val interviewerList= mutableStateOf(arrayListOf<Interviewer>())
         val statement = connection.prepareStatement("select * from ogrenci as o JOIN basvuru as b ON b.ogrenci_no=o.ogrenci_no where b.ilan_id= ? ")
@@ -98,6 +101,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
                 result.getBigDecimal("ilan_id").toString(),
                 result.getString("baslik"),
                 result.getString("aciklama"),
+                getAdvertCriteria(result.getBigDecimal("ilan_id").toString()),
                 result.getString("baslangic_tarihi"),
                 result.getString("bitis_tarihi"),
                 result.getString("firma_id"),
@@ -193,7 +197,52 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
         statement.setString(5,advert.advert_post_title)
         statement.setBigDecimal(6,firm_id.toBigDecimal())
         val result = statement.executeUpdate()
+        addAdvertCriteria(advert.advert_criteriaList,firm_id)
         return result > 0
+    }
+
+    @SuppressLint("MutableCollectionMutableState")
+    private fun getAdvertCriteria(advert_id: String ) : MutableList<String>{
+        val criteriaList= mutableListOf<String>()
+        val statement = connection.prepareStatement("select * from ilan_kriter where ilan_id = ? ")
+        statement.setBigDecimal(1,advert_id.toBigDecimal())
+        val result=statement.executeQuery()
+        while (result.next()){
+            criteriaList.add(result.getString("kriter_aciklama"))
+        }
+
+        return criteriaList
+    }
+
+    private fun addAdvertCriteria(criteriaList : MutableList<String>, firm_id: String){
+        val statement1=connection.prepareStatement("select ilan_id from ilan where firma_id = ? ORDER BY ilan_id DESC LIMIT 1")
+        statement1.setBigDecimal(1,firm_id.toBigDecimal())
+        val result = statement1.executeQuery()
+        var ilan_id=""
+        while (result.next()){
+            ilan_id=result.getString("ilan_id")
+        }
+        val statement=connection.prepareStatement("insert into ilan_kriter (kriter_aciklama,ilan_id) values (?,?) ")
+        var index=0
+        while (index < criteriaList.size){
+            statement.setString(1,criteriaList[index])
+            statement.setBigDecimal(2,ilan_id.toBigDecimal())
+            statement.executeUpdate()
+            index++
+        }
+    }
+
+    private fun updateAdvertCriteria(criteriaList : MutableList<String>, advert_id: String){
+        val statement=connection.prepareStatement("delete from ilan_kriter where ilan_id= ? ")
+        statement.setBigDecimal(1,advert_id.toBigDecimal())
+        val result=statement.executeUpdate()
+
+        criteriaList.forEach{criteria->
+            val statement1=connection.prepareStatement("insert into ilan_kriter (kriter_aciklama,ilan_id) values (?,?) ")
+            statement1.setString(1,criteria)
+            statement1.setBigDecimal(2,advert_id.toBigDecimal())
+            statement1.executeUpdate()
+        }
     }
 
 
@@ -206,6 +255,7 @@ class AdvertsApi @Inject constructor(private val databaseConnection: DatabaseCon
         statement.setDate(5,Date.valueOf(advert.advert_endDate))
         statement.setBigDecimal(6,advert.advert_id.toBigDecimal())
         val result=statement.executeUpdate()
+        updateAdvertCriteria(criteriaList =  advert.advert_criteriaList,advert_id= advert.advert_id)
         return result>0
     }
 

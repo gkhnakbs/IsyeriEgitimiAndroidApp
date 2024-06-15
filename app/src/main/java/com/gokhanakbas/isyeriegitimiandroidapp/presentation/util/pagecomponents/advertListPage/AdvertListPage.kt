@@ -1,5 +1,6 @@
 package com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.advertListPage
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,11 +19,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -39,7 +40,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +50,6 @@ import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
-import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 
 @Composable
@@ -167,25 +166,31 @@ fun AdvertListPageContent(
 
 @Composable
 fun AdvertCardContent(navController: NavController, advert_object: Advert) {
+
     Card(
         modifier = Modifier
             .padding(top = 5.dp, bottom = 5.dp)
-            .heightIn(80.dp),
+            .heightIn(80.dp)
+            .clickable {
+                navController.navigate(Screen.AdvertPage.passNavigate(advert_id = advert_object.advert_id))
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        )
+        ), shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(0.5.dp, GaziKoyuMavi)
     ) {
-        Row(modifier = Modifier
-            .fillMaxSize()
-            .clickable {
-
-            }) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(10.dp)
             ) {
-                Column(modifier=Modifier.weight(0.7f)){
+                Column(modifier = Modifier.weight(0.9f)) {
                     Text(
                         text = advert_object.advert_title,
                         fontSize = 22.sp,
@@ -207,28 +212,13 @@ fun AdvertCardContent(navController: NavController, advert_object: Advert) {
                         modifier = Modifier.requiredWidth(190.dp)
                     )
                 }
-                Row(
-                    modifier=Modifier.weight(0.3f),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    OutlinedButton(
-                        onClick = {
-                            navController.navigate(Screen.AdvertPage.passNavigate(advert_object.advert_id))
-                        }, elevation = ButtonDefaults.buttonElevation(
-                            defaultElevation = 5.dp
-                        ), colors = ButtonDefaults.elevatedButtonColors(
-                            containerColor = GaziAcikMavi,
-                            contentColor = GaziKoyuMavi
-                        )
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.ilana_git),
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(30.dp)
+                        .weight(0.1f)
+                )
 
             }
         }

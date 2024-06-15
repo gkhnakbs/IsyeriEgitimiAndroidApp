@@ -51,19 +51,22 @@ import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.AdvertDeleteQuestşionComp
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.AdvertDeleteQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.sendEvent
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
-import com.gokhanakbas.isyeriegitimiandroidapp.util.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun AdvertsOfFirmPage(paddingValues: PaddingValues, navController: NavController,viewModel : AdvertsOfFirmPageViewModel = hiltViewModel(),sharedViewModel: SharedViewModel) {
+fun AdvertsOfFirmPage(
+    paddingValues: PaddingValues,
+    navController: NavController,
+    viewModel: AdvertsOfFirmPageViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
+) {
 
     LaunchedEffect(key1 = viewModel) {
         viewModel.getFirmAdverts(Constants.FIRM_ID)
@@ -72,14 +75,19 @@ fun AdvertsOfFirmPage(paddingValues: PaddingValues, navController: NavController
     AdvertsOfFirmPageContent(
         paddingValues = paddingValues,
         navController = navController,
-        viewModel=viewModel,
+        viewModel = viewModel,
         sharedViewModel = sharedViewModel
     )
 
 }
 
 @Composable
-private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navController: NavController ,viewModel: AdvertsOfFirmPageViewModel, sharedViewModel: SharedViewModel ){
+private fun AdvertsOfFirmPageContent(
+    paddingValues: PaddingValues,
+    navController: NavController,
+    viewModel: AdvertsOfFirmPageViewModel,
+    sharedViewModel: SharedViewModel
+) {
 
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -88,14 +96,14 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
 
     val advertList = state.advertList
 
-    val indexOfAdvert= remember {
+    val indexOfAdvert = remember {
         mutableIntStateOf(0)
     }
 
-    val deleteQuestionState= remember {
+    val deleteQuestionState = remember {
         mutableStateOf(false)
     }
-    val deleteQuestionResultState= remember {
+    val deleteQuestionResultState = remember {
         mutableStateOf(false)
     }
 
@@ -103,11 +111,13 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
         mutableStateOf<Advert?>(null)
     }
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
 
-        val alertDialogOfInterViewers= remember {
+        val alertDialogOfInterViewers = remember {
             mutableStateOf(false)
         }
 
@@ -119,10 +129,10 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                 .padding(paddingValues)
         ) {
             items(
-                count = advertList.value.count(),
-                key = { advertList.value[it].id }
+                count = advertList.count(),
+                key = { advertList[it].id }
             ) { index ->
-                val advert = advertList.value[index]
+                val advert = advertList[index]
 
                 Card(
                     modifier = Modifier
@@ -190,8 +200,8 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                                 onClick = {
                                     //Ilani silme islemi gerceklesecek
 
-                                    deleteQuestionState.value=true
-                                    willDeleteAdvert.value=advert
+                                    deleteQuestionState.value = true
+                                    willDeleteAdvert.value = advert
 
                                 }, colors = ButtonDefaults.buttonColors(
                                     containerColor = Color.Red,
@@ -203,8 +213,8 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                             OutlinedButton(
                                 onClick = {
                                     //Ilan a basvurmus ogrencileri gosterme islemi gerceklesecek
-                                    alertDialogOfInterViewers.value=true
-                                    indexOfAdvert.intValue=index
+                                    alertDialogOfInterViewers.value = true
+                                    indexOfAdvert.intValue = index
                                 }, colors = ButtonDefaults.buttonColors(
                                     containerColor = GaziAcikMavi,
                                     contentColor = Color.Black
@@ -223,33 +233,40 @@ private fun AdvertsOfFirmPageContent(paddingValues: PaddingValues , navControlle
                 sharedViewModel.addAdvert(null)
                 navController.navigate(Screen.AdvertCreateOrEditPage.route)
 
-            }, colors = ButtonDefaults.outlinedButtonColors(
+            },
+            colors = ButtonDefaults.outlinedButtonColors(
                 containerColor = GaziKoyuMavi,
                 contentColor = Color.White
-            ), modifier = Modifier
+            ),
+            modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(15.dp), shape = RoundedCornerShape(20.dp),
+                .padding(15.dp),
+            shape = RoundedCornerShape(20.dp),
         ) {
             Text(text = stringResource(id = R.string.ilan_olustur))
         }
 
-        if(alertDialogOfInterViewers.value){
+        if (alertDialogOfInterViewers.value) {
             AlertDialogOfInterviewerList(
-                advert = advertList.value[indexOfAdvert.intValue],
+                advert = advertList[indexOfAdvert.intValue],
                 alertDialogOfInterviewers = alertDialogOfInterViewers,
-                navController = navController)
+                navController = navController
+            )
         }
 
-        AdvertDeleteQuestşionComp(deleteQuestion = deleteQuestionState, result = deleteQuestionResultState )
+        AdvertDeleteQuestionComp(
+            deleteQuestion = deleteQuestionState,
+            result = deleteQuestionResultState
+        )
 
         LaunchedEffect(key1 = deleteQuestionState.value) {
-            if (deleteQuestionResultState.value){
+            if (deleteQuestionResultState.value) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    deleteQuestionResultState.value=false
-                    val job=viewModel.deleteAdvert(advert_id = willDeleteAdvert.value!!.advert_id)
-                    if (job.await()){
-                        advertList.value.remove(willDeleteAdvert.value)
-                        willDeleteAdvert.value=null
+                    deleteQuestionResultState.value = false
+                    val job = viewModel.deleteAdvert(advert_id = willDeleteAdvert.value!!.advert_id)
+                    if (job.await()) {
+                        advertList.remove(willDeleteAdvert.value)
+                        willDeleteAdvert.value = null
                     }
                 }
             }
@@ -335,10 +352,14 @@ fun AlertDialogOfInterviewerList(
                                     contentDescription = "Student Image in Interviewer List"
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
-                                Text(text = interviewer.interviewer_student_name, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis)
+                                Text(
+                                    text = interviewer.interviewer_student_name,
+                                    fontWeight = FontWeight.Bold,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             }
                             Row(
-                                modifier=Modifier.weight(0.4f),
+                                modifier = Modifier.weight(0.4f),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.End
                             ) {
@@ -346,13 +367,23 @@ fun AlertDialogOfInterviewerList(
                                     onClick = {
                                         //Ogrenciyi gosterecek
                                         alertDialogOfInterviewers.value = false
-                                        navController.navigate(Screen.StudentPage.passNavigate(student_no = interviewer.interviewer_student_id))
+                                        navController.navigate(
+                                            Screen.StudentPage.passNavigate(
+                                                student_no = interviewer.interviewer_student_id
+                                            )
+                                        )
 
-                                    }, colors = ButtonDefaults.outlinedButtonColors(
+                                    },
+                                    colors = ButtonDefaults.outlinedButtonColors(
                                         contentColor = Color.Black
-                                    ), border = BorderStroke(0.5.dp,Color.Green),
+                                    ),
+                                    border = BorderStroke(0.5.dp, Color.Green),
                                 ) {
-                                    Text(text = stringResource(id = R.string.ogrenciyi_goruntule), overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
+                                    Text(
+                                        text = stringResource(id = R.string.ogrenciyi_goruntule),
+                                        overflow = TextOverflow.Ellipsis,
+                                        textAlign = TextAlign.Center
+                                    )
                                 }
                             }
                         }

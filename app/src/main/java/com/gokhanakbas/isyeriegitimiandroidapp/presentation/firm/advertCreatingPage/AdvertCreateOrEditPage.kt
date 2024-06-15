@@ -5,7 +5,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,20 +22,22 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -47,6 +48,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,6 +59,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -95,6 +98,7 @@ fun AdvertCreateOrEditPage(
 
 }
 
+@SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AdvertCreateOrEditPageContent(
@@ -117,6 +121,14 @@ private fun AdvertCreateOrEditPageContent(
     }
     val tf_advert_post_title = remember {
         mutableStateOf("")
+    }
+
+    val tf_advert_criteria = remember {
+        mutableStateOf("")
+    }
+
+    val tf_advert_criteria_list = remember {
+        mutableStateListOf<String>()
     }
 
 
@@ -175,7 +187,8 @@ private fun AdvertCreateOrEditPageContent(
             tf_advert_endDate.value = advert.advert_endDate
             tf_advert_startDate.value = advert.advert_startDate
             tf_advert_post_title.value = advert.advert_post_title
-            postCheck.value = true
+            tf_advert_criteria_list.addAll(advert.advert_criteriaList)
+            postCheck.value = advert.advert_post_title.isNotEmpty()
         }
     }
 
@@ -247,16 +260,116 @@ private fun AdvertCreateOrEditPageContent(
                 isError = descriptionError.value,
                 supportingText = { Text(text = stringResource(id = R.string.zorunlu_yazisi_tf)) }
             )
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp)
-                , verticalAlignment = Alignment.CenterVertically , horizontalArrangement = Arrangement.Start
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(
+                    value = tf_advert_criteria.value,
+                    onValueChange = { tf_advert_criteria.value = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.8f),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White,
+                        unfocusedBorderColor = GaziKoyuMavi,
+                        focusedBorderColor = GaziKoyuMavi,
+                    ),
+                    singleLine = true,
+                    label = { Text(text = stringResource(id = R.string.ilan_kriteri)) },
+                )
+                IconButton(
+                    onClick = {
+                        if (tf_advert_criteria.value.isNotEmpty()) {
+                            tf_advert_criteria_list.add(tf_advert_criteria.value.trim())
+                            tf_advert_criteria.value = ""
+                        }
+                        focusManager.clearFocus()
+                    },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = Color.White,
+                        containerColor = GaziAcikMavi
+                    ),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "",
+                        modifier = Modifier.weight(0.2f),
+                        tint = GaziKoyuMavi
+                    )
+                }
+
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            tf_advert_criteria_list.forEachIndexed { index, criteria ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White,
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = criteria,
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .weight(0.8f),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "",
+                            tint = Color.Red,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .weight(0.2f)
+                                .clickable {
+                                    tf_advert_criteria_list.apply {
+                                        removeAt(index)
+                                    }
+                                }
+                        )
+
+                    }
+
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
                 IconButton(onClick = {
                     focusManager.clearFocus()
                     datePickerOpeningState.value = true
                 }) {
-                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "",modifier=Modifier.size(32.dp).align(Alignment.CenterVertically))
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .align(Alignment.CenterVertically)
+                    )
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 OutlinedTextField(
@@ -282,15 +395,24 @@ private fun AdvertCreateOrEditPageContent(
 
                 )
             }
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp), verticalAlignment = Alignment.CenterVertically , horizontalArrangement = Arrangement.Start
-                ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
                 IconButton(onClick = {
                     focusManager.clearFocus()
                     datePickerOpeningState1.value = true
                 }) {
-                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "",modifier=Modifier.size(32.dp).align(Alignment.CenterVertically))
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .align(Alignment.CenterVertically)
+                    )
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 OutlinedTextField(
@@ -361,7 +483,10 @@ private fun AdvertCreateOrEditPageContent(
                         unfocusedBorderColor = GaziKoyuMavi,
                         focusedBorderColor = GaziKoyuMavi,
                     ),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Text),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Text
+                    ),
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     label = { Text(text = stringResource(id = R.string.ilan_post_baslik)) },
                     isError = postTitleError.value,
@@ -391,6 +516,7 @@ private fun AdvertCreateOrEditPageContent(
                                     val advert1 = Advert(
                                         advert_title = tf_advert_title.value.trim(),
                                         advert_details = tf_advert_description.value.trim(),
+                                        advert_criteriaList = tf_advert_criteria_list,
                                         advert_post_title = tf_advert_post_title.value.trim(),
                                         advert_startDate = tf_advert_startDate.value,
                                         advert_endDate = tf_advert_endDate.value,
@@ -424,6 +550,7 @@ private fun AdvertCreateOrEditPageContent(
                                     val advert1 = Advert(
                                         advert_title = tf_advert_title.value.trim(),
                                         advert_details = tf_advert_description.value.trim(),
+                                        advert_criteriaList = tf_advert_criteria_list,
                                         advert_post_title = tf_advert_post_title.value.trim(),
                                         advert_startDate = tf_advert_startDate.value,
                                         advert_endDate = tf_advert_endDate.value,
@@ -473,27 +600,38 @@ private fun AdvertCreateOrEditPageContent(
                         onClick = {
                             //Ilan yayinlama islemleri gerceklestirilecek
 
-                            if(tf_advert_startDate.value.isEmpty()){
-                                dateError.value=true
-                            }else{ dateError.value=false }
-                            if(tf_advert_endDate.value.isEmpty()){
-                                dateError2.value=true
-                            }else{ dateError2.value=false }
-                            if(tf_advert_title.value.isEmpty()){
-                                titleError.value=true
-                            }else{ titleError.value=false }
-                            if(tf_advert_description.value.isEmpty()){
-                                descriptionError.value=true
-                            }else{ descriptionError.value=false }
+                            if (tf_advert_startDate.value.isEmpty()) {
+                                dateError.value = true
+                            } else {
+                                dateError.value = false
+                            }
+                            if (tf_advert_endDate.value.isEmpty()) {
+                                dateError2.value = true
+                            } else {
+                                dateError2.value = false
+                            }
+                            if (tf_advert_title.value.isEmpty()) {
+                                titleError.value = true
+                            } else {
+                                titleError.value = false
+                            }
+                            if (tf_advert_description.value.isEmpty()) {
+                                descriptionError.value = true
+                            } else {
+                                descriptionError.value = false
+                            }
 
                             if (postCheck.value) {
-                                if(tf_advert_post_title.value.isEmpty()){
-                                    postTitleError.value=true
-                                }else{ postTitleError.value=false }
+                                if (tf_advert_post_title.value.isEmpty()) {
+                                    postTitleError.value = true
+                                } else {
+                                    postTitleError.value = false
+                                }
                                 if (!titleError.value && !descriptionError.value && !dateError.value && !dateError2.value && !postTitleError.value) {
                                     val advert1 = Advert(
                                         advert_title = tf_advert_title.value.trim(),
                                         advert_details = tf_advert_description.value.trim(),
+                                        advert_criteriaList = tf_advert_criteria_list,
                                         advert_post_title = tf_advert_post_title.value.trim(),
                                         advert_startDate = tf_advert_startDate.value,
                                         advert_endDate = tf_advert_endDate.value,
@@ -526,6 +664,7 @@ private fun AdvertCreateOrEditPageContent(
                                     val advert1 = Advert(
                                         advert_title = tf_advert_title.value.trim(),
                                         advert_details = tf_advert_description.value.trim(),
+                                        advert_criteriaList = tf_advert_criteria_list,
                                         advert_post_title = tf_advert_post_title.value.trim(),
                                         advert_startDate = tf_advert_startDate.value,
                                         advert_endDate = tf_advert_endDate.value,
@@ -623,7 +762,7 @@ fun DatePickerDialogOfStartDate(
     onDateSelected: (String) -> Unit,
     state: DatePickerState,
     datePickerOpeningState: MutableState<Boolean>,
-    dateError : MutableState<Boolean>
+    dateError: MutableState<Boolean>
 ) {
     val selectedDate = state.selectedDateMillis?.let {
         SimpleDateFormat("yyyy-MM-dd").format(Date(it))
@@ -631,13 +770,15 @@ fun DatePickerDialogOfStartDate(
     DatePickerDialog(
         onDismissRequest = { datePickerOpeningState.value = false },
         confirmButton = {
-            OutlinedButton(onClick = {
-                datePickerOpeningState.value = false
-                onDateSelected(selectedDate)
-                dateError.value=false
-            }, colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = Color.Black
-            ), border = BorderStroke(0.5.dp, Color.Black)) {
+            OutlinedButton(
+                onClick = {
+                    datePickerOpeningState.value = false
+                    onDateSelected(selectedDate)
+                    dateError.value = false
+                }, colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black
+                ), border = BorderStroke(0.5.dp, Color.Black)
+            ) {
                 Text(
                     text = stringResource(id = R.string.tamam)
                 )
@@ -645,11 +786,13 @@ fun DatePickerDialogOfStartDate(
 
         },
         dismissButton = {
-            OutlinedButton(onClick = { datePickerOpeningState.value = false },
+            OutlinedButton(
+                onClick = { datePickerOpeningState.value = false },
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = Color.Black
                 ),
-                border = BorderStroke(0.5.dp, Color.Black)) {
+                border = BorderStroke(0.5.dp, Color.Black)
+            ) {
                 Text(
                     text = stringResource(id = R.string.iptal_et)
                 )
@@ -678,13 +821,15 @@ fun DatePickerDialogOfEndDate(
     DatePickerDialog(
         onDismissRequest = { datePickerOpeningState.value = false },
         confirmButton = {
-            OutlinedButton(onClick = {
-                datePickerOpeningState.value = false
-                onDateSelected(selectedDate)
-                dateError.value=false
-            }, colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = Color.Black
-            ), border = BorderStroke(0.5.dp, Color.Black)) {
+            OutlinedButton(
+                onClick = {
+                    datePickerOpeningState.value = false
+                    onDateSelected(selectedDate)
+                    dateError.value = false
+                }, colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black
+                ), border = BorderStroke(0.5.dp, Color.Black)
+            ) {
                 Text(
                     text = stringResource(id = R.string.tamam)
                 )
@@ -692,11 +837,13 @@ fun DatePickerDialogOfEndDate(
 
         },
         dismissButton = {
-            OutlinedButton(onClick = { datePickerOpeningState.value = false },
+            OutlinedButton(
+                onClick = { datePickerOpeningState.value = false },
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = Color.Black
                 ),
-                border = BorderStroke(0.5.dp, Color.Black)) {
+                border = BorderStroke(0.5.dp, Color.Black)
+            ) {
                 Text(
                     text = stringResource(id = R.string.iptal_et)
                 )
