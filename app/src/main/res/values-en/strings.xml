@@ -19,8 +19,8 @@
     <string name="cikis_yap">Log Out</string>
     <string name="cikis">Exit</string>
     <string name="kaydet">Save</string>
-    <string name="favorilere_ekle">Add Favorites</string>
-    <string name="favorilerden_cikar">Remove From Favorites</string>
+    <string name="favorilere_ekle">Add Favourites</string>
+    <string name="favorilerden_cikar">Remove Favourites</string>
     <string name="ilana_git">Go to Advert</string>
     <string name="favori_ilanlar">Favourite Posts</string>
     <string name="parola_bos_birakilamaz">Password Field cannot be empty</string>

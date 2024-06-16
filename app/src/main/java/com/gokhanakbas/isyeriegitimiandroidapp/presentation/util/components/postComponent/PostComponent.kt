@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.postComponent
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -22,6 +22,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,17 +34,43 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Post
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziAcikMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun PostComponent (navController: NavController, post: Post) {
+fun PostComponent(
+    navController: NavController,
+    post: Post,
+    viewModel: PostComponentViewModel = hiltViewModel()
+) {
+
+    PostComponentContent(navController = navController, post = post, viewModel = viewModel)
+
+
+}
+
+@Composable
+fun PostComponentContent(
+    navController: NavController,
+    post: Post,
+    viewModel: PostComponentViewModel
+) {
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -70,7 +99,10 @@ fun PostComponent (navController: NavController, post: Post) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(modifier=Modifier.weight(0.7f), verticalAlignment = Alignment.CenterVertically){
+                    Row(
+                        modifier = Modifier.weight(0.7f),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Image(
                             painter = painterResource(id = R.drawable.gazi_university_logo),
                             contentDescription = "",
@@ -88,10 +120,15 @@ fun PostComponent (navController: NavController, post: Post) {
                             modifier = Modifier
                                 .weight(0.8f)
                                 .clickable {
-                                navController.navigate(Screen.FirmPage.passNavigate(firm_id = post.post_firm.firm_id))
-                            })
+                                    navController.navigate(Screen.FirmPage.passNavigate(firm_id = post.post_firm.firm_id))
+                                })
                     }
-                    Text(text = post.post_date, fontSize = 18.sp, color = Color.LightGray, modifier = Modifier.weight(0.3f))
+                    Text(
+                        text = post.post_date,
+                        fontSize = 18.sp,
+                        color = Color.LightGray,
+                        modifier = Modifier.weight(0.3f)
+                    )
 
                 }
 
@@ -105,9 +142,11 @@ fun PostComponent (navController: NavController, post: Post) {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 //Fotoğraf ve açıklamanın olacağı kısım.
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Text(
                             text = post.post_label,
@@ -137,43 +176,77 @@ fun PostComponent (navController: NavController, post: Post) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 //Buttonların olacağı kısım
-                var favoriIcon = if(post.post_isFavourite) Color.Yellow else Color.Black
-                var favoriText = if(post.post_isFavourite) stringResource(id = R.string.favorilerden_cikar) else stringResource(id = R.string.favorilere_ekle)
+                val favoriIcon = remember(post.post_isFavourite) {
+                    mutableStateOf(if (post.post_isFavourite) Color.Yellow else Color.Black)
+                }
+
+                val favouriteText = remember(post.post_isFavourite) {
+                    mutableStateOf( if (post.post_isFavourite) "Favorilerden Çıkar" else "Favorilere Ekle")
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    OutlinedButton(onClick = {
-                        if(post.post_isFavourite){
-                            post.post_isFavourite=false
+                    if (Constants.USER_TYPE == Constants.STUDENT) {
+                        OutlinedButton(
+                            onClick = {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    if (post.post_isFavourite) {
+                                        val job = viewModel.removeFromFavourite(
+                                            student_no = Constants.STUDENT_NO,
+                                            post_id = post.post_advert_id
+                                        )
+
+                                        if (job.await()) {
+                                            post.post_isFavourite = !post.post_isFavourite
+                                        }
+                                    } else {
+                                        val job = viewModel.addToFavourite(
+                                            student_no = Constants.STUDENT_NO,
+                                            post_id = post.post_advert_id
+                                        )
+
+                                        if (job.await()) {
+                                            post.post_isFavourite = !post.post_isFavourite
+                                        }
+                                    }
+                                }
+
+                            }, modifier = Modifier.weight(0.5f)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.bookmark_icon),
+                                contentDescription = "",
+                                modifier = Modifier.size(18.dp),
+                                tint = favoriIcon.value,
+                            )
+
+                            Text(
+                                text = favouriteText.value,
+                                fontSize = 18.sp, overflow = TextOverflow.Ellipsis
+                            )
                         }
-                        else{
-                            post.post_isFavourite=true
-                        }
-                        //Favorilere ekleme kısmı . Burada işlemin gerçekleşip gerçekleşmediğine göre de rengi değiştirebilirsin.
-                    }) {
-
-                        Icon(
-                            painter = painterResource(id = R.drawable.bookmark_icon),
-                            contentDescription = "",
-                            modifier = Modifier.size(18.dp),
-                            tint = favoriIcon,
-
-                        )
-
-                        Text(text = favoriText, fontSize = 18.sp)
                     }
-                    OutlinedButton(onClick = {
-                        //ilana yönlendirme
-                        navController.navigate(Screen.AdvertPage.passNavigate(advert_id = post.post_advert_id))
-                    }) {
+
+                    OutlinedButton(
+                        onClick = {
+                            //ilana yönlendirme
+                            navController.navigate(Screen.AdvertPage.passNavigate(advert_id = post.post_advert_id))
+                        },
+                        modifier = Modifier.weight(if (Constants.USER_TYPE == Constants.STUDENT) 0.5f else 1f)
+                    ) {
                         Icon(
                             painter = painterResource(id = R.drawable.forward_icon),
                             contentDescription = "",
                             modifier = Modifier.size(18.dp)
                         )
-                        Text(text = stringResource(id = R.string.ilana_git), fontSize = 18.sp)
+                        Text(
+                            text = stringResource(id = R.string.ilana_git),
+                            fontSize = 18.sp,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
             }

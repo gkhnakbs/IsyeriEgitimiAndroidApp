@@ -169,7 +169,7 @@ fun AdvertCardContent(navController: NavController, advert_object: Advert) {
 
     Card(
         modifier = Modifier
-            .padding(top = 5.dp, bottom = 5.dp)
+            .padding(5.dp)
             .heightIn(80.dp)
             .clickable {
                 navController.navigate(Screen.AdvertPage.passNavigate(advert_id = advert_object.advert_id))

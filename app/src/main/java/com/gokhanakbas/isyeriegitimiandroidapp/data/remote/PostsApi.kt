@@ -73,7 +73,19 @@ class PostsApi @Inject constructor(private val databaseConnection: DatabaseConne
         return postList
     }
 
-    fun addPostFavourite(student_no: String, post: Post): Boolean {
-        return true
+    fun addPostToFavourite(student_no: String, post_id : String): Boolean {
+        val statement = connection.prepareStatement("INSERT INTO favori_ilan (ilan_id,ogrenci_no) VALUES (?,?)")
+        statement.setBigDecimal(1,post_id.toBigDecimal())
+        statement.setBigDecimal(2,student_no.toBigDecimal())
+        val result=statement.executeUpdate()
+        return result>0
+    }
+
+    fun removeFromFavourite(student_no: String, post_id:String): Boolean {
+        val statement = connection.prepareStatement("delete from favori_ilan where ilan_id= ? AND ogrenci_no= ?")
+        statement.setBigDecimal(1,post_id.toBigDecimal())
+        statement.setBigDecimal(2,student_no.toBigDecimal())
+        val result=statement.executeUpdate()
+        return result>0
     }
 }

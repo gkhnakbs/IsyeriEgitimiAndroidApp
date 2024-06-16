@@ -53,7 +53,7 @@ class HomePagePostFeedViewModel @Inject constructor(private val postsRepository:
             _state.update {
                 it.copy(isLoading = true)
             }
-            postsRepository.addPostFavourite(student_no,post_id)
+            postsRepository.addPostToFavourite(student_no,post_id)
                 .onRight {
                     addingState=it
                 }

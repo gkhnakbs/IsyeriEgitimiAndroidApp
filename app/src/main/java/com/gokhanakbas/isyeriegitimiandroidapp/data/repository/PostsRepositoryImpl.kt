@@ -27,9 +27,17 @@ class PostsRepositoryImpl @Inject constructor(private val postsApi: PostsApi): P
         }
     }
 
-    override suspend fun addPostFavourite(student_no: String, post_id: String) : Either<NetworkError,Boolean> {
+    override suspend fun addPostToFavourite(student_no: String, post_id: String) : Either<NetworkError,Boolean> {
         return Either.catch {
-            postsApi.addPostFavourite("",Post("","","","","",post_isFavourite = false))
+            postsApi.addPostToFavourite(student_no,post_id)
+        }.mapLeft {
+            it.toNetworkError()
+        }
+    }
+
+    override suspend fun removeFromFavourite(student_no: String, post_id: String) : Either<NetworkError,Boolean> {
+        return Either.catch {
+            postsApi.removeFromFavourite(student_no, post_id)
         }.mapLeft {
             it.toNetworkError()
         }

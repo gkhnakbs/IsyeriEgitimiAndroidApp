@@ -15,13 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.PostComponent
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.postComponent.PostComponent
 import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 
 
@@ -39,8 +39,8 @@ fun HomePagePostFeed(
 
     val state by homePagePostFeedViewModel.state.collectAsStateWithLifecycle()
 
-    state.post.forEachIndexed { index, post ->
-        state.favouritePostList.forEachIndexed { index2, favouritePost ->
+    state.post.forEach{ post ->
+        state.favouritePostList.forEach { favouritePost ->
             if (post.post_advert_id == favouritePost.post_advert_id) {
                 post.post_isFavourite = true
             }
@@ -65,7 +65,7 @@ fun HomePagePostFeedContent(
     LoadingDialog(isLoading = homePagePostFeedState.isLoading)
 
 
-    if (homePagePostFeedState.post.size > 0) {
+    if (homePagePostFeedState.post.isNotEmpty()) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -87,7 +87,7 @@ fun HomePagePostFeedContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = R.string.suan_icin_bos_gozukuyor), color = Color.LightGray)
+            Text(text = stringResource(id = R.string.suan_icin_bos_gozukuyor), color = Color.LightGray, fontSize = 24.sp)
         }
     }
 

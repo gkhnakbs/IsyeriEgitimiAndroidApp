@@ -48,8 +48,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Advert
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.AdvertDeleteQuestionComp
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog

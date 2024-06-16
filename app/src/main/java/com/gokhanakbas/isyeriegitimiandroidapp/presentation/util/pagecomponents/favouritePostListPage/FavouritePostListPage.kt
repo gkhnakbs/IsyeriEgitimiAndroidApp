@@ -14,8 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.LoadingDialog
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.PostComponent
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.pagecomponents.firmListPage.FirmCardContent
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.util.components.postComponent.PostComponent
 
 @Composable
 fun FavouritePostListPage(

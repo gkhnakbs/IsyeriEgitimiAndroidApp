@@ -10,6 +10,8 @@ interface PostsRepository {
 
     suspend fun getFavouritePost(student_no : String) : Either<NetworkError,List<Post>>
 
-    suspend fun addPostFavourite(student_no : String,post_id:String) : Either<NetworkError,Boolean>
+    suspend fun addPostToFavourite(student_no : String,post_id:String) : Either<NetworkError,Boolean>
+
+    suspend fun removeFromFavourite(student_no : String,post_id:String) : Either<NetworkError,Boolean>
 
 }

@@ -758,7 +758,7 @@ private fun AdvertCreateOrEditPageContent(
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDialogOfStartDate(
+private fun DatePickerDialogOfStartDate(
     onDateSelected: (String) -> Unit,
     state: DatePickerState,
     datePickerOpeningState: MutableState<Boolean>,
@@ -809,7 +809,7 @@ fun DatePickerDialogOfStartDate(
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDialogOfEndDate(
+private fun DatePickerDialogOfEndDate(
     onDateSelected: (String) -> Unit,
     state: DatePickerState,
     datePickerOpeningState: MutableState<Boolean>,

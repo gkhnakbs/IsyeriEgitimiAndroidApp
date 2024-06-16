@@ -19,7 +19,7 @@ junitVersion = "1.1.5"
 lifecycleRuntimeCompose = "2.8.2"
 material3 = "1.2.1"
 navigationCompose = "2.8.0-beta03"
-serialization = "1.6.3"
+serialization = "1.7.0"
 postgresql = "42.2.9"
 uiTestManifest = "1.7.0-beta03"
 
