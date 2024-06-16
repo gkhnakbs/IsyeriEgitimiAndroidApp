@@ -7,7 +7,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
 
 interface ReportsRepository {
 
-    suspend fun getReports(student_no : String) : Either<NetworkError,MutableState<ArrayList<Report>>>
+    suspend fun getReports(student_no : String) : Either<NetworkError,MutableList<Report>>
 
     suspend fun addWeeklyReports(report: Report,student_no: String) : Either<NetworkError,Boolean>
 

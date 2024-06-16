@@ -46,7 +46,7 @@ import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.NavItem
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.advertsOfFirmPage.AdvertsOfFirmPage
-import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.WorkingStudentsPageForFirm
+import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.workingStudentsPageForFirm.WorkingStudentsPageForFirm
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.firmMainPageInfo.FirmMainPageInfo
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.SharedViewModel

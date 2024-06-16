@@ -6,7 +6,7 @@ import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Report
 
 data class WeeklyReportListPageState(
     var isLoading : Boolean=false,
-    var report_list : MutableState<ArrayList<Report>> = mutableStateOf(arrayListOf()),
+    var report_list : MutableList<Report> = mutableListOf(),
     var deletedSuccesfully : Boolean = false,
     var error: String?=null
 )

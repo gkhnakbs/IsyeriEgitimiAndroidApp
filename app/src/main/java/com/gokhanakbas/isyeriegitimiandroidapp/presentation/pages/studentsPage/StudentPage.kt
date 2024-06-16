@@ -72,18 +72,15 @@ fun StudentPage(
             studentPageViewModel.getGroupsLecturerInformation(student_no)
         }
 
-    } else {
-
+    }else{
         LaunchedEffect(key1 = studentPageViewModel) {
             if (sharedViewModel.student!!.student_skillList.isEmpty()) {
                 studentPageViewModel.getSkills(student_no)
-
             }
             studentPageViewModel.getGroupsLecturerInformation(student_no)
         }
         state.student = sharedViewModel.student!!
         sharedViewModel.addLecturer(state.groupsLecturer)
-        //Skill listide getStudentInformation içinde çekene kadar şimdilik böyle aşağıdaki gibi yapacağız.
         sharedViewModel.addStudent(sharedViewModel.student!!.copy(student_skillList = state.skillList))
     }
 
@@ -108,11 +105,6 @@ fun StudentPageContent(
         mutableStateOf(false)
     } //Birden fazla geri tuşuna tıklamayı önlemek için
 
-    if(!goBack.value){
-        goBack.value=true
-        navController.popBackStack()
-    }
-
     val studentObject = studentPageState.student
 
     val tf_studentName = studentObject.student_name
@@ -127,7 +119,7 @@ fun StudentPageContent(
     val tf_studentAddress = studentObject.student_address
 
     val scrollState = rememberScrollState()
-    val scrollState1 = rememberScrollState()
+
     Box(
         modifier = Modifier.fillMaxSize()
     )

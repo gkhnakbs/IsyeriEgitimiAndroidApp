@@ -10,13 +10,13 @@ class ReportsApi @Inject constructor(private val databaseConnection: DatabaseCon
 
     val connection = databaseConnection.connection
 
-    fun getReports(student_no: String): MutableState<ArrayList<Report>> {
-        val report_list = mutableStateOf(arrayListOf<Report>())
+    fun getReports(student_no: String): MutableList<Report> {
+        val report_list = mutableListOf<Report>()
         val statement = connection.prepareStatement("select * from haftalik_rapor where ogrenci_no= ? ")
         statement.setBigDecimal(1,student_no.toBigDecimal())
         val result = statement.executeQuery()
         while (result.next()) {
-            report_list.value.add(
+            report_list.add(
                 Report(
                     report_id = result.getBigDecimal("rapor_id").toString(),
                     report_description = result.getString("rapor_aciklama"),

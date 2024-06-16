@@ -105,12 +105,12 @@ fun WeeklyReportListPageContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(
-                count = report_list.value.count(),
+                count = report_list.count(),
                 key = {
-                    report_list.value[it].id
+                    report_list[it].id
                 },
                 itemContent = {
-                    val report_object = report_list.value[it]
+                    val report_object = report_list[it]
                     WeeklyReportCardContent(
                         navController = navController,
                         report = report_object,
@@ -142,7 +142,7 @@ fun WeeklyReportListPageContent(
 fun WeeklyReportCardContent(
     navController: NavController,
     report: Report,
-    report_list : MutableState<ArrayList<Report>>,
+    report_list : MutableList<Report>,
     viewModel: WeeklyReportListPageViewModel
 ) {
 
@@ -160,7 +160,7 @@ fun WeeklyReportCardContent(
                 deleteReportChoice.value=false
                 val job=viewModel.deleteWeeklyReport(report.report_id)
                 if(job.await()){
-                    report_list.value.remove(report)
+                    report_list.remove(report)
                 }else{
                     Event.Toast("Failed")
                 }

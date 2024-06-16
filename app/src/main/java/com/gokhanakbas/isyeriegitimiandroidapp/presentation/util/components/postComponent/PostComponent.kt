@@ -63,7 +63,7 @@ fun PostComponent(
 }
 
 @Composable
-fun PostComponentContent(
+private fun PostComponentContent(
     navController: NavController,
     post: Post,
     viewModel: PostComponentViewModel

@@ -25,4 +25,6 @@ interface StudentsRepository {
 
     suspend fun saveStudentPassword(student: Student) : Either<NetworkError,Boolean>
 
+    suspend fun getWorkingStudents(firm_id : String) : Either<NetworkError,MutableList<Student>>
+
 }

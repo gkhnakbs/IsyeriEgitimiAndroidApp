@@ -2,6 +2,7 @@ package com.gokhanakbas.isyeriegitimiandroidapp.data.repository
 
 import androidx.collection.MutableObjectList
 import arrow.core.Either
+import arrow.core.raise.catch
 import com.gokhanakbas.isyeriegitimiandroidapp.data.mapper.toNetworkError
 import com.gokhanakbas.isyeriegitimiandroidapp.data.remote.StudentsApi
 import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Lecturer
@@ -20,6 +21,14 @@ class StudentsRepositoryImpl @Inject constructor(private val studentsApi: Studen
         return Either.catch {
             studentsApi.getStudents()
         }.mapLeft { it.toNetworkError() }
+    }
+
+    override suspend fun getWorkingStudents(firm_id: String): Either<NetworkError, MutableList<Student>> {
+        return Either.catch{
+            studentsApi.getWorkingStudents(firm_id)
+        }.mapLeft {
+            it.toNetworkError()
+        }
     }
 
     override suspend fun getStudentInformation(student_no: String): Either<NetworkError, Student> {
@@ -74,5 +83,8 @@ class StudentsRepositoryImpl @Inject constructor(private val studentsApi: Studen
             it.toNetworkError()
         }
     }
+
+
+
 
 }

@@ -22,9 +22,9 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                 Student(
                     result.getBigDecimal("ogrenci_no").toString(),
                     result.getString("ogrenci_ad") + " " + result.getString("ogrenci_soyad"),
-                    "20Default",
+                    result.getString("ogrenci_yas"),
                     result.getString("ogrenci_fakulte"),
-                    "Bilgisayar Mühendisliği Default",
+                    result.getString("ogrenci_bolum"),
                     result.getString("ogrenci_kimlik_no"),
                     result.getString("ogrenci_sinif"),
                     result.getString("ogrenci_agno"),
@@ -44,7 +44,46 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                         ""
                     ),
                     result.getString("ogrenci_parola"),
-                    mutableStateListOf()
+                    mutableListOf()
+                )
+            )
+        }
+        return studentList
+    }
+
+    fun getWorkingStudents(firm_id : String): MutableList<Student> {
+        val studentList = arrayListOf<Student>()
+        val statement = connection.prepareStatement("select * from ogrenci as o join firma as f on f.firma_id=o.firma_id where o.firma_id = ? ")
+        statement.setBigDecimal(1,firm_id.toBigDecimal())
+        val result = statement.executeQuery()
+        while (result.next()) {
+            studentList.add(
+                Student(
+                    result.getBigDecimal("ogrenci_no").toString(),
+                    result.getString("ogrenci_ad") + " " + result.getString("ogrenci_soyad"),
+                    result.getString("ogrenci_yas"),
+                    result.getString("ogrenci_fakulte"),
+                    result.getString("ogrenci_bolum"),
+                    result.getString("ogrenci_kimlik_no"),
+                    result.getString("ogrenci_sinif"),
+                    result.getString("ogrenci_agno"),
+                    result.getString("ogrenci_hakkinda") ?: "",
+                    result.getString("ogrenci_adres") ?: "",
+                    result.getString("ogrenci_tel_no") ?: "",
+                    result.getString("ogrenci_eposta") ?: "",
+                    Firm(
+                        result.getBigDecimal("firma_id")?.toString() ?: "",
+                        result.getString("firma_ad")  ?: "",
+                        result.getString("firma_sektor")  ?: "",
+                        result.getString("firma_hakkinda")  ?: "",
+                        result.getString("firma_logo")  ?: "",
+                        result.getString("firma_eposta")  ?: "",
+                        result.getString("firma_adres")  ?: "",
+                        "",
+                        ""
+                    ),
+                    "",
+                    mutableListOf()
                 )
             )
         }
@@ -56,17 +95,16 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
             Student(
                 studentNo, "", "", "", "", "", "", "", "", "", "", "",
                 Firm("", "", "", "", "", "", "", "",""),
-                "", mutableStateListOf()
+                "", mutableListOf()
             )
             val statement = connection.prepareStatement("select * from ogrenci as o full join firma as f on f.firma_id=o.firma_id where ogrenci_no= ? ")
             statement.setBigDecimal(1,studentNo.toBigDecimal())
             val result=statement.executeQuery()
             while (result.next()) {
-                studentObject.student_name =
-                    result.getString("ogrenci_ad") + " " + result.getString("ogrenci_soyad")
+                studentObject.student_name =result.getString("ogrenci_ad") + " " + result.getString("ogrenci_soyad")
                 studentObject.student_age = result.getString("ogrenci_yas")
                 studentObject.student_faculty = result.getString("ogrenci_fakulte")
-                studentObject.student_department = "Bilgisayar Mühendisliği Default"
+                studentObject.student_department = result.getString("ogrenci_bolum")
                 studentObject.student_ID = result.getString("ogrenci_kimlik_no")
                 studentObject.student_classLevel = result.getString("ogrenci_sinif")
                 studentObject.student_AGNO = result.getString("ogrenci_agno")
@@ -74,7 +112,7 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
                 studentObject.student_address = result.getString("ogrenci_adres") ?: ""
                 studentObject.student_phone = result.getString("ogrenci_tel_no") ?: ""
                 studentObject.student_mail=result.getString("ogrenci_eposta") ?: ""
-                studentObject.student_password=result.getString("ogrenci_parola")
+                studentObject.student_password= result.getString("ogrenci_parola")
                 studentObject.student_workPlace =
                     Firm(
                         result.getBigDecimal("firma_id")?.toString()  ?: "",
@@ -95,7 +133,7 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
         val studentObject =Student(
             "", "", "", "", "", "", "", "", "", "", "", "",
             Firm("", "", "", "", "", "", "", "",""),
-            "", mutableStateListOf()
+            "", mutableListOf()
         )
         val statement = connection.prepareStatement("select * from ogrenci as o FULL JOIN firma as f ON o.firma_id=f.firma_id where o.ogrenci_no= ? AND o.ogrenci_parola= ? ")
         statement.setBigDecimal(1,student_no.toBigDecimal())
@@ -132,7 +170,7 @@ class StudentsApi @Inject constructor(private var databaseconnection: DatabaseCo
     }
 
     fun getSkills(ogrenci_no:String) : MutableList<Skill>{
-        val skillList= mutableStateListOf<Skill>()
+        val skillList= mutableListOf<Skill>()
         val statement = connection.prepareStatement("select * from yetenek where ogrenci_no= ? ")
         statement.setBigDecimal(1,ogrenci_no.toBigDecimal())
         val result=statement.executeQuery()

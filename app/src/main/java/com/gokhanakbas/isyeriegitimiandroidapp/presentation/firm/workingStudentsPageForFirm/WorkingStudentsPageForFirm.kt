@@ -1,4 +1,4 @@
-package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm
+package com.gokhanakbas.isyeriegitimiandroidapp.presentation.firm.workingStudentsPageForFirm
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -32,7 +32,9 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,14 +48,45 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.gokhanakbas.isyeriegitimiandroidapp.R
 import com.gokhanakbas.isyeriegitimiandroidapp.presentation.navigation.Screen
-import com.gokhanakbas.isyeriegitimiandroidapp.domain.model.Student
 import com.gokhanakbas.isyeriegitimiandroidapp.ui.theme.GaziKoyuMavi
+import com.gokhanakbas.isyeriegitimiandroidapp.util.Constants
 
 @Composable
-fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavController) {
+fun WorkingStudentsPageForFirm(
+    paddingValues: PaddingValues,
+    navController: NavController,
+    viewModel: WorkingStudentsPageForFirmViewModel = hiltViewModel()
+) {
+
+    LaunchedEffect(key1 = viewModel) {
+        val job = viewModel.getWorkingStudents(Constants.FIRM_ID)
+        println("Working Students Taking is ${job.await()}")
+    }
+
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    WorkingStudentsPageForFirmContent(
+        paddingValues = paddingValues,
+        navController = navController,
+        state = state
+    )
+
+
+}
+
+@Composable
+private fun WorkingStudentsPageForFirmContent(
+    paddingValues: PaddingValues,
+    navController: NavController,
+    state: WorkingStudentsPageForFirmState
+) {
+
     val workingStudentName = remember {
         mutableStateOf("")
     }
@@ -61,7 +94,8 @@ fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavC
         mutableStateOf(false)
     }
     val focus = LocalFocusManager.current
-    val studentListOf = emptyList<Student>()
+
+    val workingStudentList = state.workingStudents
 
     Column(
         modifier = Modifier
@@ -80,7 +114,7 @@ fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavC
                     Icon(
                         painter = painterResource(id = R.drawable.search_icon),
                         contentDescription = "Search Icon Working Students For Firm",
-                        modifier=Modifier.size(18.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                 },
                 trailingIcon = {
@@ -115,14 +149,20 @@ fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavC
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            items(count = studentListOf.size, key = { studentListOf[it].id }) {
-                val student = studentListOf[it]
+            items(
+                count = workingStudentList.size,
+                key = { workingStudentList[it].id }
+            ) {
+                val student = workingStudentList[it]
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 5.dp, bottom = 5.dp),
+                        .padding(10.dp),
                     shape = RoundedCornerShape(10.dp), elevation = CardDefaults.cardElevation(
                         defaultElevation = 5.dp
+                    ), border = BorderStroke(0.5.dp,Color.Black), colors = CardDefaults.cardColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Black
                     )
                 ) {
                     Column(
@@ -151,41 +191,16 @@ fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavC
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.gorev_sayisi) + ": 5 " + stringResource(
-                                    id = R.string.tamamlanan_gorev_sayisi
-                                ) + " 3 ", color = Color.Black
-                            )
-                        }
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(0.5f.dp)
-                                .background(Color.Gray)
-                        )
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-                            OutlinedButton(
-                                onClick = {
-                                    //Gorev verme alertDialog u açılacak
-                                    taskGivingPageState.value = true
-                                },
-                                border = BorderStroke(1.dp, Color.Green),
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = Color.Black
-                                )
-                            ) {
-                                Text(text = stringResource(id = R.string.gorev_ver))
-                            }
                             OutlinedButton(
                                 onClick = {
                                     //öğrencinin bilgilerini görüntüleyecek
-                                    navController.navigate(Screen.StudentPage.passNavigate(student_no = student.student_no))
+                                    navController.navigate(
+                                        Screen.StudentPage.passNavigate(
+                                            student_no = student.student_no
+                                        )
+                                    )
 
                                 },
                                 border = BorderStroke(1.dp, Color.Black),
@@ -200,6 +215,7 @@ fun WorkingStudentsPageForFirm(paddingValues: PaddingValues, navController: NavC
                 }
             }
         }
+
         if (taskGivingPageState.value) {
             GivingTaskPage(taskGivingPageState)
         }
@@ -274,7 +290,7 @@ fun GivingTaskPage(taskGivingPageState: MutableState<Boolean>) {
                             color = Color.LightGray,
                             modifier = Modifier
                                 .clickable {
-                                //    calendarStartState.displayMode
+                                    //    calendarStartState.displayMode
                                 }
 
                         )

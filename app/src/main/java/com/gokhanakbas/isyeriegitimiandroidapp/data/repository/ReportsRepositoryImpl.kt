@@ -12,7 +12,7 @@ import javax.inject.Inject
 class ReportsRepositoryImpl @Inject constructor(private val reportsApi: ReportsApi) :
     ReportsRepository {
 
-    override suspend fun getReports(student_no: String): Either<NetworkError, MutableState<ArrayList<Report>>> {
+    override suspend fun getReports(student_no: String): Either<NetworkError, MutableList<Report>> {
         return Either.catch {
             reportsApi.getReports(student_no)
         }.mapLeft {
